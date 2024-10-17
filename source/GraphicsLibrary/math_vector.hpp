@@ -1,7 +1,7 @@
-#ifndef MATH_TOOLS_VECTOR_HPP
-#define MATH_TOOLS_VECTOR_HPP
+#ifndef GRAPHICS_LIBRARY_VECTOR_HPP
+#define GRAPHICS_LIBRARY_VECTOR_HPP
 
-namespace Math
+namespace Graphics
 {
     class Vector2d
     {
@@ -72,6 +72,6 @@ namespace Math
     Vector2f operator * (const Vector2f& vec,         const double coefficient);
     double   operator * (const Vector2f& left,        const Vector2f& right);
 
-} //namespace Math
+} //namespace Graphics
 
-#endif //MATH_TOOLS_VECTOR_HPP
+#endif //GRAPHICS_LIBRARY_VECTOR_HPP

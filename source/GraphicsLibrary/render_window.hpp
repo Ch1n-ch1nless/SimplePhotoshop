@@ -4,12 +4,12 @@
 #include "color.hpp"
 #include "drawable.hpp"
 #include "event.hpp"
-#include "../MathTools/math_vector.hpp"
+#include "math_vector.hpp"
 
 namespace Graphics
 {
-    using WindowPoint  = Math::Vector2d;
-    using WindowVector = Math::Vector2d;
+    using WindowPoint  = Vector2d;
+    using WindowVector = Vector2d;
 
     class PixelArray;
     class Shape;
@@ -51,6 +51,8 @@ namespace Graphics
         void        DrawPixels(const PixelArray& pixels);
         void        DrawShape (const Shape&      shape);
         void        DrawSprite(const Sprite&     sprite);
+
+        friend class Mouse;
 
     private:
         sf::RenderWindow    window_;

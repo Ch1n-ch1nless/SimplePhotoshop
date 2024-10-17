@@ -1,7 +1,7 @@
 #include "math_vector.hpp"
 #include <cmath>
 
-using namespace Math;
+using namespace Graphics;
 
 /*============================================================================*/
 
