@@ -1,4 +1,6 @@
 #include "pixel_array.hpp"
+#include "shape.hpp"
+#include "sprite.hpp"
 #include "render_window.hpp"
 
 /*-----------------------------< Line functions >-----------------------------*/
@@ -90,12 +92,12 @@ void Graphics::RenderWindow::DrawPixels(const PixelArray &pixels)
 
 void Graphics::RenderWindow::DrawShape(const Shape &shape)
 {
-    // TODO: implement!
+    window_.draw(shape.GetShape());
 }
 
 void Graphics::RenderWindow::DrawSprite(const Sprite &sprite)
 {
-    // TODO: implement!
+    window_.draw(sprite.sprite_);
 }
 
 /*----------------------------------------------------------------------------*/

@@ -63,6 +63,11 @@ void Graphics::Circle::MoveByY(int dy)
     shape_.setPosition(sf::Vector2f(position_.GetX(), position_.GetY()));
 }
 
+const sf::Shape& Graphics::Circle::GetShape() const
+{
+    return shape_;
+}
+
 /*============================================================================*/
 
 /*===========================< RECTANGLE FUNCTIONS >==========================*/
@@ -123,6 +128,11 @@ void Graphics::Rectangle::MoveByY(int dy)
 {
     position_ += WindowPoint(0, dy);
     shape_.setPosition(sf::Vector2f(position_.GetX(), position_.GetY()));
+}
+
+const sf::Shape& Graphics::Rectangle::GetShape() const
+{
+    return shape_;
 }
 
 /*============================================================================*/

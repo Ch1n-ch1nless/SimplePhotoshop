@@ -21,6 +21,10 @@ namespace Graphics
         virtual void Move                   (const WindowVector& dir)       = 0;
         virtual void MoveByX                (int dx)                        = 0;
         virtual void MoveByY                (int dy)                        = 0;
+
+    private: 
+        virtual const sf::Shape& GetShape() const = 0;
+        friend void RenderWindow::DrawShape(const Shape& shape);
     };
 
     class Circle : public Shape
@@ -43,6 +47,9 @@ namespace Graphics
         WindowPoint     position_;
         Color           color_;
         float           radius_;
+
+        virtual const sf::Shape& GetShape() const override;
+        friend void RenderWindow::DrawShape(const Shape& shape);
     };
 
     class Rectangle : public Shape
@@ -66,6 +73,9 @@ namespace Graphics
         Color               color_;
         std::size_t         width_;
         std::size_t         height_;
+
+        virtual const sf::Shape& GetShape() const override;
+        friend void RenderWindow::DrawShape(const Shape& shape);
     };
 }
 
