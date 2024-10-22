@@ -25,6 +25,7 @@ bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& 
 bool Texture::loadFromImage(const AImage *image, const IntRect& area = IntRect())
 {
     //TODO: Implement this function!!!
+    static_assert(false, "Sorry, but you can not use class \'AImage\'!\n");
     return false;
 }
 
@@ -37,6 +38,7 @@ vec2u Texture::getSize() const
 std::unique_ptr<AImage> Texture::copyToImage() const
 {
     //TODO: Implement this function!!!
+    static_assert(false, "Sorry, but you can not use class \'AImage\'!\n");
     return nullptr;
 }
 
