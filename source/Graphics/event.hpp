@@ -5,6 +5,8 @@
 #include "keyboard.hpp"
 #include "mouse.hpp"
 
+#include <cstdint>
+
 namespace psapi
 {
     namespace sfm
@@ -12,48 +14,76 @@ namespace psapi
         class Event
         {
         public:
-            enum class EventType
+            struct SizeEvent
             {
-                CLOSED,
-                MOUSE_MOVED,
-                MB_PRESSED,
-                MB_RELEASED,
-                NONE
+                unsigned int width;
+                unsigned int height;
             };
 
-            class KeyEvent
+            struct KeyEvent
             {
-                friend class Event;
-
-            public:
                 Keyboard::Key code;
                 bool          alt;
                 bool          control;
                 bool          shift;
+                bool          system;
             };
 
-            class MouseMoveEvent
+            struct TextEvent
             {
-                friend class Event;
-
-            public:
-                Vec2D<int> pos;
+                uint32_t unicode;
             };
 
-            class MouseButtonEvent
+            struct MouseMoveEvent
             {
-                friend class Event;
+                int x;
+                int y;
+            };
 
-            public:
+            struct MouseButtonEvent
+            {
                 Mouse::Button button;
-                Vec2D<int> pos;
+                int           x;
+                int           y;
             };
 
-            EventType type() const;
+            struct MouseWheelScrollEvent
+            {
+                Mouse::Wheel wheel;
+                float        delta;
+                int          x;
+                int          y;
+            };
 
-            KeyEvent         key         () const;
-            MouseMoveEvent   mouse_move  () const;
-            MouseButtonEvent mouse_button() const;
+            enum EventType
+            {
+                Unknown,
+                Closed,
+                Resized,
+                LostFocus,
+                GainedFocus,
+                TextEntered,
+                KeyPressed,
+                KeyReleased,
+                MouseWheelScrolled,
+                MouseButtonPressed,
+                MouseButtonReleased,
+                MouseMoved,
+                MouseEntered,
+                MouseLeft,
+            };
+
+            EventType type;
+
+            union
+            {
+                SizeEvent             size;
+                KeyEvent              key;
+                TextEvent             text;
+                MouseMoveEvent        mouseMove;
+                MouseButtonEvent      mouseButton;
+                MouseWheelScrollEvent mouseWheel;
+            };
 
         };
     }   

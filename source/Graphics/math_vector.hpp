@@ -28,6 +28,11 @@ namespace psapi
         template<typename T>
         Vec2D<T> operator*(const double    cf,   const Vec2D<T> &vec);
 
+        using vec2i = Vec2D<int>;
+        using vec2u = Vec2D<unsigned int>;
+        using vec2f = Vec2D<float>;
+        using vec2d = Vec2D<double>;
+
     } //sfm
 
 } //psapi

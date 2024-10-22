@@ -21,6 +21,12 @@ namespace psapi
                 XBUTTON2
             };
 
+            enum class Wheel
+            {
+                Vertical,
+                Horizontal,
+            };
+
             Mouse() = delete;
 
             static bool isButtonPressed(Button button);
