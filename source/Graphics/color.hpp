@@ -35,4 +35,4 @@ namespace psapi
 
 }   //psapi
 
-#endif
+#endif //GRAPHICS_COLOR_HPP
