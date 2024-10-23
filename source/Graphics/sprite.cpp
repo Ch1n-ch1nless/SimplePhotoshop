@@ -70,7 +70,7 @@ Texture& Texture::operator =(const ATexture& other)
 
 void Sprite::setTexture(const ATexture *texture, bool reset_rect = false)
 {
-    const Texture* real_texture = dynamic_cast<const Texture*>(texture);
+    const Texture* real_texture = static_cast<const Texture*>(texture);
 
     sprite_.setTexture(real_texture->texture_, reset_rect);
 }
@@ -121,7 +121,7 @@ IntRect Sprite::getGlobalBounds() const
 
  void Sprite::draw(ARenderWindow *window)
  {
-    RenderWindow* real_window = dynamic_cast<RenderWindow*>(window);
+    RenderWindow* real_window = static_cast<RenderWindow*>(window);
 
     real_window->window_.draw(sprite_);
  }  
