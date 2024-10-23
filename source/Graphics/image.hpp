@@ -10,7 +10,7 @@ namespace psapi
         class Image : public AImage
         {
         public:
-             Image() = default;
+             Image(size_t init_size);
             ~Image() = default;
 
             virtual void setColor(const Color &color, size_t ind) override;
@@ -24,6 +24,10 @@ namespace psapi
             virtual void setPosition(double x, double y, size_t ind) override;
 
             virtual void draw(ARenderWindow *window) override;
+
+        private:
+            sf::VertexArray points_;
+            size_t          size_;
         };
 
     } //sfm
