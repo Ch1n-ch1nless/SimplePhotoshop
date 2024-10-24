@@ -13,6 +13,8 @@ namespace psapi
              Image() = default;
             ~Image() = default;
 
+            void draw(IRenderWindow* render_window) override;
+
             void create(unsigned int width, unsigned int height, const Color &color=Color(0, 0, 0)) override;
             void create(vec2u size, const Color &color=Color(0, 0, 0)) override;
 

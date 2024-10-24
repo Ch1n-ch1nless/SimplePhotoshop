@@ -139,4 +139,14 @@ std::unique_ptr<psapi::sfm::IImage> psapi::sfm::Image::create()
     return std::make_unique<Image>();
 }
 
+void psapi::sfm::Image::draw(psapi::sfm::IRenderWindow* render_window)
+{
+    RenderWindow* window = static_cast<RenderWindow*>(render_window);
+    sf::Texture temp_texture;
+    temp_texture.loadFromImage(image_);
+    sf::Sprite sprite;
+    sprite.setTexture(temp_texture);
+    window->window_.draw(sprite);
+}
+
 /*============================================================================*/
