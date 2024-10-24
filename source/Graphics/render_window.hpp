@@ -13,10 +13,10 @@ namespace psapi
         class Sprite;
         class Image;
 
-        class RenderWindow : public ARenderWindow
+        class RenderWindow : public IRenderWindow
         {
         public:
-             RenderWindow(size_t width, size_t height, const std::string& window_title);
+             RenderWindow(unsigned int width, unsigned int height, const std::string& window_title);
             ~RenderWindow() = default;
 
             virtual bool isOpen ()  override;
@@ -24,12 +24,17 @@ namespace psapi
             virtual void display()  override;
             virtual void close  ()  override;
 
+            virtual vec2u getSize() const override;
+
             virtual bool pollEvent(Event& event) override;
 
             virtual void draw(Drawable *target) override;
 
+            static std::unique_ptr<IRenderWindow> create(unsigned int width, unsigned int height, const std::string& name);
+
         private:
             sf::RenderWindow window_;
+            vec2u            size_;
 
             friend class Text;
             friend class Sprite;

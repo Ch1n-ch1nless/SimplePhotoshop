@@ -7,7 +7,7 @@ namespace psapi
 {
     namespace sfm
     {
-        class Font : public AFont
+        class Font : public IFont
         {
         public:
              Font() = default;
@@ -21,15 +21,15 @@ namespace psapi
             friend class Text;
         };
 
-        class Text : public AText
+        class Text : public IText
         {
         public:
              Text() = default;
             ~Text() = default;
 
-            virtual void draw(ARenderWindow *window)          override;
+            virtual void draw(IRenderWindow *window)          override;
             virtual void setString(const std::string& string) override;
-            virtual void setFont(const AFont* font)           override;
+            virtual void setFont(const IFont* font)           override;
             virtual void setCharacterSize(unsigned int size)  override;
             virtual void setStyle(uint32_t style)             override;
             virtual void setFillColor(const Color* color)     override;

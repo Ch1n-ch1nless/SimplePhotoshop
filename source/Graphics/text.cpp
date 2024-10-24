@@ -5,7 +5,7 @@ bool psapi::sfm::Font::loadFromFile(const std::string &filename)
     return font_.loadFromFile(filename);
 }
 
-void psapi::sfm::Text::draw(ARenderWindow *window)
+void psapi::sfm::Text::draw(IRenderWindow *window)
 {
     RenderWindow* real_window = static_cast<RenderWindow*>(window);
 
@@ -17,9 +17,9 @@ void psapi::sfm::Text::setString(const std::string &string)
     text_.setString(string);
 }
 
-void psapi::sfm::Text::setFont(const AFont *font)
+void psapi::sfm::Text::setFont(const IFont *font)
 {
-    const Font* real_font = static<const Font*>(font);
+    const Font* real_font = static_cast<const Font*>(font);
 
     text_.setFont(real_font->font_);
 }

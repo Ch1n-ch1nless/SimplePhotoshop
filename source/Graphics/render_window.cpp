@@ -3,8 +3,8 @@
 using namespace psapi;
 using namespace sfm;
 
-RenderWindow::RenderWindow(size_t width, size_t height, const std::string& window_title)
-    : window_(sf::VideoMode(width, height), window_title)
+RenderWindow::RenderWindow(unsigned int width, unsigned int height, const std::string& window_title)
+    : window_(sf::VideoMode(width, height), window_title), size_(width, height)
 {
 }
 
@@ -31,6 +31,16 @@ void RenderWindow::draw(Drawable* target)
 bool RenderWindow::isOpen()
 {
     return window_.isOpen();
+}
+
+vec2u RenderWindow::getSize() const
+{
+    return size_;
+}
+
+std::unique_ptr<IRenderWindow> RenderWindow::create(unsigned int width, unsigned int height, const std::string& name)
+{
+   return std::make_unique<RenderWindow>(width, height, name);
 }
 
 bool RenderWindow::pollEvent(Event& event)
