@@ -12,6 +12,11 @@ std::unique_ptr<psapi::sfm::IFont> psapi::sfm::Font::create()
     return std::make_unique<psapi::sfm::Font>();
 }
 
+std::unique_ptr<psapi::sfm::IFont> psapi::sfm::IFont::create()
+{
+    return std::make_unique<psapi::sfm::Font>();
+}
+
 /*============================================================================*/
 
 /*==========================< Text implementation >===========================*/
@@ -61,6 +66,11 @@ void psapi::sfm::Text::setOutlineThickness(float thickness)
 }
 
 std::unique_ptr<psapi::sfm::IText> psapi::sfm::Text::create()
+{
+    return std::make_unique<psapi::sfm::Text>();
+}
+
+std::unique_ptr<psapi::sfm::IText> psapi::sfm::IText::create()
 {
     return std::make_unique<psapi::sfm::Text>();
 }

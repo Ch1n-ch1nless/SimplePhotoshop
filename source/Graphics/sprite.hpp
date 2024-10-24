@@ -2,6 +2,7 @@
 #define  GRAPHICS_SPRITE_HPP
 
 #include "render_window.hpp"
+#include "image.hpp"
 
 namespace psapi
 {
@@ -17,9 +18,13 @@ namespace psapi
             virtual bool loadFromFile  (const std::string& filename,        const IntRect& area = IntRect()) override;
             virtual bool loadFromMemory(const void* data, std::size_t size, const IntRect& area = IntRect()) override;
             virtual vec2u getSize() const                                                                    override;
+            virtual std::unique_ptr<IImage> copyToImage() const                                              override;
+            virtual void update(const IImage *image)                                                         override;
             virtual void update(const Color *pixels)                                                         override;
             virtual void update(const Color *pixels, unsigned int width, unsigned int height,
                                                      unsigned int x,     unsigned int y) override;
+
+            static std::unique_ptr<ITexture> create();
 
         private:
             sf::Texture texture_;

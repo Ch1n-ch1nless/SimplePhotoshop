@@ -43,6 +43,11 @@ std::unique_ptr<IRenderWindow> RenderWindow::create(unsigned int width, unsigned
    return std::make_unique<RenderWindow>(width, height, name);
 }
 
+std::unique_ptr<IRenderWindow> IRenderWindow::create(unsigned int width, unsigned int height, const std::string& name)
+{
+   return std::make_unique<RenderWindow>(width, height, name);
+}
+
 bool RenderWindow::pollEvent(Event& event)
 {
     sf::Event sfEvent;

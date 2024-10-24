@@ -12,6 +12,7 @@ namespace psapi
         class Text;
         class Sprite;
         class Image;
+        class PixelArray;
 
         class RenderWindow : public IRenderWindow
         {
@@ -39,6 +40,7 @@ namespace psapi
             friend class Text;
             friend class Sprite;
             friend class Image;
+            friend class PixelArray;
         };
 
     } //sfm
