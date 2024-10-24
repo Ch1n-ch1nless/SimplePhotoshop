@@ -1,11 +1,19 @@
 #include "Graphics/Graphics.hpp"
 
+#include <iostream>
+
 using namespace psapi;
 using namespace sfm;
 
 int main()
 {
     RenderWindow main_window(800, 600, "LOL");
+
+    Texture texture;
+    texture.loadFromFile("Pictures/start_button.png");
+
+    Sprite sprite;
+    sprite.setTexture(&texture);
 
     while (main_window.isOpen())
     {
@@ -17,9 +25,18 @@ int main()
             {
                 main_window.close();
             }
+            else if (event.type == Event::EventType::KeyPressed && event.key.code == Keyboard::Key::Escape)
+            {
+                main_window.close();
+            }
+            else if (event.type == Event::EventType::MouseButtonPressed && event.mouseButton.button == Mouse::Button::Left)
+            {
+                sprite.setPosition(vec2f{event.mouseButton.x, event.mouseButton.y});
+            }
         }
 
         main_window.clear();
+        main_window.draw(&sprite);
         main_window.display();
     }
     

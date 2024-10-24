@@ -25,7 +25,7 @@ bool Texture::create(unsigned int width, unsigned int height)
 bool Texture::loadFromFile(const std::string& filename, const IntRect& area)
 {
     sf::IntRect rectangle = {area.top_x, area.top_y, area.width, area.height};
-    texture_.loadFromFile(filename, rectangle);
+    return texture_.loadFromFile(filename, rectangle);
 }
 
 bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& area)
