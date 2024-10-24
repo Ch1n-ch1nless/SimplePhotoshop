@@ -1,9 +1,21 @@
 #include "sprite.hpp"
 
+#include <cassert>
+
 using namespace psapi;
 using namespace sfm;
 
 /*===========================< Texture definition >===========================*/
+
+std::unique_ptr<ITexture> ITexture::create()
+{
+    return std::make_unique<Texture>();
+}
+
+std::unique_ptr<ITexture> Texture::create()
+{
+    return std::make_unique<Texture>();
+}
 
 bool Texture::create(unsigned int width, unsigned int height)
 {
@@ -22,24 +34,16 @@ bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& 
     texture_.loadFromMemory(data, size, rectangle);
 }
 
-bool Texture::loadFromImage(const AImage *image, const IntRect& area = IntRect())
+std::unique_ptr<IImage> Texture::copyToImage() const
 {
-    //TODO: Implement this function!!!
-    static_assert(false, "Sorry, but you can not use class \'AImage\'!\n");
-    return false;
+    assert(false && "Sorry, but why do you use this function?\n Do you really need it?\n I think, you are tired and you need go from the room.\n Phone on this number: +7(952)812\n");
+    return nullptr;
 }
 
 vec2u Texture::getSize() const
 {
     sf::Vector2u size = texture_.getSize();
     return vec2u{size.x, size.y};
-}
-
-std::unique_ptr<AImage> Texture::copyToImage() const
-{
-    //TODO: Implement this function!!!
-    static_assert(false, "Sorry, but you can not use class \'AImage\'!\n");
-    return nullptr;
 }
 
 void Texture::update(const Color *pixels)
@@ -52,23 +56,16 @@ void Texture::update(const Color *pixels, unsigned int width, unsigned int heigh
     texture_.update(reinterpret_cast<const sf::Uint8*>(pixels), width, height, x, y);
 }
 
-Texture& Texture::operator =(const ATexture& other)
+void Texture::update(const IImage *image)
 {
-    const Texture& real_texture = dynamic_cast<const Texture&>(other);
-
-    if (this != &real_texture)
-    {
-        this->texture_ = real_texture.texture_;
-    }
-
-    return *this;
+    assert(false && "Sorry, but why do you use this function?\n Do you really need it?\n I think, you are tired and you need go from the room.\n Phone on this number: +7(952)812\n");
 }
 
 /*============================================================================*/
 
 /*============================< Sprite definition >===========================*/
 
-void Sprite::setTexture(const ATexture *texture, bool reset_rect = false)
+void Sprite::setTexture(const ITexture *texture, bool reset_rect = false)
 {
     const Texture* real_texture = static_cast<const Texture*>(texture);
 
@@ -97,6 +94,12 @@ void Sprite::setScale(float factorX, float factorY)
     sprite_.setScale(factorX, factorY);
 }
 
+vec2i Sprite::getSize() const
+{
+    sf::Vector2u vec = sprite_.getTexture()->getSize();
+    return vec2i(vec.x, vec.y);
+}
+
 void Sprite::setColor(const Color &color)
 {
     sprite_.setColor(sf::Color(color.r, color.g, color.b, color.a));
@@ -119,11 +122,21 @@ IntRect Sprite::getGlobalBounds() const
     return {(unsigned int)area.left, (unsigned int)area.top, (unsigned int)area.width, (unsigned int)area.height};
 }
 
- void Sprite::draw(ARenderWindow *window)
+ void Sprite::draw(IRenderWindow *window)
  {
     RenderWindow* real_window = static_cast<RenderWindow*>(window);
 
     real_window->window_.draw(sprite_);
  }  
+
+ std::unique_ptr<ISprite> Sprite::create()
+ {
+    return std::make_unique<Sprite>();
+ }
+
+ std::unique_ptr<ISprite> ISprite::create()
+ {
+    return std::make_unique<Sprite>();
+ }
 
 /*============================================================================*/
