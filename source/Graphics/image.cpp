@@ -39,7 +39,7 @@ bool psapi::sfm::IImage::loadFromFile(const std::string &filename)
 {
     //TODO: Maybe cringe, but must work :)
     Image* real_ptr = static_cast<Image*>(this);
-    real_ptr->loadFromFile(filename);
+    return real_ptr->loadFromFile(filename);
 }
 
 psapi::sfm::vec2u psapi::sfm::IImage::getSize() const
@@ -81,6 +81,11 @@ psapi::sfm::Color psapi::sfm::IImage::getPixel(vec2u pos) const
 
 /*===========================< Image implementation >=========================*/
 
+psapi::sfm::Image::Image() :
+    image_()
+{
+}
+
 void psapi::sfm::Image::create(unsigned int width, unsigned int height, const Color &color)
 {
     image_.create(width, height, sf::Color(color.r, color.g, color.b, color.a));
@@ -103,7 +108,7 @@ void psapi::sfm::Image::create(vec2u size, const Color *pixels)
 
 bool psapi::sfm::Image::loadFromFile(const std::string &filename)
 {
-    image_.loadFromFile(filename);
+    return image_.loadFromFile(filename);
 }
 
 psapi::sfm::vec2u psapi::sfm::Image::getSize() const

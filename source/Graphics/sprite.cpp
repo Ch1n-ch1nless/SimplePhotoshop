@@ -7,6 +7,11 @@ using namespace sfm;
 
 /*===========================< Texture definition >===========================*/
 
+Texture::Texture() :
+    texture_()
+{
+}
+
 std::unique_ptr<ITexture> ITexture::create()
 {
     return std::make_unique<Texture>();
@@ -19,7 +24,7 @@ std::unique_ptr<ITexture> Texture::create()
 
 bool Texture::create(unsigned int width, unsigned int height)
 {
-    texture_.create(width, height);
+    return texture_.create(width, height);
 }
 
 bool Texture::loadFromFile(const std::string& filename, const IntRect& area)
@@ -31,11 +36,12 @@ bool Texture::loadFromFile(const std::string& filename, const IntRect& area)
 bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& area)
 {
     sf::IntRect rectangle = {area.top_x, area.top_y, area.width, area.height};
-    texture_.loadFromMemory(data, size, rectangle);
+    return texture_.loadFromMemory(data, size, rectangle);
 }
 
 std::unique_ptr<IImage> Texture::copyToImage() const
 {
+    //TODO: Rewrite this function!
     assert(false && "Sorry, but why do you use this function?\n Do you really need it?\n I think, you are tired and you need go from the room.\n Phone on this number: +7(952)812\n");
     return nullptr;
 }
@@ -58,12 +64,18 @@ void Texture::update(const Color *pixels, unsigned int width, unsigned int heigh
 
 void Texture::update(const IImage *image)
 {
+    //TODO: Rewrite this function!
     assert(false && "Sorry, but why do you use this function?\n Do you really need it?\n I think, you are tired and you need go from the room.\n Phone on this number: +7(952)812\n");
 }
 
 /*============================================================================*/
 
 /*============================< Sprite definition >===========================*/
+
+Sprite::Sprite() :
+    sprite_()
+{
+}
 
 void Sprite::setTexture(const ITexture *texture, bool reset_rect)
 {
@@ -97,7 +109,7 @@ void Sprite::setScale(float factorX, float factorY)
 vec2i Sprite::getSize() const
 {
     sf::Vector2u vec = sprite_.getTexture()->getSize();
-    return vec2i(vec.x, vec.y);
+    return vec2i(static_cast<int>(vec.x), static_cast<int>(vec.y));
 }
 
 void Sprite::setColor(const Color &color)
@@ -119,7 +131,7 @@ const vec2f Sprite::getPosition() const
 IntRect Sprite::getGlobalBounds() const
 {
     sf::FloatRect area = sprite_.getGlobalBounds();
-    return {(unsigned int)area.left, (unsigned int)area.top, (unsigned int)area.width, (unsigned int)area.height};
+    return {(int)area.left, (int)area.top, (int)area.width, (int)area.height};
 }
 
  void Sprite::draw(IRenderWindow *window)

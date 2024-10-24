@@ -11,7 +11,7 @@ namespace psapi
         class Texture : public ITexture
         {
         public:
-             Texture() = default;
+             Texture();
             ~Texture() = default;
 
             virtual bool create(unsigned int width, unsigned int height)                                     override;
@@ -35,7 +35,7 @@ namespace psapi
         class Sprite : public ISprite
         {
         public:
-             Sprite() = default;
+             Sprite();
             ~Sprite() = default;
 
             virtual void setTexture(const ITexture *texture, bool reset_rect = false) override;

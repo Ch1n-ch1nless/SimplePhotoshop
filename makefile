@@ -42,3 +42,8 @@ $(MAIN_OBJ) : $(MAIN_SRC)
 
 clean:
 	rm $(GRAPHICS_OBJ) $(MAIN_OBJ)
+
+build:
+	mkdir object              && \
+	mkdir $(GRAPHICS_OBJ_DIR) && \
+	mkdir $(STANDARD_OBJ_DIR)	

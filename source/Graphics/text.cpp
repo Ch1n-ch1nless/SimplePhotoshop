@@ -2,6 +2,11 @@
 
 /*==========================< Font implementation >===========================*/
 
+psapi::sfm::Font::Font() :
+    font_()
+{
+}
+
 bool psapi::sfm::Font::loadFromFile(const std::string &filename)
 {
     return font_.loadFromFile(filename);
@@ -20,6 +25,11 @@ std::unique_ptr<psapi::sfm::IFont> psapi::sfm::IFont::create()
 /*============================================================================*/
 
 /*==========================< Text implementation >===========================*/
+
+psapi::sfm::Text::Text() :
+    text_()
+{
+}
 
 void psapi::sfm::Text::draw(IRenderWindow *window)
 {

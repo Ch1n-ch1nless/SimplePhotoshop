@@ -10,7 +10,7 @@ namespace psapi
         class Image : public IImage
         {
         public:
-             Image() = default;
+             Image();
             ~Image() = default;
 
             void draw(IRenderWindow* render_window) override;

@@ -10,7 +10,7 @@ namespace psapi
         class Font : public IFont
         {
         public:
-             Font() = default;
+             Font();
             ~Font() = default;
 
             virtual bool loadFromFile(const std::string& filename) override;
@@ -26,7 +26,7 @@ namespace psapi
         class Text : public IText
         {
         public:
-             Text() = default;
+             Text();
             ~Text() = default;
 
             virtual void draw(IRenderWindow *window)          override;
