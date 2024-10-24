@@ -1,9 +1,20 @@
 #include "text.hpp"
 
+/*==========================< Font implementation >===========================*/
+
 bool psapi::sfm::Font::loadFromFile(const std::string &filename)
 {
     return font_.loadFromFile(filename);
 }
+
+std::unique_ptr<psapi::sfm::IFont> psapi::sfm::Font::create()
+{
+    return std::make_unique<psapi::sfm::Font>();
+}
+
+/*============================================================================*/
+
+/*==========================< Text implementation >===========================*/
 
 void psapi::sfm::Text::draw(IRenderWindow *window)
 {
@@ -48,3 +59,10 @@ void psapi::sfm::Text::setOutlineThickness(float thickness)
 {
     text_.setOutlineThickness(thickness);
 }
+
+std::unique_ptr<psapi::sfm::IText> psapi::sfm::Text::create()
+{
+    return std::make_unique<psapi::sfm::Text>();
+}
+
+/*============================================================================*/

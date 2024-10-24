@@ -15,6 +15,8 @@ namespace psapi
 
             virtual bool loadFromFile(const std::string& filename) override;
 
+            static std::unique_ptr<IFont> create();
+
         private:
             sf::Font font_;
 
@@ -35,6 +37,8 @@ namespace psapi
             virtual void setFillColor(const Color* color)     override;
             virtual void setOutlineColor(const Color* color)  override;
             virtual void setOutlineThickness(float thickness) override;
+
+            static std::unique_ptr<IText> create();
 
         private:
             sf::Text text_;
