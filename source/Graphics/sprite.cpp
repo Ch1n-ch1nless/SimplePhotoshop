@@ -22,13 +22,13 @@ bool Texture::create(unsigned int width, unsigned int height)
     texture_.create(width, height);
 }
 
-bool Texture::loadFromFile(const std::string& filename, const IntRect& area = IntRect())
+bool Texture::loadFromFile(const std::string& filename, const IntRect& area)
 {
     sf::IntRect rectangle = {area.top_x, area.top_y, area.width, area.height};
     texture_.loadFromFile(filename, rectangle);
 }
 
-bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& area = IntRect())
+bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& area)
 {
     sf::IntRect rectangle = {area.top_x, area.top_y, area.width, area.height};
     texture_.loadFromMemory(data, size, rectangle);
@@ -65,7 +65,7 @@ void Texture::update(const IImage *image)
 
 /*============================< Sprite definition >===========================*/
 
-void Sprite::setTexture(const ITexture *texture, bool reset_rect = false)
+void Sprite::setTexture(const ITexture *texture, bool reset_rect)
 {
     const Texture* real_texture = static_cast<const Texture*>(texture);
 

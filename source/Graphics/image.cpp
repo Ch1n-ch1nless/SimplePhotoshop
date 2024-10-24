@@ -7,14 +7,14 @@ std::unique_ptr<psapi::sfm::IImage> psapi::sfm::IImage::create()
     return std::make_unique<Image>();
 }
 
-void psapi::sfm::IImage::create(unsigned int width, unsigned int height, const Color &color=Color(0, 0, 0))
+void psapi::sfm::IImage::create(unsigned int width, unsigned int height, const Color &color)
 {
     //TODO: Maybe cringe, but must work :)
     Image* real_ptr = static_cast<Image*>(this);
     real_ptr->create(width, height, color);
 }
 
-void psapi::sfm::IImage::create(vec2u size, const Color &color=Color(0, 0, 0))
+void psapi::sfm::IImage::create(vec2u size, const Color &color)
 {
     //TODO: Maybe cringe, but must work :)
     Image* real_ptr = static_cast<Image*>(this);
@@ -81,12 +81,12 @@ psapi::sfm::Color psapi::sfm::IImage::getPixel(vec2u pos) const
 
 /*===========================< Image implementation >=========================*/
 
-void psapi::sfm::Image::create(unsigned int width, unsigned int height, const Color &color=Color(0, 0, 0))
+void psapi::sfm::Image::create(unsigned int width, unsigned int height, const Color &color)
 {
     image_.create(width, height, sf::Color(color.r, color.g, color.b, color.a));
 }
 
-void psapi::sfm::Image::create(vec2u size, const Color &color=Color(0, 0, 0))
+void psapi::sfm::Image::create(vec2u size, const Color &color)
 {
     image_.create(size.x, size.y, sf::Color(color.r, color.g, color.b, color.a));
 }

@@ -45,7 +45,7 @@ namespace psapi
             virtual void setPosition(const vec2f &pos) override;
 
             virtual void setScale(float factorX, float factorY) override;
-            virtual vec2i getSize() const = 0;
+            virtual vec2i getSize() const override;
 
             virtual void setColor(const Color &color) override;
 
