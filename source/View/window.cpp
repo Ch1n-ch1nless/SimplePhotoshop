@@ -233,6 +233,10 @@ void RootWindow::forceDeactivate()
     return;
 }
 
-
+IWindowContainer* getRootWindow()
+{
+    static RootWindow root_window;
+    return &root_window;
+}
 
 /*============================================================================*/
