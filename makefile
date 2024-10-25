@@ -17,6 +17,9 @@ GRAPHICS_OBJ_DIR = ./object/Graphics/
 STANDARD_SRC_DIR 	= ./source/Standard/
 STANDARD_OBJ_DIR 	= ./object/Standard/
 
+VIEW_SRC_DIR		= ./source/View/
+VIEW_OBJ_DIR 		= ./object/View/
+
 MAIN_SRC = ./source/main.cpp
 MAIN_OBJ = ./object/main.o
 
@@ -26,15 +29,21 @@ GRAPHICS_OBJ = $(patsubst $(GRAPHICS_SRC_DIR)%.cpp, $(GRAPHICS_OBJ_DIR)%.o, $(GR
 STANDARD_SRC = $(wildcard $(STANDARD_SRC_DIR)*.cpp)
 STANDARD_OBJ = $(patsubst $(STANDARD_SRC_DIR)%.cpp, $(STANDARD_OBJ_DIR)%.o, $(STANDARD_SRC))
 
+VIEW_SRC	 = $(wildcard $(VIEW_SRC_DIR)*.cpp)
+VIEW_OBJ	 = $(patsubst $(VIEW_SRC_DIR)%.cpp, $(VIEW_OBJ_DIR)%.o, $(VIEW_SRC))
+
 all: link
 
-link: $(GRAPHICS_OBJ) $(MAIN_OBJ) $(STANDARD_OBJ)
-	$(CC) $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+link: $(GRAPHICS_OBJ) $(MAIN_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ)
+	$(CC) $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(VIEW_OBJ_DIR)%.o : $(VIEW_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(MAIN_OBJ) : $(MAIN_SRC)
@@ -46,4 +55,5 @@ clean:
 build:
 	mkdir object              && \
 	mkdir $(GRAPHICS_OBJ_DIR) && \
-	mkdir $(STANDARD_OBJ_DIR)	
+	mkdir $(STANDARD_OBJ_DIR) && \
+	mkdir $(VIEW_OBJ_DIR)

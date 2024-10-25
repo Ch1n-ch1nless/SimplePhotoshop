@@ -15,6 +15,10 @@ int main()
     Sprite sprite;
     sprite.setTexture(&texture);
 
+    Sprite sprite1;
+    sprite1.setTexture(&texture);
+    sprite1.setScale(0.5f, 0.5f);
+
     while (main_window.isOpen())
     {
         Event event;
@@ -37,6 +41,7 @@ int main()
 
         main_window.clear();
         main_window.draw(&sprite);
+        main_window.draw(&sprite1);
         main_window.display();
     }
     
