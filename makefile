@@ -50,7 +50,7 @@ $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(GRAPHICS_OBJ) $(MAIN_OBJ)
+	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(VIEW_OBJ)
 
 build:
 	mkdir object              && \

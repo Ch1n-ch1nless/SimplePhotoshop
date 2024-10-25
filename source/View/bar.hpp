@@ -3,14 +3,15 @@
 
 #include "../Standard/api_bar.hpp"
 #include "../Graphics/Graphics.hpp"
+#include "window.hpp"
 
 namespace psapi
 {
     class ABarButton : public IBarButton
     {
     public:
-         ABarButton(const wid_t& id = kInvalidWindowId, const vec2i& pos, const vec2i& size);
-        ~ABarButton() = default;
+         ABarButton(const vec2i& pos, const vec2i& size, const wid_t& id = kInvalidWindowId);
+        ~ABarButton(){};
 
         virtual void draw(IRenderWindow* renderWindow) = 0;
         virtual bool update(const IRenderWindow* renderWindow, const sfm::Event&    event) = 0;
@@ -44,8 +45,8 @@ namespace psapi
     class ABar : public IBar
     {
     public:
-         ABar(const wid_t& id = kInvalidWindowId, const vec2i& pos, const vec2i& size);
-        ~ABar() = default;
+         ABar(const vec2i& pos, const vec2i& size, const wid_t& id = kInvalidWindowId);
+        ~ABar(){};
 
         virtual ChildInfo getNextChildInfo() const = 0;
 

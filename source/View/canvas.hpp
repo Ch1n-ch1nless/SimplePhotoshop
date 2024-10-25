@@ -3,6 +3,7 @@
 
 #include "../Standard/api_canvas.hpp"
 #include "../Graphics/Graphics.hpp"
+#include "window.hpp"
 
 namespace psapi
 {
@@ -10,7 +11,7 @@ namespace psapi
     {
     public:
          Layer(vec2i size);
-        ~Layer() = default;
+        ~Layer();
 
         sfm::Color getPixel(sfm::vec2i pos) const override;
         void       setPixel(sfm::vec2i pos, sfm::Color pixel) override;
@@ -29,11 +30,24 @@ namespace psapi
     {
     public:
          Canvas(vec2i init_size);
-        ~Canvas() = default;
+        ~Canvas();
+
+        virtual wid_t getId() const override;
+        virtual IWindow* getWindowById(wid_t id) override;
+        virtual const IWindow* getWindowById(wid_t id) const override;
+
+        virtual vec2i getPos()  const override;
+        virtual vec2i getSize() const override;
+
+        virtual void setParent(const IWindow* parent) override;
+
+        virtual void forceActivate() override;
+        virtual void forceDeactivate() override;
+        virtual bool isWindowContainer() const override;
 
         virtual void draw(psapi::IRenderWindow* renderWindow)         override;
         virtual bool update(const psapi::IRenderWindow* renderWindow,
-                            const psapi::sfm::Event& event)           override;
+                            const psapi::Event& event)                override;
 
         virtual ILayer*       getLayer(size_t index)       override;
         virtual const ILayer* getLayer(size_t index) const override;
@@ -66,6 +80,8 @@ namespace psapi
 
         std::unique_ptr<Layer> temp_layer_;
 
+        const IWindow* parent_;
+
         vec2i size_;
         vec2i pos_;
         vec2f scale_;
@@ -74,7 +90,9 @@ namespace psapi
 
         psapi::sfm::Texture texture_;
         psapi::sfm::Sprite sprite_;
+
         vec2i last_mouse_pos_;
+
         bool is_pressed_ = false;
     };
 

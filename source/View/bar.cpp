@@ -4,10 +4,11 @@ using namespace psapi;
 
 /*=======================< ABarButton implementation >========================*/
 
-ABarButton::ABarButton(const wid_t& id, const vec2i& pos, const vec2i& size) :
-    id_     (id),
-    pos_    (pos),
-    size_   (size)
+ABarButton::ABarButton(const vec2i& pos, const vec2i& size, const wid_t& id) :
+    IBarButton  (),
+    id_         (id),
+    pos_        (pos),
+    size_       (size)
 
 {
 }
@@ -66,7 +67,8 @@ ABarButton::State ABarButton::getState() const
 
 /*===========================< ABar implementation >==========================*/
 
-ABar::ABar(const wid_t& id = kInvalidWindowId, const vec2i& pos, const vec2i& size) :
+ABar::ABar(const vec2i& pos, const vec2i& size, const wid_t& id) :
+    IBar    (),
     id_     (id),
     pos_    (pos),
     size_   (size)
@@ -101,7 +103,10 @@ const IWindow* ABar::getWindowById(wid_t id) const
 
 void ABar::addWindow(std::unique_ptr<IWindow> window)
 {
-    if (is_active_ && !checkDuplicate(window->getId())) buttons_.push_back(std::move(window));
+    if (is_active_ && !checkDuplicate(window->getId())) 
+    {
+        buttons_.push_back(std::move(window));
+    }
 }
 
 void ABar::removeWindow(wid_t id)

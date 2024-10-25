@@ -1,5 +1,6 @@
 #include "window.hpp"
 
+#include <iostream>
 #include <cassert>
 
 using namespace psapi;
@@ -146,6 +147,11 @@ bool IWindowContainer::isWindowContainer() const
     return true;
 }
 
+bool IWindowVector::isWindowContainer() const
+{
+    return true;
+}
+
 void IWindowVector::addWindow(std::unique_ptr<IWindow> window)
 {
     windows_.push_back(std::move(window));
@@ -233,7 +239,7 @@ void RootWindow::forceDeactivate()
     return;
 }
 
-IWindowContainer* getRootWindow()
+IWindowContainer *psapi::getRootWindow()
 {
     static RootWindow root_window;
     return &root_window;

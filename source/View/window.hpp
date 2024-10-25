@@ -10,21 +10,21 @@ namespace psapi
     {
     public:
          AWindow(const wid_t& id = kInvalidWindowId);
-        ~AWindow() = default;
+        ~AWindow(){};
 
-        virtual void draw(IRenderWindow* renderWindow) = 0;
-        virtual bool update(const IRenderWindow* renderWindow, const Event& event) = 0;
+        virtual void draw(IRenderWindow* renderWindow) override = 0;
+        virtual bool update(const IRenderWindow* renderWindow, const Event& event) override = 0;
 
               wid_t    getId        ()         const override;
               IWindow* getWindowById(wid_t id)       override;
         const IWindow* getWindowById(wid_t id) const override;
 
-        virtual vec2i getPos() const = 0;
-        virtual vec2i getSize() const = 0;
-        virtual void setParent(const IWindow* parent) = 0;
-        virtual void forceActivate() = 0;
-        virtual void forceDeactivate() = 0;
-        virtual bool isWindowContainer() const = 0;
+        virtual vec2i getPos() const override = 0;
+        virtual vec2i getSize() const override = 0;
+        virtual void setParent(const IWindow* parent) override = 0;
+        virtual void forceActivate() override = 0;
+        virtual void forceDeactivate() override = 0;
+        virtual bool isWindowContainer() const override = 0;
 
     protected:
         wid_t id_;
@@ -34,7 +34,7 @@ namespace psapi
     {
     public:
          AWindowContainer(const wid_t& id = kInvalidWindowId);
-        ~AWindowContainer() = default;
+        ~AWindowContainer(){};
 
         wid_t getId() const override;
         bool isWindowContainer() const override;
@@ -66,7 +66,7 @@ namespace psapi
     {
     public:
          AWindowVector(const wid_t& id = kInvalidWindowId);
-        ~AWindowVector() = default;
+        ~AWindowVector(){};
 
         wid_t getId() const override;
 
@@ -99,7 +99,7 @@ namespace psapi
     {
     public:
          RootWindow();
-        ~RootWindow() = default;
+        ~RootWindow(){};
 
         virtual void draw  (      psapi::IRenderWindow* renderWindow) override;
         virtual bool update(const psapi::IRenderWindow* renderWindow,

@@ -1,4 +1,5 @@
 #include "Graphics/Graphics.hpp"
+#include "View/View.hpp"
 
 #include <iostream>
 
@@ -6,45 +7,39 @@ using namespace psapi;
 using namespace sfm;
 
 int main()
-{
-    RenderWindow main_window(800, 600, "LOL");
+{   
+    RenderWindow render_window(800, 600, "RootWindow");
 
-    Texture texture;
-    texture.loadFromFile("Pictures/start_button.png");
+    IWindowContainer* root_window = getRootWindow();
 
-    Sprite sprite;
-    sprite.setTexture(&texture);
+    root_window->addWindow(std::make_unique<Canvas>(vec2i{400, 300}));
 
-    Sprite sprite1;
-    sprite1.setTexture(&texture);
-    sprite1.setScale(0.5f, 0.5f);
+    Canvas* canvas = static_cast<Canvas*>(root_window->getWindowById(kCanvasWindowId));
 
-    while (main_window.isOpen())
+    canvas->setParent(root_window);
+
+    while (render_window.isOpen())
     {
         Event event;
 
-        while (main_window.pollEvent(event))
+        while (render_window.pollEvent(event))
         {
             if (event.type == Event::EventType::Closed)
             {
-                main_window.close();
-            }
-            else if (event.type == Event::EventType::KeyPressed && event.key.code == Keyboard::Key::Escape)
-            {
-                main_window.close();
-            }
-            else if (event.type == Event::EventType::MouseButtonPressed && event.mouseButton.button == Mouse::Button::Left)
-            {
-                sprite.setPosition(vec2f{event.mouseButton.x, event.mouseButton.y});
+                render_window.close();
             }
         }
 
-        main_window.clear();
-        main_window.draw(&sprite);
-        main_window.draw(&sprite1);
-        main_window.display();
+        render_window.display();
+        render_window.clear();
+
+        ILayer* temp_layer = canvas->getTempLayer();
+        temp_layer->setPixel(canvas->getMousePosition(), {255, 255, 255, 255});
+
+        root_window->draw(&render_window);
+
+        root_window->update(&render_window, event);
     }
-    
 
     return 0;
 }
