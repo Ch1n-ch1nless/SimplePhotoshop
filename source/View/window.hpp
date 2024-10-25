@@ -95,6 +95,28 @@ namespace psapi
         wid_t id_;
     };
 
+    class RootWindow : public AWindowVector
+    {
+    public:
+         RootWindow();
+        ~RootWindow() = default;
+
+        virtual void draw  (      psapi::IRenderWindow* renderWindow) override;
+        virtual bool update(const psapi::IRenderWindow* renderWindow,
+                            const psapi::sfm::Event& event)           override;
+        
+        virtual wid_t getId() const override;
+
+        virtual psapi::vec2i getPos()  const          override;
+        virtual psapi::vec2i getSize() const          override;
+        virtual void setParent(const IWindow* parent) override;
+        virtual void forceActivate()                  override;
+        virtual void forceDeactivate()                override;
+
+    private:
+        bool is_active = true;
+    };
+
 } //psapi
 
 

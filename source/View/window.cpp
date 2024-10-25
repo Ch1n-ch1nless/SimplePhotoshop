@@ -138,3 +138,101 @@ const IWindow* AWindowVector::getWindowById(wid_t id) const
 }
 
 /*============================================================================*/
+
+/*======================< IWindowVector implementation >======================*/
+
+bool IWindowContainer::isWindowContainer() const
+{
+    return true;
+}
+
+void IWindowVector::addWindow(std::unique_ptr<IWindow> window)
+{
+    windows_.push_back(std::move(window));
+}
+
+void IWindowVector::removeWindow(wid_t id)
+{
+    for (auto it = windows_.begin(); it != windows_.end(); it++) {
+        if ((*it)->getId() == id) {
+            windows_.erase(it);
+            return;
+        }
+    }
+}
+
+IWindow* IWindowVector::getWindowById(wid_t id)
+{
+    for (auto& window : windows_)
+    {
+        if (window->getId() == id)
+        {
+            return window.get();
+        }
+    }
+
+    return (getId() == id) ? this : nullptr;
+}
+
+const IWindow* IWindowVector::getWindowById(wid_t id) const
+{
+    for (auto& window : windows_)
+    {
+        if (window->getId() == id)
+        {
+            return window.get();
+        }
+    }
+
+    return (getId() == id) ? this : nullptr;
+}
+
+/*============================================================================*/
+
+/*=======================< RootWindow implementation >========================*/
+
+RootWindow::RootWindow() : AWindowVector(kRootWindowId) {}
+
+void RootWindow::draw(IRenderWindow* renderWindow)
+{
+    drawChildren(renderWindow);
+}
+
+bool RootWindow::update(const IRenderWindow* renderWindow, const Event& event)
+{
+    return updateChildren(renderWindow, event);
+}
+
+wid_t RootWindow::getId() const 
+{
+    return kRootWindowId;
+}
+
+vec2i RootWindow::getPos() const
+{
+    return {0, 0};
+}
+
+vec2i RootWindow::getSize() const 
+{
+    return {0, 0};
+}
+
+void RootWindow::setParent(const IWindow* window)
+{
+    return;
+}
+
+void RootWindow::forceActivate()
+{
+    return;
+}
+
+void RootWindow::forceDeactivate()
+{
+    return;
+}
+
+
+
+/*============================================================================*/
