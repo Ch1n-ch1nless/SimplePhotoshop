@@ -10,7 +10,7 @@ namespace psapi
     class ABarButton : public IBarButton
     {
     public:
-         ABarButton(const vec2i& pos, const vec2i& size, const wid_t& id = kInvalidWindowId);
+         ABarButton(const vec2i& pos, const vec2u& size, const wid_t& id = kInvalidWindowId);
         ~ABarButton(){};
 
         virtual void draw(IRenderWindow* renderWindow) = 0;
@@ -20,7 +20,7 @@ namespace psapi
         virtual const IWindow* getWindowById(wid_t id) const override;
 
         virtual vec2i getPos()  const override;
-        virtual vec2i getSize() const override;
+        virtual vec2u getSize() const override;
         virtual wid_t getId()   const override;
 
         virtual void setParent(const IWindow* parent) override;
@@ -39,13 +39,13 @@ namespace psapi
         bool is_active_ = true;
 
         vec2i pos_;
-        vec2i size_;
+        vec2u size_;
     };
 
     class ABar : public IBar
     {
     public:
-         ABar(const vec2i& pos, const vec2i& size, const wid_t& id = kInvalidWindowId);
+         ABar(const vec2i& pos, const vec2u& size, const wid_t& id = kInvalidWindowId);
         ~ABar(){};
 
         virtual ChildInfo getNextChildInfo() const = 0;
@@ -59,7 +59,7 @@ namespace psapi
         virtual void removeWindow(wid_t id) override;
 
         virtual vec2i getPos()  const override;
-        virtual vec2i getSize() const override;
+        virtual vec2u getSize() const override;
         virtual wid_t getId()   const override;
 
         virtual void setParent(const IWindow* parent) override;
@@ -79,7 +79,7 @@ namespace psapi
         bool is_active_ = true;
 
         vec2i pos_;
-        vec2i size_;
+        vec2u size_;
     };  
 
 }

@@ -10,18 +10,18 @@ namespace psapi
     class Layer : public ILayer
     {
     public:
-         Layer(vec2i size);
+         Layer(vec2u size);
         ~Layer();
 
         sfm::Color getPixel(sfm::vec2i pos) const override;
         void       setPixel(sfm::vec2i pos, sfm::Color pixel) override;
 
-        void       resize(vec2i new_size);
+        void       resize(vec2u new_size);
 
     private:
         friend class Canvas;
 
-        vec2i size_;
+        vec2u size_;
 
         std::vector<sfm::Color> pixels_;
     };
@@ -29,7 +29,7 @@ namespace psapi
     class Canvas : public ICanvas
     {
     public:
-         Canvas(vec2i init_size);
+         Canvas(vec2u init_size);
         ~Canvas();
 
         virtual wid_t getId() const override;
@@ -37,12 +37,14 @@ namespace psapi
         virtual const IWindow* getWindowById(wid_t id) const override;
 
         virtual vec2i getPos()  const override;
-        virtual vec2i getSize() const override;
+        virtual vec2u getSize() const override;
 
         virtual void setParent(const IWindow* parent) override;
 
         virtual void forceActivate() override;
         virtual void forceDeactivate() override;
+        virtual bool isActive() const override;
+
         virtual bool isWindowContainer() const override;
 
         virtual void draw(psapi::IRenderWindow* renderWindow)         override;
@@ -71,7 +73,7 @@ namespace psapi
         virtual void setScale(sfm::vec2f scale) override;
 
         virtual sfm::vec2i getMousePosition() const override;
-        virtual bool isPressed()         const override;
+        virtual bool isPressed()              const override;
 
     private:
         void drawLayer(const Layer* layer, IRenderWindow* renderWindow);
@@ -82,7 +84,7 @@ namespace psapi
 
         const IWindow* parent_;
 
-        vec2i size_;
+        vec2u size_;
         vec2i pos_;
         vec2f scale_;
 

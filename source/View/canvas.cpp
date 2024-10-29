@@ -7,7 +7,7 @@ using namespace psapi;
 
 /*==========================< Layer implementation >==========================*/
 
-Layer::Layer(vec2i init_size) :
+Layer::Layer(vec2u init_size) :
     size_   (init_size),
     pixels_ (static_cast<size_t>(init_size.x * init_size.y))
 {
@@ -39,7 +39,7 @@ void Layer::setPixel(sfm::vec2i pos, sfm::Color pixel)
     pixels_[y * (size_t)size_.x + x] = pixel;
 }
 
-void Layer::resize(vec2i new_size)
+void Layer::resize(vec2u new_size)
 {
     std::vector<sfm::Color> new_pixels(static_cast<size_t>(new_size.x * new_size.y));
 
@@ -62,7 +62,7 @@ void Layer::resize(vec2i new_size)
 
 /*=========================< Canvas implementation >==========================*/
 
-Canvas::Canvas(vec2i size) :
+Canvas::Canvas(vec2u size) :
     temp_layer_(std::make_unique<Layer>(size)),
     layers_(0),
     size_(size),
@@ -100,7 +100,7 @@ vec2i Canvas::getPos() const
     return pos_;
 }
 
-vec2i Canvas::getSize() const
+vec2u Canvas::getSize() const
 {
     return size_;
 }
@@ -118,6 +118,12 @@ void Canvas::forceDeactivate()
 {
     return;
 }
+
+bool Canvas::isActive() const
+{
+    return true;
+}
+
 bool Canvas::isWindowContainer() const
 {
     return false;
@@ -252,11 +258,12 @@ void Canvas::setPos(sfm::vec2i pos)
 
 void Canvas::setSize(sfm::vec2i size)
 {
-    size_ = size;
+    size_.x = size.x;
+    size_.y = size.y;
 
-    temp_layer_->resize(size);
+    temp_layer_->resize(size_);
     for (auto& layer : layers_) {
-        layer->resize(size);
+        layer->resize(size_);
     }
 }
 

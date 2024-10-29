@@ -12,7 +12,7 @@ int main()
 
     IWindowContainer* root_window = getRootWindow();
 
-    root_window->addWindow(std::make_unique<Canvas>(vec2i{400, 300}));
+    root_window->addWindow(std::make_unique<Canvas>(vec2u{400, 300}));
 
     Canvas* canvas = static_cast<Canvas*>(root_window->getWindowById(kCanvasWindowId));
 

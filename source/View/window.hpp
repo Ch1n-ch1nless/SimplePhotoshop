@@ -20,10 +20,12 @@ namespace psapi
         const IWindow* getWindowById(wid_t id) const override;
 
         virtual vec2i getPos() const override = 0;
-        virtual vec2i getSize() const override = 0;
+        virtual vec2u getSize() const override = 0;
         virtual void setParent(const IWindow* parent) override = 0;
         virtual void forceActivate() override = 0;
         virtual void forceDeactivate() override = 0;
+        virtual bool isActive() const override= 0;
+
         virtual bool isWindowContainer() const override = 0;
 
     protected:
@@ -49,10 +51,11 @@ namespace psapi
         virtual const IWindow* getWindowById(wid_t id) const = 0;
 
         virtual vec2i getPos() const = 0;
-        virtual vec2i getSize() const = 0;
+        virtual vec2u getSize() const = 0;
         virtual void setParent(const IWindow* parent) = 0;
         virtual void forceActivate() = 0;
         virtual void forceDeactivate() = 0;
+        virtual bool isActive() const = 0;
 
     protected:
         virtual bool checkDuplicate(const wid_t& id) = 0;
@@ -82,10 +85,11 @@ namespace psapi
         virtual bool update(const IRenderWindow* renderWindow, const Event& event) = 0;
 
         virtual vec2i getPos() const = 0;
-        virtual vec2i getSize() const = 0;
+        virtual vec2u getSize() const = 0;
         virtual void setParent(const IWindow* parent) = 0;
         virtual void forceActivate() = 0;
         virtual void forceDeactivate() = 0;
+        virtual bool isActive() const = 0;
 
     protected:  
         virtual bool checkDuplicate(const wid_t& id);
@@ -108,10 +112,11 @@ namespace psapi
         virtual wid_t getId() const override;
 
         virtual psapi::vec2i getPos()  const          override;
-        virtual psapi::vec2i getSize() const          override;
+        virtual psapi::vec2u getSize() const          override;
         virtual void setParent(const IWindow* parent) override;
         virtual void forceActivate()                  override;
         virtual void forceDeactivate()                override;
+        virtual bool isActive() const                 override;
 
     private:
         bool is_active = true;

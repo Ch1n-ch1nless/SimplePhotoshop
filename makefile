@@ -34,7 +34,7 @@ VIEW_OBJ	 = $(patsubst $(VIEW_SRC_DIR)%.cpp, $(VIEW_OBJ_DIR)%.o, $(VIEW_SRC))
 
 all: link
 
-link: $(GRAPHICS_OBJ) $(MAIN_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ)
+link: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(MAIN_OBJ)
 	$(CC) $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
@@ -50,7 +50,7 @@ $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(VIEW_OBJ)
+	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ)
 
 build:
 	mkdir object              && \

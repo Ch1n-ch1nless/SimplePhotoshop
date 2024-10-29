@@ -219,7 +219,7 @@ vec2i RootWindow::getPos() const
     return {0, 0};
 }
 
-vec2i RootWindow::getSize() const 
+vec2u RootWindow::getSize() const 
 {
     return {0, 0};
 }
@@ -237,6 +237,11 @@ void RootWindow::forceActivate()
 void RootWindow::forceDeactivate()
 {
     return;
+}
+
+bool RootWindow::isActive() const
+{
+    return true;
 }
 
 IWindowContainer *psapi::getRootWindow()

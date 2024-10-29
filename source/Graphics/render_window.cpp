@@ -1,5 +1,7 @@
 #include "render_window.hpp"
 
+#include <cassert>
+
 using namespace psapi;
 using namespace sfm;
 
@@ -36,6 +38,19 @@ bool RenderWindow::isOpen() const
 vec2u RenderWindow::getSize() const
 {
     return size_;
+}
+
+void RenderWindow::setFps(float fps)
+{
+    //TODO: Fix the assert
+    assert(false && "ERROR!!! Current function is npt allowed to use it!\n");
+}
+
+float RenderWindow::getFps() const
+{
+    //TODO: Fix the assert
+    assert(false && "ERROR!!! Current function is npt allowed to use it!\n");
+    return 0.f;
 }
 
 std::unique_ptr<IRenderWindow> RenderWindow::create(unsigned int width, unsigned int height, const std::string& name)

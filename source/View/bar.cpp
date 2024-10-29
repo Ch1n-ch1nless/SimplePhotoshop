@@ -4,7 +4,7 @@ using namespace psapi;
 
 /*=======================< ABarButton implementation >========================*/
 
-ABarButton::ABarButton(const vec2i& pos, const vec2i& size, const wid_t& id) :
+ABarButton::ABarButton(const vec2i& pos, const vec2u& size, const wid_t& id) :
     IBarButton  (),
     id_         (id),
     pos_        (pos),
@@ -28,7 +28,7 @@ vec2i ABarButton::getPos() const
     return pos_;
 }
 
-vec2i ABarButton::getSize() const
+vec2u ABarButton::getSize() const
 {
     return size_;
 }
@@ -67,7 +67,7 @@ ABarButton::State ABarButton::getState() const
 
 /*===========================< ABar implementation >==========================*/
 
-ABar::ABar(const vec2i& pos, const vec2i& size, const wid_t& id) :
+ABar::ABar(const vec2i& pos, const vec2u& size, const wid_t& id) :
     IBar    (),
     id_     (id),
     pos_    (pos),
@@ -127,7 +127,7 @@ vec2i ABar::getPos()  const
     return pos_;
 }
 
-vec2i ABar::getSize() const
+vec2u ABar::getSize() const
 {
     return size_;
 }
