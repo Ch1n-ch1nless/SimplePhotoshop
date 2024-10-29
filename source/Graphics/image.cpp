@@ -144,14 +144,4 @@ std::unique_ptr<psapi::sfm::IImage> psapi::sfm::Image::create()
     return std::make_unique<Image>();
 }
 
-std::unique_ptr<psapi::sfm::IImage> psapi::sfm::IImage::create()
-{
-    return std::make_unique<Image>();
-}
-
-bool psapi::sfm::Image::loadFromFile(const std::string &filename)
-{
-    return image_.loadFromFile(filename);
-}
-
 /*============================================================================*/
