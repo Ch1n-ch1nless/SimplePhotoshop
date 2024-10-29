@@ -29,7 +29,7 @@ namespace psapi
              Text();
             ~Text() = default;
 
-            virtual void draw(IRenderWindow *window)          override;
+            virtual void draw(IRenderWindow *window)    const override;
             virtual void setString(const std::string& string) override;
             virtual void setFont(const IFont* font)           override;
             virtual void setCharacterSize(unsigned int size)  override;

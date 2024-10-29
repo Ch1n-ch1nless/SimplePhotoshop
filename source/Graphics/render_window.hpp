@@ -13,6 +13,8 @@ namespace psapi
         class Sprite;
         class Image;
         class PixelsArray;
+        class RectangleShape;
+        class EllipseShape;
 
         class RenderWindow : public IRenderWindow
         {
@@ -20,16 +22,19 @@ namespace psapi
              RenderWindow(unsigned int width, unsigned int height, const std::string& window_title);
             ~RenderWindow() = default;
 
-            virtual bool isOpen ()  override;
-            virtual void clear  ()  override;
-            virtual void display()  override;
-            virtual void close  ()  override;
+            virtual bool isOpen () const override;
+            virtual void clear  ()       override;
+            virtual void display()       override;
+            virtual void close  ()       override;
 
             virtual vec2u getSize() const override;
 
             virtual bool pollEvent(Event& event) override;
 
             virtual void draw(Drawable *target) override;
+
+            virtual void setFps(float fps) override;
+            virtual float getFps() const override;
 
             static std::unique_ptr<IRenderWindow> create(unsigned int width, unsigned int height, const std::string& name);
 
@@ -41,6 +46,8 @@ namespace psapi
             friend class Sprite;
             friend class Image;
             friend class PixelsArray;
+            friend class RectangleShape;
+            friend class EllipseShape;
         };
 
     } //sfm

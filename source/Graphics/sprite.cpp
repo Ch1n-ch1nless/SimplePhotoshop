@@ -106,10 +106,10 @@ void Sprite::setScale(float factorX, float factorY)
     sprite_.setScale(factorX, factorY);
 }
 
-vec2i Sprite::getSize() const
+vec2u Sprite::getSize() const
 {
     sf::Vector2u vec = sprite_.getTexture()->getSize();
-    return vec2i(static_cast<int>(vec.x), static_cast<int>(vec.y));
+    return vec2u(vec.x, vec.y);
 }
 
 void Sprite::setColor(const Color &color)
@@ -134,7 +134,7 @@ IntRect Sprite::getGlobalBounds() const
     return {(int)area.left, (int)area.top, (int)area.width, (int)area.height};
 }
 
- void Sprite::draw(IRenderWindow *window)
+ void Sprite::draw(IRenderWindow *window) const
  {
     RenderWindow* real_window = static_cast<RenderWindow*>(window);
 

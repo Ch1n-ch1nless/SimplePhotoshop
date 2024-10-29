@@ -28,7 +28,7 @@ void RenderWindow::draw(Drawable* target)
     target->draw(this);
 }
 
-bool RenderWindow::isOpen()
+bool RenderWindow::isOpen() const
 {
     return window_.isOpen();
 }

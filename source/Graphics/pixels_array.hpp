@@ -13,7 +13,7 @@ namespace psapi
              PixelsArray(size_t init_size);
             ~PixelsArray() = default;
 
-            virtual void draw(IRenderWindow* render_window) override;
+            virtual void draw(IRenderWindow* render_window) const override;
 
             virtual void setColor(const Color &color, size_t ind) override;
             virtual Color getColor(size_t ind) const override;

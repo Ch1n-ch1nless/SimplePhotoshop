@@ -75,7 +75,12 @@ std::unique_ptr<psapi::sfm::IPixelsArray> psapi::sfm::PixelsArray::create()
     return std::make_unique<psapi::sfm::PixelsArray>(INIT_SIZE);
 }
 
-void psapi::sfm::PixelsArray::draw(psapi::sfm::IRenderWindow* window)
+std::unique_ptr<psapi::sfm::IPixelsArray>  psapi::sfm::IPixelsArray::create()
+{
+    return std::make_unique<psapi::sfm::PixelsArray>(INIT_SIZE);
+}
+
+void psapi::sfm::PixelsArray::draw(psapi::sfm::IRenderWindow* window) const
 {
     RenderWindow* real_window = static_cast<RenderWindow*>(window);
     real_window->window_.draw(data_);

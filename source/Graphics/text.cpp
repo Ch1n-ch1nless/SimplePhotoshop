@@ -31,7 +31,7 @@ psapi::sfm::Text::Text() :
 {
 }
 
-void psapi::sfm::Text::draw(IRenderWindow *window)
+void psapi::sfm::Text::draw(IRenderWindow *window) const
 {
     RenderWindow* real_window = static_cast<RenderWindow*>(window);
 

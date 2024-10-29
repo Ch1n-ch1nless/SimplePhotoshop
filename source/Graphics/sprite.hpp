@@ -45,7 +45,7 @@ namespace psapi
             virtual void setPosition(const vec2f &pos) override;
 
             virtual void setScale(float factorX, float factorY) override;
-            virtual vec2i getSize() const override;
+            virtual vec2u getSize() const override;
 
             virtual void setColor(const Color &color) override;
 
@@ -56,7 +56,7 @@ namespace psapi
 
             static std::unique_ptr<ISprite> create();
 
-            virtual void draw(IRenderWindow *window) override;
+            virtual void draw(IRenderWindow *window) const override;
 
         private:
             sf::Sprite sprite_;
