@@ -1,6 +1,6 @@
 #include "pencil_action.hpp"
 
-sys_plugin::PencilAction::PencilAction()
+/*sys_plugin::PencilAction::PencilAction()
 {
     canvas_ = static_cast<psapi::ICanvas*>(psapi::getRootWindow()->getWindowById(psapi::kCanvasWindowId));
 }
@@ -57,4 +57,4 @@ bool sys_plugin::PencilAction::operator()(const psapi::IRenderWindow* renderWind
     }
 
     mouse_points_.pop_front();
-}
+}*/

@@ -6,7 +6,7 @@
 
 namespace sys_plugin
 {
-    class PencilAction : public psapi::AButtonAction
+    /*class PencilAction : public psapi::AButtonAction
     {
     public:
          PencilAction();
@@ -26,7 +26,7 @@ namespace sys_plugin
                                         psapi::vec2i &point3    );
 
         size_t calcStepNumber(psapi::vec2i &point1, psapi::vec2i &point2);
-    };
+    };*/
 };
 
 #endif //SYSTEM_PLUGIN_PENCIL_ACTION_HPP

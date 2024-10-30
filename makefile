@@ -23,6 +23,9 @@ VIEW_OBJ_DIR 		= ./object/View/
 MAIN_SRC = ./source/main.cpp
 MAIN_OBJ = ./object/main.o
 
+SYSTEM_PLUGINS_SRC_DIR = ./source/SystemPlugins/
+SYSTEM_PLUGINS_OBJ_DIR = ./object/SystemPlugins/
+
 GRAPHICS_SRC = $(wildcard $(GRAPHICS_SRC_DIR)*.cpp)
 GRAPHICS_OBJ = $(patsubst $(GRAPHICS_SRC_DIR)%.cpp, $(GRAPHICS_OBJ_DIR)%.o, $(GRAPHICS_SRC))
 
@@ -32,10 +35,13 @@ STANDARD_OBJ = $(patsubst $(STANDARD_SRC_DIR)%.cpp, $(STANDARD_OBJ_DIR)%.o, $(ST
 VIEW_SRC	 = $(wildcard $(VIEW_SRC_DIR)*.cpp)
 VIEW_OBJ	 = $(patsubst $(VIEW_SRC_DIR)%.cpp, $(VIEW_OBJ_DIR)%.o, $(VIEW_SRC))
 
+SYSTEM_PLUGINS_SRC	 = $(wildcard $(SYSTEM_PLUGINS_SRC_DIR)*.cpp)
+SYSTEM_PLUGINS_OBJ	 = $(patsubst $(SYSTEM_PLUGINS_SRC_DIR)%.cpp, $(SYSTEM_PLUGINS_OBJ_DIR)%.o, $(SYSTEM_PLUGINS_SRC))
+
 all: link
 
-link: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(MAIN_OBJ)
-	$(CC) $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+link: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_OBJ) $(MAIN_OBJ)
+	$(CC) $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -46,14 +52,18 @@ $(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
 $(VIEW_OBJ_DIR)%.o : $(VIEW_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+$(SYSTEM_PLUGINS_OBJ_DIR)%.o : $(SYSTEM_PLUGINS_SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
 $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ)
+	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) $(SYSTEM_PLUGINS_OBJ)
 
 build:
-	mkdir object              && \
-	mkdir $(GRAPHICS_OBJ_DIR) && \
-	mkdir $(STANDARD_OBJ_DIR) && \
-	mkdir $(VIEW_OBJ_DIR)
+	mkdir object              		&& \
+	mkdir $(GRAPHICS_OBJ_DIR) 		&& \
+	mkdir $(STANDARD_OBJ_DIR) 		&& \
+	mkdir $(VIEW_OBJ_DIR)	  		&& \
+	mkdir $(SYSTEM_PLUGINS_OBJ_DIR)

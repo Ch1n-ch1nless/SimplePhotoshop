@@ -1,5 +1,6 @@
 #include "Graphics/Graphics.hpp"
 #include "View/View.hpp"
+#include "SystemPlugins/tool_bar.hpp"
 
 #include <iostream>
 
@@ -19,6 +20,12 @@ int main()
     canvas->setParent(root_window);
 
     canvas->setPos({200, 150});
+
+    root_window->addWindow(std::make_unique<sys_plugin::ToolBar>(vec2i{650, 0}, vec2u{150, 600}, vec2u{35, 35}, 4, "Pictures/tool_bar.png"));
+
+    sys_plugin::ToolBar* tool_bar = static_cast<sys_plugin::ToolBar*>(root_window->getWindowById(kToolBarWindowId));
+
+    tool_bar->setParent(root_window);
 
     while (render_window.isOpen())
     {

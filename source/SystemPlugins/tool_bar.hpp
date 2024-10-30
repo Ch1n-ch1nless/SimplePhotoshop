@@ -9,8 +9,14 @@ namespace sys_plugin
     class ToolBarButton : public psapi::ABarButton
     {
     public:
-        ToolBarButton(const psapi::vec2i& pos, const psapi::vec2u& size, const psapi::wid_t& id);
-        virtual ~ToolBarButton() noexcept override;
+        ToolBarButton(  const psapi::IBar* parent, 
+                        std::unique_ptr<psapi::AButtonAction> action,
+                        const char** texture_files,
+                        const psapi::vec2i &pos  = psapi::vec2i{0, 0}, 
+                        const psapi::vec2u &size = psapi::vec2u{0, 0}, 
+                        const psapi::wid_t &id   = psapi::kInvalidWindowId  );
+        
+        ~ToolBarButton() noexcept override = default;
 
         virtual void draw(psapi::IRenderWindow* renderWindow) const override;
         virtual bool update(const psapi::IRenderWindow* renderWindow, const psapi::Event& event) override;
@@ -25,16 +31,11 @@ namespace sys_plugin
     class ToolBar : public psapi::ABar 
     {
     public:
-        ToolBar(const psapi::vec2i& pos, const psapi::vec2i& size, const std::string& background);
-        virtual ~ToolBar() noexcept override;
+        ToolBar(const psapi::vec2i& pos, const psapi::vec2u& size, const psapi::vec2u &the_button_size, const size_t &rows_number, const std::string& background);
+        ~ToolBar() noexcept override = default;
 
         virtual void draw(psapi::IRenderWindow* renderWindow) override;
         virtual bool update(const psapi::IRenderWindow* renderWindow, const psapi::Event& event) override;
-
-        virtual psapi::ChildInfo getNextChildInfo() const override;
-        virtual void finishButtonDraw(psapi::IRenderWindow* renderWindow, const psapi::IBarButton* button) override;
-
-        void createButtons(const std::vector<std::string> &texture_files);
 
     private:    
         psapi::sfm::Texture texture_;

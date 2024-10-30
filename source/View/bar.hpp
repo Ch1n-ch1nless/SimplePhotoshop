@@ -7,6 +7,8 @@
 
 namespace psapi
 {
+    class ABar;
+
     class AButtonAction 
     {
     public:
@@ -22,7 +24,7 @@ namespace psapi
                     std::unique_ptr<AButtonAction> action,
                     const psapi::vec2i &pos  = vec2i{0, 0}, 
                     const psapi::vec2u &size = vec2u{0, 0}, 
-                    const wid_t &id = kInvalidWindowId);
+                    const wid_t &id = kInvalidWindowId      );
         
         ABarButton() = default;
 
@@ -43,6 +45,9 @@ namespace psapi
         virtual void forceActivate()                  override;
         virtual bool isActive() const                 override;
 
+        virtual void setSize(psapi::vec2u &new_size);
+        virtual void setPos(psapi::vec2i &new_pos);
+
         virtual void setState(State state);
         virtual State getState() const;
 
@@ -58,19 +63,20 @@ namespace psapi
         vec2u size_;
 
         std::unique_ptr<AButtonAction> action_;
+
+        friend class ABar;
     };
 
     class ABar : public IBar
     {
     public:
-        ABar(const psapi::vec2i &pos, const psapi::vec2u &size, const wid_t &id = kInvalidWindowId);
-        ABar() = default;
+        ABar(const psapi::vec2i &pos, const psapi::vec2u &size, const psapi::vec2u &button_size, const size_t &rows_number, const wid_t &id = kInvalidWindowId);
 
-        virtual ~ABar() noexcept = 0;
+        virtual ~ABar() noexcept = default;
 
-        virtual ChildInfo getNextChildInfo() const = 0;
+        virtual ChildInfo getNextChildInfo() const;
 
-        virtual void finishButtonDraw(IRenderWindow* renderWindow, const IBarButton* button) = 0;
+        virtual void finishButtonDraw(IRenderWindow* renderWindow, const IBarButton* button) const override;
 
         virtual       IWindow* getWindowById(wid_t id)       override;
         virtual const IWindow* getWindowById(wid_t id) const override;
@@ -101,6 +107,12 @@ namespace psapi
 
         vec2i pos_;
         vec2u size_;
+
+        const psapi::vec2u button_size;
+        const psapi::vec2i buttons_offset = {10, 10};
+        const size_t n_row_buttons;
+
+        mutable size_t cur_button_index = 0;
     };  
 
 }

@@ -42,6 +42,16 @@ wid_t ABarButton::getId() const
     return id_;
 }
 
+void ABarButton::setSize(psapi::vec2u &new_size)
+{
+    size_ = new_size;
+}
+
+void ABarButton::setPos(psapi::vec2i &new_pos)
+{
+    pos_ = new_pos;
+}
+
 void ABarButton::setParent(const IWindow* parent)
 {
     parent_ = parent;
@@ -76,11 +86,30 @@ ABarButton::State ABarButton::getState() const
 
 /*===========================< ABar implementation >==========================*/
 
-ABar::ABar(const psapi::vec2i &pos, const psapi::vec2u &size, const wid_t &id) :
-    pos_    (pos),
-    size_   (size),
-    id_     (id)
+ABar::ABar(const psapi::vec2i &pos, const psapi::vec2u &size,  const psapi::vec2u &the_button_size, const size_t &rows_number, const wid_t &id) :
+    pos_            (pos),
+    size_           (size),
+    id_             (id),
+    button_size     (the_button_size),
+    n_row_buttons   (rows_number)
 {
+}
+
+void ABar::finishButtonDraw(IRenderWindow* renderWindow, const IBarButton* button) const
+{
+    return;
+}
+
+ChildInfo ABar::getNextChildInfo() const
+{
+    int row_index = cur_button_index / n_row_buttons;
+    int col_index = cur_button_index % n_row_buttons;
+
+    psapi::vec2i button_pos = pos_ + buttons_offset + vec2i{col_index * button_size.x, row_index * button_size.y};
+
+    cur_button_index++;
+
+    return ChildInfo{button_pos, vec2i{button_size.x, button_size.y}};
 }
 
 IWindow* ABar::getWindowById(wid_t id)
@@ -116,6 +145,19 @@ void ABar::addWindow(std::unique_ptr<IWindow> window)
         window->setParent(this);
         buttons_.push_back(std::move(window));
     }
+
+    ABarButton* new_button = static_cast<ABarButton*>(window.get());
+
+    ChildInfo new_params = getNextChildInfo();
+
+    new_button->setPos(new_params.pos);
+
+    vec2u size = {};
+
+    size.x = new_params.size.x;
+    size.y = new_params.size.y;
+
+    new_button->setSize(size);
 }
 
 void ABar::removeWindow(wid_t id)
