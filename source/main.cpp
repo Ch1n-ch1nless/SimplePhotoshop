@@ -18,6 +18,8 @@ int main()
 
     canvas->setParent(root_window);
 
+    canvas->setPos({200, 150});
+
     while (render_window.isOpen())
     {
         Event event;
@@ -28,17 +30,20 @@ int main()
             {
                 render_window.close();
             }
+
+            root_window->update(&render_window, event);
         }
 
         render_window.display();
         render_window.clear();
 
-        ILayer* temp_layer = canvas->getTempLayer();
-        temp_layer->setPixel(canvas->getMousePosition(), {255, 255, 255, 255});
+        if (canvas->isPressed())
+        {
+            ILayer* temp_layer = canvas->getTempLayer();
+            temp_layer->setPixel(canvas->getMousePosition(), {0, 0, 0, 255});
+        }
 
         root_window->draw(&render_window);
-
-        root_window->update(&render_window, event);
     }
 
     return 0;

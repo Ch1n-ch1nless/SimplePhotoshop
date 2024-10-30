@@ -4,12 +4,16 @@ using namespace psapi;
 
 /*=======================< ABarButton implementation >========================*/
 
-ABarButton::ABarButton(const vec2i& pos, const vec2u& size, const wid_t& id) :
-    IBarButton  (),
-    id_         (id),
-    pos_        (pos),
-    size_       (size)
-
+ABarButton::ABarButton( const IBar* parent, 
+                        std::unique_ptr<AButtonAction> action,
+                        const psapi::vec2i &pos, 
+                        const psapi::vec2u &size, 
+                        const wid_t &id                         ) :
+    parent_ (parent),
+    pos_    (pos),
+    size_   (size),
+    id_     (id),
+    action_ (std::move(action))
 {
 }
 
@@ -53,6 +57,11 @@ void ABarButton::forceActivate()
     is_active_ = true;
 }
 
+bool ABarButton::isActive() const
+{
+    return is_active_;
+}
+
 void ABarButton::setState(State state)
 {
     state_ = state;
@@ -67,11 +76,10 @@ ABarButton::State ABarButton::getState() const
 
 /*===========================< ABar implementation >==========================*/
 
-ABar::ABar(const vec2i& pos, const vec2u& size, const wid_t& id) :
-    IBar    (),
-    id_     (id),
+ABar::ABar(const psapi::vec2i &pos, const psapi::vec2u &size, const wid_t &id) :
     pos_    (pos),
-    size_   (size)
+    size_   (size),
+    id_     (id)
 {
 }
 
@@ -105,6 +113,7 @@ void ABar::addWindow(std::unique_ptr<IWindow> window)
 {
     if (is_active_ && !checkDuplicate(window->getId())) 
     {
+        window->setParent(this);
         buttons_.push_back(std::move(window));
     }
 }
@@ -152,6 +161,10 @@ void ABar::forceActivate()
     is_active_ = true;
 }
 
+bool ABar::isActive() const
+{
+    return is_active_;
+}
 
 bool ABar::checkDuplicate(const wid_t& id)
 {

@@ -96,6 +96,9 @@ namespace psapi
         vec2i last_mouse_pos_;
 
         bool is_pressed_ = false;
+        bool is_active_  = true;
+
+        bool updateLastMousePos(const IRenderWindow* renderWindow);
     };
 
 }

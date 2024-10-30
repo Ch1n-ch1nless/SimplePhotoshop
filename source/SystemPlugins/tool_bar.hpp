@@ -9,23 +9,24 @@ namespace sys_plugin
     class ToolBarButton : public psapi::ABarButton
     {
     public:
-         ToolBarButton(const psapi::vec2i& pos, const psapi::vec2i& size, const psapi::wid_t& id = psapi::kInvalidWindowId);
-        ~ToolBarButton();
+        ToolBarButton(const psapi::vec2i& pos, const psapi::vec2u& size, const psapi::wid_t& id);
+        virtual ~ToolBarButton() noexcept override;
 
-        virtual void draw(psapi::IRenderWindow* renderWindow) override;
+        virtual void draw(psapi::IRenderWindow* renderWindow) const override;
         virtual bool update(const psapi::IRenderWindow* renderWindow, const psapi::Event& event) override;
 
-
+        virtual bool loadTextures(const char** texture_files);
 
     private:
-
+        psapi::sfm::Texture texture_[4];
+        psapi::sfm::Sprite  sprite_;
     };
 
     class ToolBar : public psapi::ABar 
     {
     public:
-         ToolBar(const psapi::vec2i& pos, const psapi::vec2i& size, const std::string& background);
-        ~ToolBar();
+        ToolBar(const psapi::vec2i& pos, const psapi::vec2i& size, const std::string& background);
+        virtual ~ToolBar() noexcept override;
 
         virtual void draw(psapi::IRenderWindow* renderWindow) override;
         virtual bool update(const psapi::IRenderWindow* renderWindow, const psapi::Event& event) override;

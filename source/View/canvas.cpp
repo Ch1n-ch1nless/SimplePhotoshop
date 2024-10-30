@@ -62,6 +62,8 @@ void Layer::resize(vec2u new_size)
 
 /*=========================< Canvas implementation >==========================*/
 
+static const sfm::Color BACKGROUND_COLOR = {200, 200, 200, 255};
+
 Canvas::Canvas(vec2u size) :
     temp_layer_(std::make_unique<Layer>(size)),
     layers_(0),
@@ -76,6 +78,22 @@ Canvas::Canvas(vec2u size) :
                     static_cast<unsigned int>(size_.y));
 
     layers_.push_back(std::make_unique<Layer>(size_));
+
+    for (int y = 0; y < size_.y; y++)
+    {
+        for (int x = 0; x < size_.x; x++)
+        {
+            temp_layer_->setPixel({x, y}, BACKGROUND_COLOR);
+        }
+    }
+
+    for (int y = 0; y < size_.y; y++) 
+    {
+        for (int x = 0; x < size_.x; x++) 
+        {
+            layers_.back()->setPixel({x, y}, BACKGROUND_COLOR);
+        }
+    }
 }
 
 Canvas::~Canvas()
@@ -130,7 +148,12 @@ bool Canvas::isWindowContainer() const
 }
 
 void Canvas::draw(psapi::IRenderWindow* renderWindow)
-{
+{   
+    if (!is_active_)
+    {
+        return;
+    }
+
     for (const auto& layer : layers_)
     {
         drawLayer(layer.get(), renderWindow);
@@ -139,33 +162,40 @@ void Canvas::draw(psapi::IRenderWindow* renderWindow)
     drawLayer(temp_layer_.get(), renderWindow);
 }
 
-bool Canvas::update(const IRenderWindow* renderWindow, const Event& event)
+bool Canvas::updateLastMousePos(const IRenderWindow* renderWindow)
 {
-    if (event.type == Event::EventType::MouseButtonPressed)
+    vec2i mouse_pos = sfm::Mouse::getPosition(renderWindow);
+
+    mouse_pos -= pos_;
+
+    last_mouse_pos_ = mouse_pos;
+
+    if (0 <= mouse_pos.x && mouse_pos.x <= size_.x &&
+        0 <= mouse_pos.y && mouse_pos.y <= size_.y      )
     {
-        is_pressed_ = true;
-        last_mouse_pos_.x = event.mouseButton.x;
-        last_mouse_pos_.y = event.mouseButton.y;
         return true;
-    }
-    else if (event.type == Event::EventType::MouseButtonReleased)
-    {
-        is_pressed_ = false;
-        last_mouse_pos_.x = event.mouseButton.x;
-        last_mouse_pos_.y = event.mouseButton.y;
-        return true;
-    }
-    else if (event.type == Event::EventType::MouseMoved)
-    {
-        if (is_pressed_)
-        {
-            last_mouse_pos_.x = event.mouseMove.x;
-            last_mouse_pos_.y = event.mouseMove.y;
-            return true;
-        }
     }
 
     return false;
+}
+
+bool Canvas::update(const IRenderWindow* renderWindow, const Event& event)
+{
+    if (!is_active_) return false;
+
+    if (event.type == Event::EventType::MouseButtonReleased)
+    {
+        is_pressed_ = false;
+    }
+
+    if (!updateLastMousePos(renderWindow)) return false;
+
+    if (event.type == Event::EventType::MouseButtonPressed)
+    {
+        is_pressed_ = true;
+    }
+
+    return true;
 }
 
 ILayer* Canvas::getLayer(size_t index)
@@ -284,11 +314,12 @@ bool Canvas::isPressed() const
 
 void Canvas::drawLayer(const Layer* layer, IRenderWindow* renderWindow)
 {
-    texture_.create(layer->size_.x, layer->size_.y);
     texture_.update(layer->pixels_.data());
     sprite_.setTexture(&texture_);
     sprite_.setScale(scale_.x, scale_.y);
-    renderWindow->draw(&sprite_);
+    sprite_.setPosition(static_cast<float>(pos_.x), static_cast<float>(pos_.y));
+
+    sprite_.draw(renderWindow);
 }
 
 /*============================================================================*/

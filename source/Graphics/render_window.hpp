@@ -48,6 +48,8 @@ namespace psapi
             friend class PixelsArray;
             friend class RectangleShape;
             friend class EllipseShape;
+
+            friend vec2i Mouse::getPosition(const IRenderWindow* window);
         };
 
     } //sfm
