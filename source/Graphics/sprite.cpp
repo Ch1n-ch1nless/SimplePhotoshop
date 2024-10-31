@@ -41,9 +41,12 @@ bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& 
 
 std::unique_ptr<IImage> Texture::copyToImage() const
 {
-    //TODO: Rewrite this function!
-    assert(false && "Sorry, but why do you use this function?\n Do you really need it?\n I think, you are tired and you need go from the room.\n Phone on this number: +7(952)812\n");
-    return nullptr;
+    std::unique_ptr<IImage> new_image = Image::create();
+
+    Image* temp_ptr = static_cast<Image*>(new_image.get());
+    temp_ptr->image_ = texture_.copyToImage();
+
+    return new_image;
 }
 
 vec2u Texture::getSize() const
@@ -64,8 +67,8 @@ void Texture::update(const Color *pixels, unsigned int width, unsigned int heigh
 
 void Texture::update(const IImage *image)
 {
-    //TODO: Rewrite this function!
-    assert(false && "Sorry, but why do you use this function?\n Do you really need it?\n I think, you are tired and you need go from the room.\n Phone on this number: +7(952)812\n");
+    const Image* temp_ptr = static_cast<const Image*>(image);
+    texture_.update(temp_ptr->image_);
 }
 
 /*============================================================================*/
@@ -115,6 +118,12 @@ vec2u Sprite::getSize() const
 void Sprite::setColor(const Color &color)
 {
     sprite_.setColor(sf::Color(color.r, color.g, color.b, color.a));
+}
+
+Color Sprite::getColor() const
+{
+    sf::Color cur_color = sprite_.getColor();
+    return Color{cur_color.r, cur_color.g, cur_color.b, cur_color.a};
 }
 
 void Sprite::setRotation(float angle)

@@ -48,6 +48,7 @@ namespace psapi
             virtual vec2u getSize() const override;
 
             virtual void setColor(const Color &color) override;
+            virtual Color getColor() const override;
 
             virtual void setRotation(float angle) override;
 
