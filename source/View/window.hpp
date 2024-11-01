@@ -58,6 +58,24 @@ namespace ps
         virtual void addWindow(std::unique_ptr<IWindow> window) override = 0;
         virtual void removeWindow(wid_t id)                     override = 0;
 
+        virtual void draw(IRenderWindow* render_window) override = 0;
+        virtual bool update(const IRenderWindow* render_window, const Event& event) override = 0;
+
+        virtual wid_t getId() const override;
+        
+        virtual       IWindow* getWindowById(wid_t id)       override;
+        virtual const IWindow* getWindowById(wid_t id) const override;
+
+        virtual vec2i getPos()  const override;
+        virtual vec2u getSize() const override;
+
+        virtual void setParent(const IWindow* parent) override;
+
+        virtual void forceActivate() override;
+        virtual void forceDeactivate() override;
+
+        virtual bool isActive() const override;
+
         virtual bool isWindowContainer() const override;
 
     protected:
@@ -69,18 +87,46 @@ namespace ps
     class AWindowVector : public AWindowContainer, public psapi::IWindowVector
     {
     public:
+         AWindowVector() = default;
         ~AWindowVector() override = default;
+
+        virtual void draw(IRenderWindow* render_window) override = 0;
+        virtual bool update(const IRenderWindow* render_window, const Event& event) override = 0;
 
         virtual void addWindow(std::unique_ptr<IWindow> window) override;
         virtual void removeWindow(wid_t id)                     override;
 
+        virtual wid_t getId() const override;
+        
         virtual       IWindow* getWindowById(wid_t id)       override;
         virtual const IWindow* getWindowById(wid_t id) const override;
+
+        virtual vec2i getPos()  const override;
+        virtual vec2u getSize() const override;
+
+        virtual void setParent(const IWindow* parent) override;
+
+        virtual void forceActivate() override;
+        virtual void forceDeactivate() override;
+
+        virtual bool isActive() const override;
+
+        virtual bool isWindowContainer() const override;
 
     protected:
         virtual void drawChildren(IRenderWindow* render_window) override;
         virtual bool updateChildren(const IRenderWindow* render_window, const Event& event) override;
         virtual bool checkDuplicate(const wid_t& id) override;
+    };
+
+    class RootWindow : public AWindowVector
+    {
+    public:
+         RootWindow();
+        ~RootWindow() = default;
+
+        virtual void draw(IRenderWindow* render_window) override;
+        virtual bool update(const IRenderWindow* render_window, const Event& event) override;
     };
 }
 
