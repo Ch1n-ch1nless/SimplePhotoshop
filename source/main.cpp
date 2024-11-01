@@ -2,7 +2,7 @@
 
 int main()
 {
-    psapi::sfm::RenderWindow render_window(800, 600, "TEST!!!");
+    psapi::sfm::RenderWindow render_window(1920, 1080, "TEST!!!");
 
     psapi::IWindowContainer* root_window = psapi::getRootWindow();
 
