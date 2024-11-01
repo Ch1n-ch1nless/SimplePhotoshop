@@ -14,12 +14,19 @@ namespace sys_plugin
     class ToolBar : public ps::ABar
     {
     public:
-         ToolBar();
+         ToolBar(std::unique_ptr<psapi::sfm::Sprite> background_sprite, 
+                 std::unique_ptr<psapi::sfm::Sprite> hover_button,
+                 std::unique_ptr<psapi::sfm::Sprite> press_button,
+                 std::unique_ptr<psapi::sfm::Sprite> release_button,
+                 const ps::vec2i    &bar_position,
+                 const ps::vec2u    &bar_size,
+                 const ps::vec2u    &button_size, 
+                 const size_t   &number_buttons_in_row,
+                 const ps::wid_t    &id                                     );
+        
         ~ToolBar() override = default;
 
-        
-    private:
-
+        static std::unique_ptr<ToolBar> create(const size_t width, const size_t height);
     };
 }
 

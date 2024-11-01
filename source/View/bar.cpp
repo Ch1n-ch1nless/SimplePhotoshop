@@ -1,5 +1,7 @@
 #include "bar.hpp"
 
+#include <iostream>
+
 using namespace ps;
 
 /*=======================< ABarButton implementation >========================*/
@@ -11,10 +13,11 @@ ABarButton::ABarButton( std::unique_ptr<psapi::sfm::Sprite> sprite,
     sprite_ (std::move(sprite)),
     action_ (std::move(action))
 {
-    id_     = psapi::kInvalidWindowId;
-    parent_ = bar_parent;
-    pos_    = {0, 0};
-    size_   = {1, 1};
+    id_         = psapi::kInvalidWindowId;
+    parent_     = bar_parent;
+    pos_        = {0, 0};
+    size_       = {1, 1};
+    is_active_  = true;
 }
 
 void ABarButton::draw(IRenderWindow* render_window)
@@ -87,6 +90,68 @@ bool ABarButton::update(const IRenderWindow* render_window, const Event& event)
     state_  = State::Normal;
     return false;
 }
+
+
+void ABarButton::addWindow(std::unique_ptr<IWindow> window)
+{
+    (static_cast<AWindowVector*>(this))->addWindow(std::move(window));
+}
+
+void ABarButton::removeWindow(wid_t id)
+{
+    (static_cast<AWindowVector*>(this))->removeWindow(id);
+}
+
+wid_t ABarButton::getId() const
+{
+    return id_;
+}
+
+psapi::IWindow* ABarButton::getWindowById(wid_t id)
+{
+    return (static_cast<AWindowVector*>(this))->getWindowById(id);
+}
+
+const psapi::IWindow* ABarButton::getWindowById(wid_t id) const
+{
+    return (static_cast<const AWindowVector*>(this))->getWindowById(id);
+}
+
+vec2i ABarButton::getPos() const
+{
+    return pos_;
+}
+
+vec2u ABarButton::getSize() const
+{
+    return size_;
+}
+
+void ABarButton::setParent(const IWindow* parent)
+{
+    parent_ = parent;
+}
+
+void ABarButton::forceActivate()
+{
+    is_active_ = true;
+}
+
+void ABarButton::forceDeactivate()
+{
+    is_active_ = false;
+}
+
+bool ABarButton::isActive() const
+{
+    return is_active_;
+}
+
+bool ABarButton::isWindowContainer() const
+{
+    return true;
+}
+
 
 void ABarButton::drawChildren(IRenderWindow* render_window)
 {
@@ -163,9 +228,10 @@ ABar::ABar( std::unique_ptr<psapi::sfm::Sprite> background_sprite,
     button_size_    (button_size),
     n_row_buttons_  (number_buttons_in_row)
 {
-    pos_    = bar_position;
-    size_   = bar_size;
-    id_     = id;
+    pos_        = bar_position;
+    size_       = bar_size;
+    id_         = id;
+    is_active_  = true;
 
     cur_button_index = 0;
 }
@@ -249,7 +315,7 @@ bool ABar::update(const IRenderWindow* render_window, const Event &event)
 
 void ABar::addWindow(std::unique_ptr<IWindow> window)
 {
-    if (!is_active_)
+    if (is_active_)
     {
         psapi::ChildInfo info = getNextChildInfo();
 
@@ -322,6 +388,56 @@ void ABar::finishButtonDraw(IRenderWindow* renderWindow, const psapi::IBarButton
     default:
         break;
     }
+}
+
+wid_t ABar::getId() const
+{
+    return id_;
+}
+
+psapi::IWindow* ABar::getWindowById(wid_t id)
+{
+    return (static_cast<AWindowVector*>(this))->getWindowById(id);
+}
+
+const psapi::IWindow* ABar::getWindowById(wid_t id) const
+{
+    return (static_cast<const AWindowVector*>(this))->getWindowById(id);
+}
+
+vec2i ABar::getPos() const
+{
+    return pos_;
+}
+
+vec2u ABar::getSize() const
+{
+    return size_;
+}
+
+void ABar::setParent(const IWindow* parent)
+{
+    parent_ = parent;
+}
+
+void ABar::forceActivate()
+{
+    is_active_ = true;
+}
+
+void ABar::forceDeactivate()
+{
+    is_active_ = false;
+}
+
+bool ABar::isActive() const
+{
+    return is_active_;
+}
+
+bool ABar::isWindowContainer() const
+{
+    return true;
 }
 
 /*=============================================================================*/

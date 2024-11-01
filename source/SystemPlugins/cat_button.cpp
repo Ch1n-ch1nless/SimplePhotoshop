@@ -1,0 +1,33 @@
+#include "cat_button.hpp"
+
+#include <iostream>
+
+using namespace sys_plugin;
+
+bool CatButtonAction::operator()(const psapi::IRenderWindow* render_window, const psapi::sfm::Event& event)
+{
+    std::cout << "Meow!\n";
+    return true;
+}
+
+CatButton::CatButton(   std::unique_ptr<psapi::sfm::Sprite> sprite, 
+                        std::unique_ptr<CatButtonAction>    action )
+:
+    ABarButton(std::move(sprite), std::move(action), psapi::getRootWindow()->getWindowById(psapi::kToolBarWindowId))
+{
+}
+
+std::unique_ptr<CatButton> CatButton::create()
+{
+    static std::unique_ptr<psapi::sfm::Texture> texture = std::make_unique<psapi::sfm::Texture>();
+
+    texture->loadFromFile(CAT_BUTTON_TEXTURE);
+
+    std::unique_ptr<psapi::sfm::Sprite> sprite = std::make_unique<psapi::sfm::Sprite>();
+
+    sprite->setTexture(texture.get());
+
+    std::unique_ptr<CatButtonAction> action = std::make_unique<CatButtonAction>();
+
+    return std::make_unique<CatButton>(std::move(sprite), std::move(action));
+}
