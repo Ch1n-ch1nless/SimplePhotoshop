@@ -10,6 +10,8 @@ int main()
 
     root_window->addWindow(static_cast<std::unique_ptr<ps::AWindow>>(sys_plugin::ToolBar::create(1920, 1080)));
 
+    root_window->addWindow(static_cast<std::unique_ptr<ps::AWindow>>(std::make_unique<ps::Canvas>(1920, 1080)));
+
     sys_plugin::ToolBar* tool_bar = static_cast<sys_plugin::ToolBar*>(static_cast<ps::AWindow*>(root_window->getWindowById(psapi::kToolBarWindowId)));
 
     tool_bar->addWindow(static_cast<std::unique_ptr<ps::AWindow>>(sys_plugin::CatButton::create()));

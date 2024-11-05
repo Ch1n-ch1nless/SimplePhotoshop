@@ -3,5 +3,6 @@
 
 #include "window.hpp"
 #include "bar.hpp"
+#include "canvas.hpp"
 
 #endif //VIEW_VIEW__HPP
