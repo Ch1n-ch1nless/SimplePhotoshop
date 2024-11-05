@@ -42,56 +42,60 @@ void ABarButton::draw(IRenderWindow* render_window)
 
 bool ABarButton::update(const IRenderWindow* render_window, const Event& event)
 {
+    if (!is_active_) return false;
+
     vec2i mouse_pos = psapi::sfm::Mouse::getPosition(render_window);
 
     mouse_pos -= pos_;
 
-    if (0 <= mouse_pos.x && mouse_pos.x <= size_.x &&
-        0 <= mouse_pos.y && mouse_pos.y <= size_.y      )
-    {
-        bool result = true;
+    bool is_in_window = (0 <= mouse_pos.x && mouse_pos.x <= size_.x &&
+                         0 <= mouse_pos.y && mouse_pos.y <= size_.y    );
 
+    if (state_ == psapi::IBarButton::State::Released)
+    {
+        action_->operator()(render_window, event);
+        return true;
+    }
+
+    if (is_in_window)
+    {
         switch (event.type)
         {
-        case Event::EventType::MouseButtonPressed :
-            switch (event.mouseButton.button)
-            {
-            case psapi::sfm::Mouse::Button::Left :
-                action_->activate();
-                break;
-            
-            case psapi::sfm::Mouse::Button::Right :
-                activeChildren(render_window, event);
-                break;
-
-            default:
-                break;
-            }
-
-            state_ = State::Press;
+        case psapi::sfm::Event::EventType::MouseButtonPressed:
+            state_ = psapi::IBarButton::State::Press;
+            action_->activate();
             break;
 
-        case Event::EventType::MouseButtonReleased :
-            state_ = State::Released;
+        case psapi::sfm::Event::EventType::MouseButtonReleased:
+            state_ = psapi::IBarButton::State::Released;
             break;
 
-        case Event::EventType::MouseMoved:
-            state_ = State::Hover;
+        case psapi::sfm::Event::EventType::MouseMoved:
+            state_ = psapi::IBarButton::State::Hover;
             break;
         
         default:
-            result = false;
             break;
         }
 
-        action_->operator()(render_window, event);
+        if (state_ == psapi::IBarButton::State::Normal)
+        {
+            state_ = psapi::IBarButton::State::Hover;
+        }
 
-        return result;
+        return true;
     }
 
-    action_->operator()(render_window, event);
+    switch (state_)
+    {
+    case psapi::IBarButton::State::Released:
+        break;
+    
+    default:
+        state_ = psapi::IBarButton::State::Normal;
+        break;
+    }
 
-    state_  = State::Normal;
     return false;
 }
 

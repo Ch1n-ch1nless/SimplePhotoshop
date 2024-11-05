@@ -23,11 +23,6 @@ bool PencilAction::operator()(const psapi::IRenderWindow* render_window, const p
 
         canvas_->getTempLayer()->setPixel(mouse_pos, psapi::sfm::Color{0, 0, 0, 255});
 
-        if (event.type == psapi::sfm::Event::EventType::MouseButtonReleased)
-        {
-            is_active_ = false;
-        }
-
         return true;
     }
 
