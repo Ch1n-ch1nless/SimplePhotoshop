@@ -1,6 +1,9 @@
 #include "View/View.hpp"
 #include "SystemPlugins/tool_bar.hpp"
 #include "SystemPlugins/cat_button.hpp"
+#include "SystemPlugins/pencil_button.hpp"
+
+#include <iostream>
 
 int main()
 {
@@ -14,7 +17,11 @@ int main()
 
     sys_plugin::ToolBar* tool_bar = static_cast<sys_plugin::ToolBar*>(static_cast<ps::AWindow*>(root_window->getWindowById(psapi::kToolBarWindowId)));
 
+    ps::Canvas* canvas = static_cast<ps::Canvas*>(static_cast<ps::AWindow*>(root_window->getWindowById(psapi::kCanvasWindowId)));
+
     tool_bar->addWindow(static_cast<std::unique_ptr<ps::AWindow>>(sys_plugin::CatButton::create()));
+
+    tool_bar->addWindow(static_cast<std::unique_ptr<ps::AWindow>>(sys_plugin::PencilButton::create(canvas)));
 
     while (render_window.isOpen())
     {

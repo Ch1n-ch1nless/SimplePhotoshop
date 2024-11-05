@@ -13,6 +13,8 @@ namespace sys_plugin
         virtual ~CatButtonAction() override = default;
 
         virtual bool operator()(const psapi::IRenderWindow* render_window, const psapi::sfm::Event& event) override;
+
+        virtual void activate() override;
     };
 
     class CatButton : public ps::ABarButton

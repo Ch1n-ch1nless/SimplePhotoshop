@@ -13,6 +13,11 @@ namespace ps
         virtual ~ABarAction() = default;
 
         virtual bool operator()(const psapi::IRenderWindow* render_window, const psapi::sfm::Event& event) = 0;
+
+        virtual void activate() = 0;
+    
+    protected:
+        bool is_active_ = false;
     };
 
     class ABarButton : public psapi::IBarButton, public AWindowVector

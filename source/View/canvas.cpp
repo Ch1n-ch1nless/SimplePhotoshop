@@ -153,7 +153,40 @@ void Canvas::draw(IRenderWindow* render_window)
 
 bool Canvas::update(const IRenderWindow* render_window, const Event& event)
 {
-    //...
+    if (!is_active_)
+    {
+        return false;
+    }
+
+    if (event.type == psapi::Event::EventType::MouseButtonReleased)
+    {
+        is_pressed_ = false;
+    }
+
+    ps::vec2i new_mouse_pos = psapi::sfm::Mouse::getPosition(render_window);
+
+    new_mouse_pos -= pos_;
+
+    bool is_in_window = false;
+
+    if (0 <= new_mouse_pos.x && new_mouse_pos.x <= size_.x &&
+        0 <= new_mouse_pos.y && new_mouse_pos.y <= size_.y      )
+    {
+        is_in_window = true;
+    }
+
+    last_mouse_pos_ = new_mouse_pos;
+
+    if (!is_in_window)
+    {
+        return false;
+    }
+
+    if (event.type == psapi::sfm::Event::MouseButtonPressed) 
+    {
+        is_pressed_ = true;
+    }
+
     return true;
 }
 

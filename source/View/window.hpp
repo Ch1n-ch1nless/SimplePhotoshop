@@ -41,11 +41,10 @@ namespace ps
 
         virtual bool isWindowContainer() const override;
 
-        wid_t   id_;
-
     protected:
         vec2u   size_;
         vec2i   pos_;
+        wid_t   id_;
         bool    is_active_;
 
         const IWindow*  parent_;

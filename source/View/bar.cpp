@@ -57,7 +57,7 @@ bool ABarButton::update(const IRenderWindow* render_window, const Event& event)
             switch (event.mouseButton.button)
             {
             case psapi::sfm::Mouse::Button::Left :
-                action_->operator()(render_window, event);
+                action_->activate();
                 break;
             
             case psapi::sfm::Mouse::Button::Right :
@@ -84,8 +84,12 @@ bool ABarButton::update(const IRenderWindow* render_window, const Event& event)
             break;
         }
 
+        action_->operator()(render_window, event);
+
         return result;
     }
+
+    action_->operator()(render_window, event);
 
     state_  = State::Normal;
     return false;

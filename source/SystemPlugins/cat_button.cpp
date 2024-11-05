@@ -6,8 +6,17 @@ using namespace sys_plugin;
 
 bool CatButtonAction::operator()(const psapi::IRenderWindow* render_window, const psapi::sfm::Event& event)
 {
+    if (!is_active_) return false;
+
     std::cout << "Meow!\n";
+    is_active_ = false;
+
     return true;
+}
+
+void CatButtonAction::activate()
+{
+    is_active_ = true;
 }
 
 CatButton::CatButton(   std::unique_ptr<psapi::sfm::Sprite> sprite, 
