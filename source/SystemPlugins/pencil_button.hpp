@@ -2,6 +2,7 @@
 #define  SYSTEM_PLUGINS_HPP
 
 #include "tool_bar.hpp"
+#include "../Standard/plugin_example.hpp"
 
 #include <deque>
 

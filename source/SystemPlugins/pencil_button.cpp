@@ -131,3 +131,31 @@ std::unique_ptr<PencilButton> PencilButton::create(psapi::ICanvas* canvas)
 
     return std::make_unique<PencilButton>(std::move(sprite), std::move(action));
 }
+
+extern "C"
+{
+    bool   loadPlugin()
+    {
+        /*auto texture = psapi::sfm::ITexture::create().release();
+        texture->loadFromFile(PENCIL_BUTTON_TEXTURE);
+
+        auto toolbar_sprite = std::make_unique<psapi::sfm::Sprite>();
+        toolbar_sprite->setTexture(texture);
+
+        auto toolbar = dynamic_cast<psapi::IBar*>(psapi::getRootWindow()->getWindowById(psapi::kToolBarWindowId));*/
+
+        std::cerr << "In plugin: " << psapi::getRootWindow() << '\n';
+
+        /*auto pencil_action = std::make_unique<PencilAction>(static_cast<psapi::ICanvas*>(psapi::getRootWindow()->getWindowById(psapi::kCanvasWindowId)));
+        auto pencil_button = std::make_unique<PencilButton>(std::move(toolbar_sprite), std::move(pencil_action));*/
+
+        //toolbar->addWindow(std::move(static_cast<std::unique_ptr<ps::AWindow>>(std::move(pencil_button))));
+
+        return true;
+    }
+
+    void unloadPlugin()
+    {
+        return;
+    }
+}
