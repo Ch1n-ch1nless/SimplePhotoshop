@@ -8,9 +8,8 @@ using namespace sfm;
 
 /*==========================< Layer implementation >==========================*/
 
-Layer::Layer(const vec2i &position, const vec2u &size)
+Layer::Layer(const vec2u &size)
 :
-    pos_    (position),
     size_   (size)
 {
     data_.assign(size_.x * size_.y, Color(200, 200, 200));  //TODO: Fix the magic constant!
@@ -18,13 +17,10 @@ Layer::Layer(const vec2i &position, const vec2u &size)
 
 Color Layer::getPixel(vec2i pos) const
 {
-    if (pos_.x <= pos.x && pos.x <= (pos_.x + size_.x) &&
-        pos_.y <= pos.y && pos.y <= (pos_.y + size_.y)      )
+    if (0 <= pos.x && pos.x <= size_.x &&
+        0 <= pos.y && pos.y <= size_.y      )
     {
-        int x = pos.x - pos_.x;
-        int y = pos.y - pos_.y;
-
-        int index = x + y * size_.x;
+        int index = pos.x + pos.y * size_.x;
 
         return data_[index];
     }
@@ -34,13 +30,10 @@ Color Layer::getPixel(vec2i pos) const
 
 void Layer::setPixel(vec2i pos, Color pixel) 
 {
-    if (pos_.x <= pos.x && pos.x <= (pos_.x + size_.x) &&
-        pos_.y <= pos.y && pos.y <= (pos_.y + size_.y)      )
+    if (0 <= pos.x && pos.x <= size_.x &&
+        0 <= pos.y && pos.y <= size_.y      )
     {
-        int x = pos.x - pos_.x;
-        int y = pos.y - pos_.y;
-
-        int index = x + y * size_.x;
+        int index = pos.x + pos.y * size_.x;
 
         data_[index] = pixel;
         return;
@@ -88,17 +81,17 @@ Canvas::Canvas(const size_t width, const size_t height)
     size_.x = CanvasSize.x * width;
     size_.y = CanvasSize.y * height;
 
-    temp_layer_ = std::make_unique<Layer>(pos_, size_);
+    temp_layer_ = std::make_unique<Layer>(size_);
 
     texture_->create(size_.x, size_.y);
 
-    layers_.push_back(std::make_unique<Layer>(pos_, size_));
+    layers_.push_back(std::make_unique<Layer>(size_));
 }
 
 Canvas::Canvas(const vec2i &position, const vec2u &size)
 :
     layers_                 (0),
-    temp_layer_             (std::make_unique<Layer>(position, size)),
+    temp_layer_             (std::make_unique<Layer>(size)),
     texture_                (std::make_unique<Texture>()),
     sprite_                 (std::make_unique<Sprite>()),
     last_mouse_pos_         ({0, 0}),
@@ -112,7 +105,7 @@ Canvas::Canvas(const vec2i &position, const vec2u &size)
 
     texture_->create(size_.x, size_.y);
 
-    layers_.push_back(std::make_unique<Layer>(position, size));
+    layers_.push_back(std::make_unique<Layer>(size));
 
     for (unsigned int y = 0; y < size_.y; y++)
     {
@@ -290,7 +283,7 @@ bool Canvas::insertLayer(size_t index, std::unique_ptr<ILayer> layer) {
         assert(false && "ERROR!!! Program can not insert new layer!");
     }
 
-    std::unique_ptr<Layer> new_layer = std::make_unique<Layer>(pos_, size_);
+    std::unique_ptr<Layer> new_layer = std::make_unique<Layer>(size_);
     for (int y = 0; y < size_.y; y++)
     {
         for (int x = 0; x < size_.x; x++)
@@ -321,20 +314,13 @@ bool Canvas::insertEmptyLayer(size_t index)
         assert(false && "ERROR!!! Program can not insert new empty layer!");
     }
 
-    layers_.insert(layers_.begin() + (long)index, std::make_unique<Layer>(pos_, size_));
+    layers_.insert(layers_.begin() + (long)index, std::make_unique<Layer>(size_));
     return true;
 }
 
 void Canvas::setPos(vec2i pos)
 {
     pos_ = pos;
-
-    temp_layer_->pos_   = pos;
-
-    for (auto& layer : layers_)
-    {
-        static_cast<Layer*>(layer.get())->pos_ = pos;
-    }
 }
 
 void Canvas::setSize(vec2i size)

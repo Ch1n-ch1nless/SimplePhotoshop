@@ -3,6 +3,8 @@
 
 #include "tool_bar.hpp"
 
+#include <deque>
+
 namespace sys_plugin
 {
     const char* const PENCIL_BUTTON_TEXTURE = "pictures/pencil_button.png";
@@ -20,6 +22,18 @@ namespace sys_plugin
 
     private:
         psapi::ICanvas* canvas_;
+
+        std::deque<psapi::vec2i> mouse_points_;
+
+        psapi::vec2i    interpolateHermite( float         t,
+                                            psapi::vec2i &point0,
+                                            psapi::vec2i &point1,
+                                            psapi::vec2i &point2,
+                                            psapi::vec2i &point3 );
+
+        size_t          calculateStepsNumber(psapi::vec2i &point1, psapi::vec2i &point2);
+
+        void            paintNewPoint();
     };
 
     class PencilButton : public ps::ABarButton

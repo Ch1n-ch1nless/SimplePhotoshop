@@ -9,7 +9,7 @@ namespace ps
     class Layer : public psapi::ILayer
     {
     public:
-        Layer(const vec2i &position, const vec2u &size);
+        Layer(const vec2u &size);
 
         virtual ~Layer() = default;
 
@@ -21,7 +21,6 @@ namespace ps
     private:
         std::vector<psapi::sfm::Color> data_;
 
-        vec2i   pos_;
         vec2u   size_;
         
         friend class Canvas;
