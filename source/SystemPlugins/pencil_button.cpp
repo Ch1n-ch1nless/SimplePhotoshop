@@ -21,8 +21,8 @@ psapi::vec2i PencilAction::interpolateHermite(  float            t,
                                                 psapi::vec2i    &point2,
                                                 psapi::vec2i    &point3 )
 {
-    psapi::vec2f medium0 = {(point0.x + point2.x) / 2.f, (point0.y + point2.y) / 2.f};
-    psapi::vec2f medium1 = {(point1.x + point3.x) / 2.f, (point1.y + point3.y) / 2.f};
+    psapi::vec2f medium0 = {(point2.x - point0.x) / 2.f, (point2.y - point0.y) / 2.f};
+    psapi::vec2f medium1 = {(point3.x - point1.x) / 2.f, (point3.y - point1.y) / 2.f};
 
     float t2   = t*t,
           t3   = t2 * t,
@@ -40,7 +40,7 @@ psapi::vec2i PencilAction::interpolateHermite(  float            t,
     float y = hermite00 * point1.y + hermite10 * medium0.y +
               hermite01 * point2.y + hermite11 * medium1.y;
 
-    return psapi::vec2i{(int)std::round(x), (int)std::round(y)};
+    return psapi::vec2i{(int)round(x), (int)round(y)};
 }
 
 size_t PencilAction::calculateStepsNumber(psapi::vec2i &point1, psapi::vec2i &point2)
@@ -48,7 +48,7 @@ size_t PencilAction::calculateStepsNumber(psapi::vec2i &point1, psapi::vec2i &po
     float dist = (point2.x - point1.x) * (point2.x - point1.x) +
                  (point2.y - point1.y) * (point2.y - point1.y)  ;
     
-    return 16 + static_cast<size_t>(std::max(sqrt(dist), 32.0));
+    return static_cast<size_t>(std::max(sqrt(dist), 50.0));
 }
 
 void PencilAction::paintNewPoint()
@@ -62,9 +62,16 @@ void PencilAction::paintNewPoint()
 
     size_t steps_number = calculateStepsNumber(point1, point2);
 
-    for (float t = 0; t <= 1; t += 0.01f)
+    for (size_t i = 0; i <= steps_number; ++i)
     {
+        float t = static_cast<float>(i) / static_cast<float>(steps_number);
+
         psapi::vec2i point = interpolateHermite(t, point0, point1, point2, point3);
+
+        /*std::cerr << "=======================\n";
+        std::cerr << "t := " << t << '\n';
+        std::cerr << "Point := {" << point.x << ", " << point.y << "}\n";
+        std::cerr << "=======================\n";*/
 
         canvas_->getTempLayer()->setPixel(point, psapi::sfm::Color{0, 0, 0, 255});  //TODO: Fix the magic constant!
     }
