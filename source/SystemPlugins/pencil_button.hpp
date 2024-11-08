@@ -13,7 +13,7 @@ namespace sys_plugin
     class PencilAction : public ps::ABarAction
     {
     public:
-        PencilAction(psapi::ICanvas* canvas);
+        PencilAction(ps::Canvas* canvas);
 
         virtual ~PencilAction() override = default;
 
@@ -22,7 +22,7 @@ namespace sys_plugin
         virtual void activate() override;
 
     private:
-        psapi::ICanvas* canvas_;
+        ps::Canvas* canvas_;
 
         std::deque<psapi::vec2i> mouse_points_;
 
@@ -45,7 +45,7 @@ namespace sys_plugin
         
         virtual ~PencilButton() override = default;
 
-        static std::unique_ptr<PencilButton> create(psapi::ICanvas* canvas);
+        static std::unique_ptr<PencilButton> create(ps::Canvas* canvas);
     };
 };
 

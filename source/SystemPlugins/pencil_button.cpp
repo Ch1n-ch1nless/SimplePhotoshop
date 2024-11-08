@@ -4,9 +4,9 @@
 
 using namespace sys_plugin;
 
-PencilAction::PencilAction(psapi::ICanvas* canvas)
+PencilAction::PencilAction(ps::Canvas* canvas)
 :
-    canvas_(canvas)
+    canvas_(canvas_)
 {
 }
 
@@ -68,11 +68,6 @@ void PencilAction::paintNewPoint()
 
         psapi::vec2i point = interpolateHermite(t, point0, point1, point2, point3);
 
-        /*std::cerr << "=======================\n";
-        std::cerr << "t := " << t << '\n';
-        std::cerr << "Point := {" << point.x << ", " << point.y << "}\n";
-        std::cerr << "=======================\n";*/
-
         canvas_->getTempLayer()->setPixel(point, psapi::sfm::Color{0, 0, 0, 255});  //TODO: Fix the magic constant!
     }
 
@@ -81,7 +76,7 @@ void PencilAction::paintNewPoint()
 
 bool PencilAction::operator()(const psapi::IRenderWindow* render_window, const psapi::sfm::Event& event)
 {
-    if (is_active_ && canvas_->isPressed())
+    if (is_active_ && canvas_ && canvas_->isPressed())
     {
         psapi::vec2i cur_pos = canvas_->getMousePosition();
 
@@ -117,7 +112,7 @@ PencilButton::PencilButton(std::unique_ptr<psapi::sfm::Sprite> sprite, std::uniq
 {
 }
 
-std::unique_ptr<PencilButton> PencilButton::create(psapi::ICanvas* canvas)
+std::unique_ptr<PencilButton> PencilButton::create(ps::Canvas* canvas)
 {
     static std::unique_ptr<psapi::sfm::Texture> texture = std::make_unique<psapi::sfm::Texture>();
 
@@ -136,20 +131,9 @@ extern "C"
 {
     bool   loadPlugin()
     {
-        /*auto texture = psapi::sfm::ITexture::create().release();
-        texture->loadFromFile(PENCIL_BUTTON_TEXTURE);
-
-        auto toolbar_sprite = std::make_unique<psapi::sfm::Sprite>();
-        toolbar_sprite->setTexture(texture);
-
-        auto toolbar = dynamic_cast<psapi::IBar*>(psapi::getRootWindow()->getWindowById(psapi::kToolBarWindowId));*/
-
-        std::cerr << "In plugin: " << psapi::getRootWindow() << '\n';
-
-        /*auto pencil_action = std::make_unique<PencilAction>(static_cast<psapi::ICanvas*>(psapi::getRootWindow()->getWindowById(psapi::kCanvasWindowId)));
-        auto pencil_button = std::make_unique<PencilButton>(std::move(toolbar_sprite), std::move(pencil_action));*/
-
-        //toolbar->addWindow(std::move(static_cast<std::unique_ptr<ps::AWindow>>(std::move(pencil_button))));
+        ps::Canvas* canvas = static_cast<ps::Canvas*>(static_cast<ps::AWindow*>(psapi::getRootWindow()->getWindowById(psapi::kCanvasWindowId)));
+        ps::ABar* tool_bar = static_cast<ps::ABar*>(static_cast<ps::AWindow*>(psapi::getRootWindow()->getWindowById(psapi::kToolBarWindowId)));
+        tool_bar->addWindow(std::move(static_cast<std::unique_ptr<ps::AWindow>>(std::move(sys_plugin::PencilButton::create(canvas)))));
 
         return true;
     }

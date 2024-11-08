@@ -40,3 +40,19 @@ std::unique_ptr<CatButton> CatButton::create()
 
     return std::make_unique<CatButton>(std::move(sprite), std::move(action));
 }
+
+extern "C"
+{
+    bool   loadPlugin()
+    {
+        ps::ABar* tool_bar = static_cast<ps::ABar*>(static_cast<ps::AWindow*>(psapi::getRootWindow()->getWindowById(psapi::kToolBarWindowId)));
+        tool_bar->addWindow(std::move(static_cast<std::unique_ptr<ps::AWindow>>(std::move(sys_plugin::CatButton::create()))));
+
+        return true;
+    }
+
+    void unloadPlugin()
+    {
+        return;
+    }
+}

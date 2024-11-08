@@ -75,3 +75,18 @@ std::unique_ptr<ToolBar> ToolBar::create(const size_t width, const size_t height
 }
 
 /*============================================================================*/
+
+extern "C"
+{
+    bool   loadPlugin()
+    {
+        psapi::getRootWindow()->addWindow(std::move(static_cast<std::unique_ptr<ps::AWindow>>(std::move(sys_plugin::ToolBar::create(1920, 1080)))));
+
+        return true;
+    }
+
+    void unloadPlugin()
+    {
+        return;
+    }
+}

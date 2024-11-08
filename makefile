@@ -24,6 +24,10 @@ VIEW_OBJ_DIR 		= ./object/View/
 MAIN_SRC = ./source/main.cpp
 MAIN_OBJ = ./object/main.o
 
+PLUGINS_DIR = ./Plugins/
+
+PLUGINS = $(wildcard $(PLUGINS_DIR)*.so)
+
 SYSTEM_PLUGINS_SRC_DIR = ./source/SystemPlugins/
 SYSTEM_PLUGINS_OBJ_DIR = ./object/SystemPlugins/
 
@@ -41,8 +45,14 @@ SYSTEM_PLUGINS_OBJ	 = $(patsubst $(SYSTEM_PLUGINS_SRC_DIR)%.cpp, $(SYSTEM_PLUGIN
 
 all: link
 
-link: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) object/SystemPlugins/tool_bar.o $(MAIN_OBJ)
-	$(CC) $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) object/SystemPlugins/tool_bar.o -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -L./Plugins/ -lpencil_button
+link: build_sys_plugins
+	$(CC) object/main.o -o photoshop.out -L./Plugins/ -Wl,-rpath=./Plugins -lapi_impl -L./Plugins/ -ltool_bar -L./Plugins/ -lpencil_button -L./Plugins/ -lcat_button -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+
+build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_OBJ) $(MAIN_OBJ)
+	$(CC) -shared -o Plugins/libapi_impl.so $(GRAPHICS_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) -shared -o Plugins/libpencil_button.so object/SystemPlugins/pencil_button.o -L./Plugins/ -lapi_impl
+	$(CC) -shared -o Plugins/libtool_bar.so object/SystemPlugins/tool_bar.o -L./Plugins/ -lapi_impl
+	$(CC) -shared -o Plugins/libcat_button.so object/SystemPlugins/cat_button.o -L./Plugins/ -lapi_impl
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
@@ -53,18 +63,14 @@ $(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
 $(VIEW_OBJ_DIR)%.o : $(VIEW_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
-object/SystemPlugins/tool_bar.o : source/SystemPlugins/tool_bar.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+$(SYSTEM_PLUGINS_OBJ_DIR)%.o : $(SYSTEM_PLUGINS_SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 $(MAIN_OBJ) : $(MAIN_SRC)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 clean:
 	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) $(SYSTEM_PLUGINS_OBJ)
-
-plugin_build:
-	g++ $(CFLAGS) -c -fPIC source/SystemPlugins/pencil_button.cpp -o object/SystemPlugins/pencil_button.o
-	gcc -shared object/SystemPlugins/pencil_button.o object/View/bar.o object/View/window.o object/Graphics/sprite.o -o Plugins/libpencil_button.so
  
 build:
 	mkdir object              		&& \
