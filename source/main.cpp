@@ -14,7 +14,7 @@ int loadPlugins();
 
 int main()
 {
-    psapi::sfm::RenderWindow render_window(1920, 1080, "TEST!!!");
+    psapi::sfm::RenderWindow render_window(1920, 1080, "MyPhotoshop v.0.1");
 
     psapi::IWindowContainer* root_window = psapi::getRootWindow();
 

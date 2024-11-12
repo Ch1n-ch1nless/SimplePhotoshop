@@ -81,6 +81,8 @@ Canvas::Canvas(const size_t width, const size_t height)
     size_.x = CanvasSize.x * width;
     size_.y = CanvasSize.y * height;
 
+    id_     = psapi::kCanvasWindowId;
+
     temp_layer_ = std::make_unique<Layer>(size_);
 
     texture_->create(size_.x, size_.y);
@@ -102,6 +104,8 @@ Canvas::Canvas(const vec2i &position, const vec2u &size)
 {
     pos_    = position;
     size_   = size;
+
+    id_     = psapi::kCanvasWindowId;
 
     texture_->create(size_.x, size_.y);
 

@@ -13,7 +13,7 @@ namespace sys_plugin
     class PencilAction : public ps::ABarAction
     {
     public:
-        PencilAction(ps::Canvas* canvas);
+        PencilAction();
 
         virtual ~PencilAction() override = default;
 
@@ -45,7 +45,7 @@ namespace sys_plugin
         
         virtual ~PencilButton() override = default;
 
-        static std::unique_ptr<PencilButton> create(ps::Canvas* canvas);
+        static std::unique_ptr<PencilButton> create();
     };
 };
 
