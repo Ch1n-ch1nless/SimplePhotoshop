@@ -6,5 +6,6 @@
 #include "text.hpp"
 #include "image.hpp"
 #include "pixels_array.hpp"
+#include "shape.hpp"
 
 #endif //GRAPHICS_GRAPHICS_HPP

@@ -34,6 +34,8 @@ namespace psapi
             sf::Image image_;
 
             friend class Texture;
+            friend class RectangleShape;
+            friend class EllipseShape;
         };
 
     } //sfm

@@ -30,6 +30,8 @@ namespace psapi
             sf::Texture texture_;
             
             friend class Sprite;
+            friend class RectangleShape;
+            friend class EllipseShape;
         };
 
         class Sprite : public ISprite
