@@ -1,6 +1,7 @@
 #include "canvas.hpp"
 
 #include <cassert>
+#include <iostream>
 
 using namespace ps;
 using namespace psapi;
@@ -353,6 +354,26 @@ vec2i Canvas::getMousePosition() const
 bool Canvas::isPressed() const
 {
     return is_pressed_;
+}
+
+void Canvas::moveee(float offsetX, float offsetY)
+{
+    std::cerr << "I aboba\n";
+}
+
+void Canvas::moveee(vec2f offset)
+{
+    std::cerr << "I moved on {" << offset.x << ", " << offset.y<< "}\n";
+}
+
+void Canvas::scaleee(float factorX, float factorY)
+{
+    std::cerr << "I scaled by {" << factorX << ", " << factorY << "}\n";
+}
+
+void Canvas::scaleee(vec2f factor)
+{
+    std::cerr << "I scaled by {" << factor.x << ", " << factor.y << "}\n";
 }
 
 /*============================================================================*/
