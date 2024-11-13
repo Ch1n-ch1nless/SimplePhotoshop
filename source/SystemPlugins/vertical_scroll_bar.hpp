@@ -5,7 +5,8 @@
 
 namespace sys_plugin
 {
-    /*class Slider : public ps::AWindow
+    /*
+    class Slider : public ps::AWindow
     {
     public:
 
