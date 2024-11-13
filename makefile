@@ -46,13 +46,14 @@ SYSTEM_PLUGINS_OBJ	 = $(patsubst $(SYSTEM_PLUGINS_SRC_DIR)%.cpp, $(SYSTEM_PLUGIN
 all: link
 
 link: build_sys_plugins
-	$(CC) object/main.o -o photoshop.out -L./Plugins/ -Wl,-rpath=./Plugins -lapi_impl -L./Plugins/ -ltool_bar -L./Plugins/ -lpencil_button -L./Plugins/ -lcat_button -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) object/main.o -o photoshop.out -L./Plugins/ -Wl,-rpath=./Plugins -lapi_impl -L./Plugins/ -ltool_bar -L./Plugins/ -lpencil_button -L./Plugins/ -lcat_button -L./Plugins/ -lbrush_button -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_OBJ) $(MAIN_OBJ)
 	$(CC) -shared -o Plugins/libapi_impl.so $(GRAPHICS_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 	$(CC) -shared -o Plugins/libpencil_button.so object/SystemPlugins/pencil_button.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/libtool_bar.so object/SystemPlugins/tool_bar.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/libcat_button.so object/SystemPlugins/cat_button.o -L./Plugins/ -lapi_impl
+	$(CC) -shared -o Plugins/libbrush_button.so object/SystemPlugins/brush_button.o -L./Plugins/ -lapi_impl
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@

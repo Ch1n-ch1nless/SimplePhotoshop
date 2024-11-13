@@ -7,7 +7,8 @@ const char* const PluginPathArray[] =
 {
     "./Plugins/libtool_bar.so",
     "./Plugins/libpencil_button.so",
-    "./Plugins/libcat_button.so"
+    "./Plugins/libcat_button.so",
+    "./Plugins/libbrush_button.so"
 };
 
 int loadPlugins();

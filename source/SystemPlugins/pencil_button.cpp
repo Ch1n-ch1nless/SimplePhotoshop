@@ -1,8 +1,8 @@
 #include "pencil_button.hpp"
 
-#include <iostream>
-
 using namespace sys_plugin;
+
+/*=======================< PencilAction implementation >======================*/
 
 PencilAction::PencilAction()
 {
@@ -105,6 +105,10 @@ bool PencilAction::operator()(const psapi::IRenderWindow* render_window, const p
     return false;
 }
 
+/*============================================================================*/
+
+/*=======================< PencilButton implementation >======================*/
+
 PencilButton::PencilButton(std::unique_ptr<psapi::sfm::Sprite> sprite, std::unique_ptr<PencilAction> action )
 :
     ps::ABarButton(std::move(sprite), std::move(action), psapi::getRootWindow()->getWindowById(psapi::kToolBarWindowId))
@@ -141,3 +145,5 @@ extern "C"
         return;
     }
 }
+
+/*============================================================================*/
