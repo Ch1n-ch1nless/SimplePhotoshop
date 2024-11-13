@@ -84,7 +84,10 @@ size_t BrushAction::calculateStepsNumber(psapi::vec2i &point1, psapi::vec2i &poi
 
 void BrushAction::paintNewCircle()
 {
-    if (mouse_points_.size() < 4) return;
+    if (mouse_points_.size() < 4) 
+    {
+        return;
+    }
 
     psapi::vec2i &point0 = mouse_points_[0];
     psapi::vec2i &point1 = mouse_points_[1];
@@ -103,9 +106,9 @@ void BrushAction::paintNewCircle()
         {
             for (int offsetX = -BRUSH_RADIUS; offsetX <= BRUSH_RADIUS; offsetX++)
             {
-                if ((offsetX * offsetX + offsetY * offsetY) < BRUSH_RADIUS * BRUSH_RADIUS)
+                if ((offsetX * offsetX + offsetY * offsetY) <= BRUSH_RADIUS * BRUSH_RADIUS)
                 {
-                    canvas_->getTempLayer()->setPixel(point + ps::vec2i{offsetX, offsetY}, psapi::sfm::Color{0, 0, 0, 255});  //TODO: Fix the magic constant!
+                    canvas_->getTempLayer()->setPixel(point + ps::vec2i{offsetX, offsetY}, psapi::sfm::Color{255, 0, 0, 255});
                 }
             }
         }
