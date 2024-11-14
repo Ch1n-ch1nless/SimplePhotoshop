@@ -167,6 +167,32 @@ bool Canvas::update(const IRenderWindow* render_window, const Event& event)
         return false;
     }
 
+    //TODO: Fix the magic constant from scroll!
+    if (event.type == psapi::Event::EventType::KeyPressed)
+    {
+        switch (event.key.code)
+        {
+        case psapi::sfm::Keyboard::Key::Up :
+            scroll( 0.f, -1.f);
+            break;
+
+        case psapi::sfm::Keyboard::Key::Down :
+            scroll( 0.f,  1.f);
+            break;
+
+        case psapi::sfm::Keyboard::Key::Left :
+            scroll(-1.f, 0.f);
+            break;
+
+        case psapi::sfm::Keyboard::Key::Right :
+            scroll(1.f, 0.f);
+            break;
+        
+        default:
+            break;
+        }
+    }
+
     if (event.type == psapi::Event::EventType::MouseButtonReleased)
     {
         is_pressed_ = false;
@@ -175,6 +201,7 @@ bool Canvas::update(const IRenderWindow* render_window, const Event& event)
     ps::vec2i new_mouse_pos = psapi::sfm::Mouse::getPosition(render_window);
 
     new_mouse_pos -= pos_;
+    new_mouse_pos += (visible_box_pos_ - object_position_);
 
     bool is_in_window = false;
 
@@ -369,12 +396,26 @@ bool Canvas::isPressed() const
 
 void Canvas::scroll(float offsetX, float offsetY)
 {
-    return;
+    visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offsetX), 
+                                  static_cast<int>(object_size_.x - visible_box_pos_.x));
+
+    visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offsetY), 
+                                  static_cast<int>(object_size_.y - visible_box_pos_.y));
+
+    visible_box_pos_.x = std::max(visible_box_pos_.x, 0);
+    visible_box_pos_.y = std::max(visible_box_pos_.y, 0);
 }
 
 void Canvas::scroll(const vec2f &offset)         
 {
-    return;
+    visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offset.x), 
+                                  static_cast<int>(object_size_.x - visible_box_pos_.x));
+
+    visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offset.y), 
+                                  static_cast<int>(object_size_.y - visible_box_pos_.y));
+
+    visible_box_pos_.x = std::max(visible_box_pos_.x, 0);
+    visible_box_pos_.y = std::max(visible_box_pos_.y, 0);
 }
 
 /*============================================================================*/
