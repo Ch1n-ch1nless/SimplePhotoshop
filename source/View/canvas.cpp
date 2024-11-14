@@ -74,7 +74,9 @@ Canvas::Canvas(const size_t width, const size_t height)
     scale_                  {1.f, 1.f},
     parent_                 (nullptr),
     is_pressed_             (false),
-    is_active_              (true)
+    is_active_              (true),
+    moveCoefX               (5.f / CanvasSize.x),
+    moveCoefY               (5.f / CanvasSize.y)
 {
     pos_.x  = CanvasTopLeftPos.x * width;
     pos_.y  = CanvasTopLeftPos.y * height;
@@ -87,13 +89,13 @@ Canvas::Canvas(const size_t width, const size_t height)
     Scrollable::object_size_        = {width, height};
     Scrollable::visible_box_size_   = size_;
 
-    id_     = psapi::kCanvasWindowId;
+    id_ = psapi::kCanvasWindowId;
 
-    temp_layer_ = std::make_unique<Layer>(size_);
+    temp_layer_ = std::make_unique<Layer>(vec2u{width, height});
 
-    texture_->create(size_.x, size_.y);
+    texture_->create(width, height);
 
-    layers_.push_back(std::make_unique<Layer>(size_));
+    layers_.push_back(std::make_unique<Layer>(vec2u{width, height}));
 }
 
 Canvas::Canvas(const vec2i &position, const vec2u &canvas_size, const vec2u &layer_size)
@@ -106,7 +108,9 @@ Canvas::Canvas(const vec2i &position, const vec2u &canvas_size, const vec2u &lay
     scale_                  {1.f, 1.f},
     parent_                 (nullptr),
     is_pressed_             (false),
-    is_active_              (true)
+    is_active_              (true),
+    moveCoefX               (5.f * static_cast<float>(layer_size.x) / static_cast<float>(canvas_size.x)),
+    moveCoefY               (5.f * static_cast<float>(layer_size.y) / static_cast<float>(canvas_size.y))
 {
     Scrollable::object_position_    = {0, 0};
     Scrollable::visible_box_pos_    = {0, 0};
@@ -167,25 +171,24 @@ bool Canvas::update(const IRenderWindow* render_window, const Event& event)
         return false;
     }
 
-    //TODO: Fix the magic constant from scroll!
     if (event.type == psapi::Event::EventType::KeyPressed)
     {
         switch (event.key.code)
         {
         case psapi::sfm::Keyboard::Key::Up :
-            scroll( 0.f, -1.f);
+            scroll( 0.f, -moveCoefY);
             break;
 
         case psapi::sfm::Keyboard::Key::Down :
-            scroll( 0.f,  1.f);
+            scroll( 0.f,  moveCoefY);
             break;
 
         case psapi::sfm::Keyboard::Key::Left :
-            scroll(-1.f, 0.f);
+            scroll(-moveCoefX, 0.f);
             break;
 
         case psapi::sfm::Keyboard::Key::Right :
-            scroll(1.f, 0.f);
+            scroll(moveCoefX, 0.f);
             break;
         
         default:
@@ -201,7 +204,6 @@ bool Canvas::update(const IRenderWindow* render_window, const Event& event)
     ps::vec2i new_mouse_pos = psapi::sfm::Mouse::getPosition(render_window);
 
     new_mouse_pos -= pos_;
-    new_mouse_pos += (visible_box_pos_ - object_position_);
 
     bool is_in_window = false;
 
@@ -211,7 +213,7 @@ bool Canvas::update(const IRenderWindow* render_window, const Event& event)
         is_in_window = true;
     }
 
-    last_mouse_pos_ = new_mouse_pos;
+    last_mouse_pos_ = new_mouse_pos + (visible_box_pos_ - object_position_);
 
     if (!is_in_window)
     {
@@ -397,10 +399,10 @@ bool Canvas::isPressed() const
 void Canvas::scroll(float offsetX, float offsetY)
 {
     visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offsetX), 
-                                  static_cast<int>(object_size_.x - visible_box_pos_.x));
+                                  static_cast<int>(object_size_.x - visible_box_size_.x));
 
     visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offsetY), 
-                                  static_cast<int>(object_size_.y - visible_box_pos_.y));
+                                  static_cast<int>(object_size_.y - visible_box_size_.y));
 
     visible_box_pos_.x = std::max(visible_box_pos_.x, 0);
     visible_box_pos_.y = std::max(visible_box_pos_.y, 0);
@@ -409,10 +411,10 @@ void Canvas::scroll(float offsetX, float offsetY)
 void Canvas::scroll(const vec2f &offset)         
 {
     visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offset.x), 
-                                  static_cast<int>(object_size_.x - visible_box_pos_.x));
+                                  static_cast<int>(object_size_.x - visible_box_size_.x));
 
     visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offset.y), 
-                                  static_cast<int>(object_size_.y - visible_box_pos_.y));
+                                  static_cast<int>(object_size_.y - visible_box_size_.y));
 
     visible_box_pos_.x = std::max(visible_box_pos_.x, 0);
     visible_box_pos_.y = std::max(visible_box_pos_.y, 0);

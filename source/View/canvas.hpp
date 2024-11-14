@@ -92,6 +92,9 @@ namespace ps
 
         size_t                                      active_layer_index_;
 
+        const float                                 moveCoefX;
+        const float                                 moveCoefY;
+
         mutable bool                                is_active_;
                 bool                                is_pressed_ = false;
     };
