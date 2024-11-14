@@ -4,6 +4,6 @@
 #include "window.hpp"
 #include "bar.hpp"
 #include "canvas.hpp"
-#include "transformable.hpp"
+#include "scrollable.hpp"
 
 #endif //VIEW_VIEW__HPP

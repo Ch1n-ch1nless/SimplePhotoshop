@@ -26,7 +26,7 @@ Color Layer::getPixel(vec2i pos) const
         return data_[index];
     }
 
-    assert(false && "ERROR!!! Mouse not on Layer!\n");
+    //assert(false && "ERROR!!! Mouse not on Layer!\n");
 }
 
 void Layer::setPixel(vec2i pos, Color pixel) 
@@ -40,7 +40,7 @@ void Layer::setPixel(vec2i pos, Color pixel)
         return;
     }
 
-    assert(false && "ERROR!!! Mouse not on Layer!\n");
+    //assert(false && "ERROR!!! Mouse not on Layer!\n");
 }
 
 void Layer::resize(const vec2u &new_size)
@@ -82,6 +82,11 @@ Canvas::Canvas(const size_t width, const size_t height)
     size_.x = CanvasSize.x * width;
     size_.y = CanvasSize.y * height;
 
+    Scrollable::object_position_    = {0, 0};
+    Scrollable::visible_box_pos_    = {0, 0};
+    Scrollable::object_size_        = {width, height};
+    Scrollable::visible_box_size_   = size_;
+
     id_     = psapi::kCanvasWindowId;
 
     temp_layer_ = std::make_unique<Layer>(size_);
@@ -91,10 +96,10 @@ Canvas::Canvas(const size_t width, const size_t height)
     layers_.push_back(std::make_unique<Layer>(size_));
 }
 
-Canvas::Canvas(const vec2i &position, const vec2u &size)
+Canvas::Canvas(const vec2i &position, const vec2u &canvas_size, const vec2u &layer_size)
 :
     layers_                 (0),
-    temp_layer_             (std::make_unique<Layer>(size)),
+    temp_layer_             (std::make_unique<Layer>(layer_size)),
     texture_                (std::make_unique<Texture>()),
     sprite_                 (std::make_unique<Sprite>()),
     last_mouse_pos_         ({0, 0}),
@@ -103,26 +108,31 @@ Canvas::Canvas(const vec2i &position, const vec2u &size)
     is_pressed_             (false),
     is_active_              (true)
 {
+    Scrollable::object_position_    = {0, 0};
+    Scrollable::visible_box_pos_    = {0, 0};
+    Scrollable::object_size_        = layer_size;
+    Scrollable::visible_box_size_   = canvas_size;
+
     pos_    = position;
-    size_   = size;
+    size_   = canvas_size;
 
     id_     = psapi::kCanvasWindowId;
 
-    texture_->create(size_.x, size_.y);
+    texture_->create(layer_size.x, layer_size.y);
 
-    layers_.push_back(std::make_unique<Layer>(size));
+    layers_.push_back(std::make_unique<Layer>(layer_size));
 
-    for (unsigned int y = 0; y < size_.y; y++)
+    for (unsigned int y = 0; y < layer_size.y; y++)
     {
-        for (unsigned int x = 0; x < size_.x; x++)
+        for (unsigned int x = 0; x < layer_size.x; x++)
         {
             layers_.back()->setPixel(vec2i{x, y}, Color{200, 200, 200, 255});   //TODO: Fix the magic constant
         }
     }
 
-    for (unsigned int y = 0; y < size_.y; y++)
+    for (unsigned int y = 0; y < layer_size.y; y++)
     {
-        for (unsigned int x = 0; x < size_.x; x++)
+        for (unsigned int x = 0; x < layer_size.x; x++)
         {
             temp_layer_->setPixel(vec2i{x, y}, Color{200, 200, 200, 255});      //TODO: Fix the magic constant
         }
@@ -133,6 +143,7 @@ void Canvas::drawLayer(const Layer* layer, IRenderWindow* render_window)
 {
     texture_->update(layer->data_.data());
     sprite_->setTexture(texture_.get());
+    sprite_->setTextureRect({visible_box_pos_.x, visible_box_pos_.y, (int)visible_box_size_.x, (int)visible_box_size_.y});
     sprite_->setScale(scale_.x, scale_.y);
     sprite_->setPosition(static_cast<float>(pos_.x), static_cast<float>(pos_.y));
 
@@ -356,24 +367,14 @@ bool Canvas::isPressed() const
     return is_pressed_;
 }
 
-void Canvas::moveee(float offsetX, float offsetY)
+void Canvas::scroll(float offsetX, float offsetY)
 {
-    std::cerr << "I aboba\n";
+    return;
 }
 
-void Canvas::moveee(vec2f offset)
+void Canvas::scroll(const vec2f &offset)         
 {
-    std::cerr << "I moved on {" << offset.x << ", " << offset.y<< "}\n";
-}
-
-void Canvas::scaleee(float factorX, float factorY)
-{
-    std::cerr << "I scaled by {" << factorX << ", " << factorY << "}\n";
-}
-
-void Canvas::scaleee(vec2f factor)
-{
-    std::cerr << "I scaled by {" << factor.x << ", " << factor.y << "}\n";
+    return;
 }
 
 /*============================================================================*/

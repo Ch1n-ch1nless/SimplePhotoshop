@@ -2,7 +2,7 @@
 #define  VIEW_CANVAS_HPP
 
 #include "window.hpp"
-#include "transformable.hpp"
+#include "scrollable.hpp"
 #include "../Standard/api_canvas.hpp"
 
 namespace ps
@@ -27,11 +27,11 @@ namespace ps
         friend class Canvas;
     };
 
-    class Canvas : public psapi::ICanvas, public Transformable, public AWindow
+    class Canvas : public psapi::ICanvas, public Scrollable, public AWindow
     {
     public:
         Canvas(const size_t width, const size_t height);
-        Canvas(const vec2i &position, const vec2u &size);
+        Canvas(const vec2i &position, const vec2u &canvas_size, const vec2u &layer_size);
         virtual ~Canvas() = default;
 
         virtual void draw(psapi::IRenderWindow* renderWindow)         override;
@@ -73,10 +73,8 @@ namespace ps
         virtual vec2i                   getMousePosition()                  const   override;
         virtual bool                    isPressed()                         const   override;
 
-        virtual void                    moveee (float offsetX, float offsetY)         override;
-        virtual void                    moveee (vec2f offset)                         override;
-        virtual void                    scaleee(float factorX, float factorY)         override;
-        virtual void                    scaleee(vec2f factor)                         override;
+        virtual void                    scroll(float offsetX, float offsetY)        override;
+        virtual void                    scroll(const vec2f &offset)                 override;
 
     private:
         void drawLayer(const Layer* layer, IRenderWindow* render_window);
