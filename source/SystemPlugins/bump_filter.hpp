@@ -23,8 +23,8 @@ namespace sys_plugin
     class BumpFilterButton : public ps::ABarButton
     {
     public:
-        BumpFilterButton(std::unique_ptr<psapi::sfm::Sprite> sprite, 
-                             std::unique_ptr<BumpFilterAction>        action );
+        BumpFilterButton(std::unique_ptr<psapi::sfm::Sprite>   sprite, 
+                             std::unique_ptr<BumpFilterAction> action );
         
         virtual ~BumpFilterButton() override = default;
 

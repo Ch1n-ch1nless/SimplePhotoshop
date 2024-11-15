@@ -11,7 +11,8 @@ const char* const PluginPathArray[] =
     "./Plugins/libbrush_button.so",
     "./Plugins/liberaser_button.so",
     "./Plugins/libnegative_filter.so",
-    "./Plugins/libbump_filter.so"
+    "./Plugins/libbump_filter.so",
+    "./Plugins/libblur_filter.so"
 };
 
 int loadPlugins();
