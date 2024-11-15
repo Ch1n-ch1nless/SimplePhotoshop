@@ -130,7 +130,7 @@ Canvas::Canvas(const vec2i &position, const vec2u &canvas_size, const vec2u &lay
     {
         for (unsigned int x = 0; x < layer_size.x; x++)
         {
-            layers_.back()->setPixel(vec2i{x, y}, Color{200, 200, 200, 255});   //TODO: Fix the magic constant
+            layers_.back()->setPixel(vec2i{x, y}, Color{255, 255, 255, 255});   //TODO: Fix the magic constant
         }
     }
 
@@ -138,7 +138,7 @@ Canvas::Canvas(const vec2i &position, const vec2u &canvas_size, const vec2u &lay
     {
         for (unsigned int x = 0; x < layer_size.x; x++)
         {
-            temp_layer_->setPixel(vec2i{x, y}, Color{200, 200, 200, 255});      //TODO: Fix the magic constant
+            temp_layer_->setPixel(vec2i{x, y}, Color{255, 255, 255, 255});      //TODO: Fix the magic constant
         }
     }
 }
@@ -176,19 +176,19 @@ bool Canvas::update(const IRenderWindow* render_window, const Event& event)
         switch (event.key.code)
         {
         case psapi::sfm::Keyboard::Key::Up :
-            scroll( 0.f, -moveCoefY);
+            scroll( 0.f, -1.f);
             break;
 
         case psapi::sfm::Keyboard::Key::Down :
-            scroll( 0.f,  moveCoefY);
+            scroll( 0.f,  1.f);
             break;
 
         case psapi::sfm::Keyboard::Key::Left :
-            scroll(-moveCoefX, 0.f);
+            scroll(-1.f, 0.f);
             break;
 
         case psapi::sfm::Keyboard::Key::Right :
-            scroll(moveCoefX, 0.f);
+            scroll(1.f, 0.f);
             break;
         
         default:
@@ -284,6 +284,11 @@ const ILayer* Canvas::getLayer(size_t index) const
     return layers_.at(index).get();
 }
 
+const vec2i Canvas::getLayerOffset(size_t index) const
+{
+    return visible_box_pos_ - object_position_;
+}
+
 ILayer* Canvas::getTempLayer()
 {
     return temp_layer_.get();
@@ -292,6 +297,11 @@ ILayer* Canvas::getTempLayer()
 const ILayer* Canvas::getTempLayer() const
 {
     return temp_layer_.get();
+}
+
+const vec2i Canvas::getTempLayerOffset() const
+{
+    return visible_box_pos_ - object_position_;
 }
 
 void Canvas::cleanTempLayer()
@@ -398,10 +408,10 @@ bool Canvas::isPressed() const
 
 void Canvas::scroll(float offsetX, float offsetY)
 {
-    visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offsetX), 
+    visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offsetX * moveCoefX), 
                                   static_cast<int>(object_size_.x - visible_box_size_.x));
 
-    visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offsetY), 
+    visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offsetY * moveCoefY), 
                                   static_cast<int>(object_size_.y - visible_box_size_.y));
 
     visible_box_pos_.x = std::max(visible_box_pos_.x, 0);
@@ -410,10 +420,10 @@ void Canvas::scroll(float offsetX, float offsetY)
 
 void Canvas::scroll(const vec2f &offset)         
 {
-    visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offset.x), 
+    visible_box_pos_.x = std::min(static_cast<int>(visible_box_pos_.x + offset.x * moveCoefX), 
                                   static_cast<int>(object_size_.x - visible_box_size_.x));
 
-    visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offset.y), 
+    visible_box_pos_.y = std::min(static_cast<int>(visible_box_pos_.y + offset.y * moveCoefY), 
                                   static_cast<int>(object_size_.y - visible_box_size_.y));
 
     visible_box_pos_.x = std::max(visible_box_pos_.x, 0);

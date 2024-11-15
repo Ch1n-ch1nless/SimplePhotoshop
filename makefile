@@ -55,6 +55,7 @@ build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_
 	$(CC) -shared -o Plugins/libcat_button.so object/SystemPlugins/cat_button.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/libbrush_button.so object/SystemPlugins/brush_button.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/liberaser_button.so object/SystemPlugins/eraser_button.o -L./Plugins/ -lapi_impl
+	$(CC) -shared -o Plugins/libnegative_filter.so object/SystemPlugins/negative_filter.o -L./Plugins/ -lapi_impl
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@

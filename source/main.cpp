@@ -9,7 +9,8 @@ const char* const PluginPathArray[] =
     "./Plugins/libpencil_button.so",
     "./Plugins/libcat_button.so",
     "./Plugins/libbrush_button.so",
-    "./Plugins/liberaser_button.so"
+    "./Plugins/liberaser_button.so",
+    "./Plugins/libnegative_filter.so"
 };
 
 int loadPlugins();

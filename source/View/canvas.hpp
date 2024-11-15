@@ -51,9 +51,11 @@ namespace ps
 
         virtual psapi::ILayer*          getLayer(size_t index)                      override;
         virtual const psapi::ILayer*    getLayer(size_t index)              const   override;
+                const vec2i             getLayerOffset(size_t index)        const;
 
         virtual psapi::ILayer*          getTempLayer()                              override;
         virtual const psapi::ILayer*    getTempLayer()                      const   override;
+                const vec2i             getTempLayerOffset()                const;
 
         virtual void                    cleanTempLayer()                            override;
 
