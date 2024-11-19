@@ -46,7 +46,16 @@ SYSTEM_PLUGINS_OBJ	 = $(patsubst $(SYSTEM_PLUGINS_SRC_DIR)%.cpp, $(SYSTEM_PLUGIN
 all: link
 
 link: build_sys_plugins
-	$(CC) object/main.o -o photoshop.out -L./Plugins/ -Wl,-rpath=./Plugins -lapi_impl -L./Plugins/ -ltool_bar -L./Plugins/ -lpencil_button -L./Plugins/ -lcat_button -L./Plugins/ -lbrush_button -L./Plugins/ -leraser_button -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) object/main.o -o photoshop.out -L./Plugins/ -Wl,-rpath=./Plugins -lapi_impl 	-L./Plugins/ -ltool_bar \
+																						-L./Plugins/ -lpencil_button \
+																						-L./Plugins/ -lcat_button \
+																						-L./Plugins/ -lbrush_button \
+																						-L./Plugins/ -leraser_button \
+																						-L./Plugins/ -lnegative_filter \
+																						-L./Plugins/ -lbump_filter \
+																						-L./Plugins/ -lblur_filter \
+																						-L./Plugins/ -lgauss_blur_filter \
+																						-lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_OBJ) $(MAIN_OBJ)
 	$(CC) -shared -o Plugins/libapi_impl.so $(GRAPHICS_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
@@ -58,6 +67,7 @@ build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_
 	$(CC) -shared -o Plugins/libnegative_filter.so object/SystemPlugins/negative_filter.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/libbump_filter.so object/SystemPlugins/bump_filter.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/libblur_filter.so object/SystemPlugins/blur_filter.o -L./Plugins/ -lapi_impl
+	$(CC) -shared -o Plugins/libgauss_blur_filter.so object/SystemPlugins/gauss_blur_filter.o -L./Plugins/ -lapi_impl
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@

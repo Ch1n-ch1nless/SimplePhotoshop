@@ -12,7 +12,8 @@ const char* const PluginPathArray[] =
     "./Plugins/liberaser_button.so",
     "./Plugins/libnegative_filter.so",
     "./Plugins/libbump_filter.so",
-    "./Plugins/libblur_filter.so"
+    "./Plugins/libblur_filter.so",
+    "./Plugins/libgauss_blur_filter.so"
 };
 
 int loadPlugins();

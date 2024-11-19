@@ -13,7 +13,7 @@ Layer::Layer(const vec2u &size)
 :
     size_   (size)
 {
-    data_.assign(size_.x * size_.y, Color(200, 200, 200));  //TODO: Fix the magic constant!
+    data_.assign(size_.x * size_.y, Color(255, 255, 255));  //TODO: Fix the magic constant!
 }
 
 Color Layer::getPixel(vec2i pos) const
@@ -45,7 +45,7 @@ void Layer::setPixel(vec2i pos, Color pixel)
 
 void Layer::resize(const vec2u &new_size)
 {
-    std::vector<Color> new_data(new_size.x * new_size.y, Color(200, 200, 200, 255));    //TODO: FIX the magic constant
+    std::vector<Color> new_data(new_size.x * new_size.y, Color(255, 255, 255, 255));    //TODO: FIX the magic constant
 
     unsigned int min_width  = std::min(new_size.x, size_.x);
     unsigned int min_height = std::min(new_size.y, size_.y);
