@@ -1,4 +1,3 @@
-/*
 #ifndef  VIEW_SCROLL_BAR_HPP
 #define  VIEW_SCROLL_BAR_HPP
 
@@ -8,16 +7,26 @@
 
 namespace ps
 {
-    enum class ScrollType : int
+    enum class Orientation : int
     {
         Vertical,
         Horizontal
     };
 
+    const char* const VERTICAL_SLIDER_TEXTURE       = "pictures/vertical_slider_texture.png";
+    const char* const HORIZONTAL_SLIDER_TEXTURE     = "pictures/horizontal_slider_texture.png";
+    const char* const UP_MOVE_BUTTON_TEXTURE        = "pictures/up_move_button_texture.png";
+    const char* const DOWN_MOVE_BUTTON_TEXTURE      = "pictures/down_move_button_texture.png";
+    const char* const LEFT_MOVE_BUTTON_TEXTURE      = "pictures/left_move_button_texture.png";
+    const char* const RIGHT_MOVE_BUTTON_TEXTURE     = "pictures/right_move_button_texture.png";
+    const char* const VERTICAL_SCROLL_BAR_TEXTURE   = "pictures/vertical_scroll_bar.png";
+    const char* const HORIZONTAL_SCROLL_BAR_TEXTURE = "pictures/horizontal_scroll_bar.png";
+
+    const ps::vec2u MOVE_BUTTON_SIZE = ps::vec2u{16, 16};
 
 /*============================< Slider interface >============================*/
-/*
-    template <ScrollType type>
+
+    template <Orientation orientation>
     class Slider : public psapi::IBarButton, public AWindow
     {
     public:
@@ -68,11 +77,11 @@ namespace ps
         State                               state_;
 
     };
-*/
+
 /*==========================< Slider implementation >=========================*/
-/*
-    template <ScrollType type>
-    Slider<type>::Slider(std::unique_ptr<psapi::sfm::Sprite> sprite,
+
+    template <Orientation orientation>
+    Slider<orientation>::Slider(std::unique_ptr<psapi::sfm::Sprite> sprite,
                         const vec2i                         &position,
                         const vec2u                         &size,
                         const vec2i                         &direction,
@@ -100,41 +109,53 @@ namespace ps
                         static_cast<float>(size_.y) / static_cast<float>(picture_size.y) );
     }
 
-    template<ScrollType type>
-    void Slider<type>::move(float offsetX, float offsetY)
+    template<Orientation orientation>
+    void Slider<orientation>::move(float offsetX, float offsetY)
     {
         object_->scroll(offsetX, offsetY);
 
         last_mouse_pos_ += vec2i{(int)offsetX, (int)offsetY};
         pos_            += vec2i{(int)offsetX, (int)offsetY};
 
-        pos_.x = std::max(top_left_pos_.x, std::min(top_left_pos_.x + (int)scroll_bar_size_.x, pos_.x));
-        pos_.y = std::max(top_left_pos_.y, std::min(top_left_pos_.y + (int)scroll_bar_size_.y, pos_.y));
+        ps::vec2i max_deviation = {(int)scroll_bar_size_.x - (int)size_.x,
+                                   (int)scroll_bar_size_.y - (int)size_.y};
+
+        pos_.x = std::max(top_left_pos_.x, std::min(top_left_pos_.x + max_deviation.x, pos_.x));
+        pos_.y = std::max(top_left_pos_.y, std::min(top_left_pos_.y + max_deviation.y, pos_.y));
+
+        last_mouse_pos_.x = std::max(top_left_pos_.x, std::min(top_left_pos_.x + max_deviation.x, last_mouse_pos_.x));
+        last_mouse_pos_.y = std::max(top_left_pos_.y, std::min(top_left_pos_.y + max_deviation.y, last_mouse_pos_.y));
     }
 
-    template<ScrollType type>
-    void Slider<type>::move(const vec2f &offset)
+    template<Orientation orientation>
+    void Slider<orientation>::move(const vec2f &offset)
     {
         object_->scroll(offset);
 
         last_mouse_pos_ += vec2i{(int)offset.x, (int)offset.y};
         pos_            += vec2i{(int)offset.x, (int)offset.y};
 
-        pos_.x = std::max(top_left_pos_.x, std::min(top_left_pos_.x + (int)scroll_bar_size_.x, pos_.x));
-        pos_.y = std::max(top_left_pos_.y, std::min(top_left_pos_.y + (int)scroll_bar_size_.y, pos_.y));
+        ps::vec2i max_deviation = {(int)scroll_bar_size_.x - (int)size_.x,
+                                   (int)scroll_bar_size_.y - (int)size_.y};
+
+        pos_.x = std::max(top_left_pos_.x, std::min(top_left_pos_.x + max_deviation.x, pos_.x));
+        pos_.y = std::max(top_left_pos_.y, std::min(top_left_pos_.y + max_deviation.y, pos_.y));
+
+        last_mouse_pos_.x = std::max(top_left_pos_.x, std::min(top_left_pos_.x + max_deviation.x, last_mouse_pos_.x));
+        last_mouse_pos_.y = std::max(top_left_pos_.y, std::min(top_left_pos_.y + max_deviation.y, last_mouse_pos_.y));
     }
 
-    template <ScrollType type>
-    void Slider<type>::draw(IRenderWindow* render_window)
+    template <Orientation orientation>
+    void Slider<orientation>::draw(IRenderWindow* render_window)
     {
         sprite_->setPosition(static_cast<float>(pos_.x), 
-                            static_cast<float>(pos_.y) );
+                             static_cast<float>(pos_.y) );
 
         sprite_->draw(render_window);
     }
 
-    template <ScrollType type>
-    bool Slider<type>::update(const IRenderWindow* render_window, const Event& event)
+    template <Orientation orientation>
+    bool Slider<orientation>::update(const IRenderWindow* render_window, const Event& event)
     {
         if (!is_active_) return;
 
@@ -143,39 +164,39 @@ namespace ps
         if (pos_.x <= new_mouse_position.x && new_mouse_position.x <= (pos_.x + size_.x) &&
             pos_.y <= new_mouse_position.y && new_mouse_position.y <= (pos_.y + size_.y)   )
         {
-            if (event.type == psapi::sfm::Event::MouseMoved)
+            if (event.orientation == psapi::sfm::Event::MouseMoved)
             {
                 ps::vec2i offset = new_mouse_position - last_mouse_pos_;
                 
-                offset.x = offset.x * ((direction_.x == 0) ? 0 : 1);
-                offset.y = offset.y * ((direction_.y == 0) ? 0 : 1);
+                offset.x = offset.x * direction_.x;
+                offset.y = offset.y * direction_.y;
 
                 move(offset);
             }
-            else if (event.type == psapi::sfm::Event::MouseButtonPressed)
+            else if (event.orientation == psapi::sfm::Event::MouseButtonPressed)
             {
                 last_mouse_pos_ = new_mouse_position;
             }
         }
     }
 
-    template <ScrollType type>
-    void Slider<type>::setState(State state)
+    template <Orientation orientation>
+    void Slider<orientation>::setState(State state)
     {
         state_ = state;
     }
 
-    template <ScrollType type>
-    psapi::IBarButton::State Slider<type>::getState() const
+    template <Orientation orientation>
+    psapi::IBarButton::State Slider<orientation>::getState() const
     {
         return state_;
-    } 
-*/
+    }
+
 /*============================================================================*/
 
 /*==========================< MoveButton interface >==========================*/
-/*
-    template <ScrollType type>
+
+    template <Orientation orientation>
     class MoveButton : public psapi::IBarButton, public AWindow
     {
     public:
@@ -184,7 +205,7 @@ namespace ps
                     const vec2u                         &size,
                     const vec2i                         &direction,
                     const IWindow*                      scroll_bar,  
-                    Slider<type>*                       slider      );
+                    Slider<orientation>*                slider      );
 
 
         virtual ~MoveButton() = default;
@@ -198,19 +219,19 @@ namespace ps
     private:
         std::unique_ptr<psapi::sfm::Sprite> sprite_;
         vec2i                               direction_;
-        Slider<type>*                       slider_;
+        Slider<orientation>*                       slider_;
         State state_;
     };
-*/
+
 /*========================< MoveButton implementation >=======================*/
-/*
-    template <ScrollType type>
-    MoveButton<type>::MoveButton(std::unique_ptr<psapi::sfm::Sprite> sprite,
-                                const vec2i                         &position,
-                                const vec2u                         &size,
-                                const vec2i                         &direction,
-                                const IWindow*                      scroll_bar,  
-                                Slider<type>*                       slider     )
+
+    template <Orientation orientation>
+    MoveButton<orientation>::MoveButton(std::unique_ptr<psapi::sfm::Sprite> sprite,
+                                const vec2i                                 &position,
+                                const vec2u                                 &size,
+                                const vec2i                                 &direction,
+                                const IWindow*                              scroll_bar,  
+                                Slider<orientation>*                        slider     )
     :
         sprite_     (std::move(sprite)),
         direction_  (direction),
@@ -223,18 +244,18 @@ namespace ps
 
         vec2u picture_size = sprite->getSize();
         sprite->setScale(static_cast<float>(size_.x) / static_cast<float>(picture_size.x),
-                        static_cast<float>(size_.y) / static_cast<float>(picture_size.y) );
+                         static_cast<float>(size_.y) / static_cast<float>(picture_size.y) );
     }
 
-    template <ScrollType type>
-    void MoveButton<type>::draw(IRenderWindow* render_window)
+    template <Orientation orientation>
+    void MoveButton<orientation>::draw(IRenderWindow* render_window)
     {
         sprite_->setPosition(pos_);
         sprite_->draw(render_window);
     }
 
-    template <ScrollType type>
-    bool MoveButton<type>::update(const IRenderWindow* render_window,
+    template <Orientation orientation>
+    bool MoveButton<orientation>::update(const IRenderWindow* render_window,
                                 const Event          &event        )
     {
         if (!is_active_) return false;
@@ -246,7 +267,7 @@ namespace ps
         if (0 <= new_mouse_position.x && new_mouse_position.x <= size_.x &&
             0 <= new_mouse_position.y && new_mouse_position.y <= size.y     )
         {
-            if (event.type == Event::MouseButtonPressed)
+            if (event.orientation == Event::MouseButtonPressed)
             {
                 slider_->move((float)direction.x, (float)direction.y);
                 return true;
@@ -256,23 +277,23 @@ namespace ps
         return false;
     }
 
-    template <ScrollType type>
-    void MoveButton<type>::setState(State state)
+    template <Orientation orientation>
+    void MoveButton<orientation>::setState(State state)
     {
         state_ = state;
     }
 
-    template <ScrollType type>
-    psapi::IBarButton::State MoveButton<type>::getState() const
+    template <Orientation orientation>
+    psapi::IBarButton::State MoveButton<orientation>::getState() const
     {
         return state_;
     } 
-*/
+
 /*============================================================================*/
 
 /*===========================< ScrollBar interface >==========================*/
-/*
-    template <ScrollType type>
+
+    template <Orientation orientation>
     class ScrollBar : public psapi::IBar, public AWindowVector
     {
     public:
@@ -280,9 +301,11 @@ namespace ps
                     std::unique_ptr<psapi::sfm::Sprite> hover_button,
                     std::unique_ptr<psapi::sfm::Sprite> press_button,
                     std::unique_ptr<psapi::sfm::Sprite> release_button,
+                    ps::Scrollable *scrollable_object,
+                    double          scroll_ratio,
                     const vec2i    &bar_position,
                     const vec2u    &bar_size,
-                    const wid_t    &id                                    );
+                    const wid_t    &id                                    ) = delete;
 
         virtual ~ScrollBar() override = default;
 
@@ -291,6 +314,8 @@ namespace ps
 
         virtual psapi::ChildInfo getNextChildInfo() const override;
         virtual void finishButtonDraw(IRenderWindow* renderWindow, const psapi::IBarButton* button) const override;
+
+        static std::unique_ptr<ScrollBar<orientation>> create();
 
     private:
         void drawChildren(IRenderWindow* render_window) override;
@@ -303,31 +328,114 @@ namespace ps
         std::unique_ptr<psapi::sfm::Sprite> release_button_;
 
     };
-*/
+
 /*========================< ScrollBar implementation >========================*/
-/*
-    template<ScrollType type>
-    ScrollBar<type>::ScrollBar( std::unique_ptr<psapi::sfm::Sprite> background_sprite, 
-                                std::unique_ptr<psapi::sfm::Sprite> hover_button,
-                                std::unique_ptr<psapi::sfm::Sprite> press_button,
-                                std::unique_ptr<psapi::sfm::Sprite> release_button,
-                                const vec2i    &bar_position,
-                                const vec2u    &bar_size,
-                                const wid_t    &id                                      )
-    :
-        background_     (std::move(background)),
-        hover_button_   (std::move(hover_button)),
-        press_button_   (std::move(press_button)),
-        release_button_ (std::move(release_button))
+
+    template <Orientation orientation>
+    void ScrollBar<orientation>::draw(IRenderWindow* render_window)
     {
-        pos_    = bar_position;
-        size_   = bar_size;
-        id_     = id;
+        background_->draw(render_window);
 
-        
+        drawChildren(render_window);
     }
-*/
-/*============================================================================*/
-//}
 
-//#endif //VIEW_SCROLL_BAR_HPP
+    template <Orientation orientation>
+    bool update(const IRenderWindow* render_window, const Event& event)
+    {
+        if (!is_active_)
+        {
+            return false;
+        }
+
+        return updateChildren(render_window, event);
+    }
+
+    template <Orientation orientation>
+    psapi::ChildInfo ScrollBar<orientation>::getNextChildInfo() const
+    {
+        return psapi::ChildInfo{};
+    }
+
+    template <Orientation orientation>
+    void ScrollBar<orientation>::finishButtonDraw(IRenderWindow* renderWindow, const psapi::IBarButton* button) const
+    {
+        return;
+    }
+
+    template <Orientation orientation>
+    void ScrollBar<orientation>::drawChildren(IRenderWindow* render_window)
+    {
+        for (auto &window : windows_)
+        {
+            window->draw(render_window);
+        }
+    }
+
+    template <Orientation orientation>
+    bool ScrollBar<orientation>::updateChildren(const IRenderWindow* render_window, const Event& event)
+    {
+        bool result = false;
+
+        for (auto &window : windows_)
+        {
+            result |= window->update(render_window, event);
+        }
+
+        handleDoubleAction();
+
+        return result;
+    }
+
+    template <Orientation orientation>
+    void ScrollBar<orientation>::handleDoubleAction()
+    {
+        ssize_t last_active = last_active_button_;
+
+        int n_active_buttons = 0;
+        ssize_t new_active = -1;
+
+        for (size_t i = 0; i < windows_.size(); i++)
+        {
+            psapi::IBarButton* ptr = static_cast<psapi::IBarButton*>(windows_[i].get());
+
+            if (ptr->getState() == psapi::IBarButton::State::Released)
+            {
+                n_active_buttons++; 
+                new_active = static_cast<ssize_t>(i);
+            }
+        }
+
+        if (n_active_buttons > 1) 
+        {
+            psapi::IBarButton* ptr = static_cast<psapi::IBarButton*>(windows_[(size_t)last_active].get());
+            ptr->setState(psapi::IBarButton::State::Normal);
+        }
+        else if (n_active_buttons == 1) 
+        {
+            last_active_button_ = new_active;
+        }
+    }
+
+    template <Orientation orientation>
+    std::unique_ptr<ScrollBar<orientation>> ScrollBar<orientation>::create()
+    {
+        static std::unique_ptr<psapi::sfm::Texture> background_texture = {};
+        
+        if (orientation == Orientation::Vertical)
+        {
+            background_texture->loadFromFile(VERTICAL_SCROLL_BAR_TEXTURE);
+        }
+        else
+        {
+            background_texture->loadFromFile(HORIZONTAL_SCROLL_BAR_TEXTURE);
+        }
+
+        static std::unique_ptr<psapi::sfm::Texture> press_button_texture = {};
+        // press_button_texture->loadFromFile();
+        // 
+    }
+
+/*============================================================================*/
+}
+
+#endif //VIEW_SCROLL_BAR_HPP
