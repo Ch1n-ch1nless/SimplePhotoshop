@@ -13,7 +13,8 @@ const char* const PluginPathArray[] =
     "./Plugins/libnegative_filter.so",
     "./Plugins/libbump_filter.so",
     "./Plugins/libblur_filter.so",
-    "./Plugins/libgauss_blur_filter.so"
+    "./Plugins/libgauss_blur_filter.so",
+    "./Plugins/libunsharp_mask_filter.so"
 };
 
 int loadPlugins();
