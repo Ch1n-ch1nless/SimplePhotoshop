@@ -13,12 +13,12 @@ namespace ps
         Horizontal
     };
 
-    const char* const VERTICAL_SLIDER_TEXTURE       = "pictures/vertical_slider_texture.png";
-    const char* const HORIZONTAL_SLIDER_TEXTURE     = "pictures/horizontal_slider_texture.png";
-    const char* const UP_MOVE_BUTTON_TEXTURE        = "pictures/up_move_button_texture.png";
-    const char* const DOWN_MOVE_BUTTON_TEXTURE      = "pictures/down_move_button_texture.png";
-    const char* const LEFT_MOVE_BUTTON_TEXTURE      = "pictures/left_move_button_texture.png";
-    const char* const RIGHT_MOVE_BUTTON_TEXTURE     = "pictures/right_move_button_texture.png";
+    const char* const VERTICAL_SLIDER_TEXTURE       = "pictures/vertical_slider.png";
+    const char* const HORIZONTAL_SLIDER_TEXTURE     = "pictures/horizontal_slider.png";
+    const char* const UP_MOVE_BUTTON_TEXTURE        = "pictures/up_move_button.png";
+    const char* const DOWN_MOVE_BUTTON_TEXTURE      = "pictures/down_move_button.png";
+    const char* const LEFT_MOVE_BUTTON_TEXTURE      = "pictures/left_move_button.png";
+    const char* const RIGHT_MOVE_BUTTON_TEXTURE     = "pictures/right_move_button.png";
     const char* const VERTICAL_SCROLL_BAR_TEXTURE   = "pictures/vertical_scroll_bar.png";
     const char* const HORIZONTAL_SCROLL_BAR_TEXTURE = "pictures/horizontal_scroll_bar.png";
 
