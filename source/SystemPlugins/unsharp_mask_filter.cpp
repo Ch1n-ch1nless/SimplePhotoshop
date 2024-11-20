@@ -91,7 +91,7 @@ bool sys_plugin::UnsharpMaskFilterAction::operator()(const ps::IRenderWindow* re
 
                 uint8_t sharpen_red     = static_cast<uint8_t>(std::min(std::max((int)new_red, 0), 255));
                 uint8_t sharpen_green   = static_cast<uint8_t>(std::min(std::max((int)new_green, 0), 255));
-                uint8_t sharpen_blue    = static_cast<uint8_t>(std::min(std::max((int)new_red, 0), 255));
+                uint8_t sharpen_blue    = static_cast<uint8_t>(std::min(std::max((int)new_blue, 0), 255));
                 uint8_t sharpen_alpha   = static_cast<uint8_t>(std::min(std::max((int)new_alpha, 0), 255));
 
                 psapi::sfm::Color sharpen_color = {sharpen_red, sharpen_green, sharpen_blue, sharpen_alpha};
