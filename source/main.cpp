@@ -10,6 +10,7 @@ const char* const PluginPathArray[] =
     "./Plugins/libcat_button.so",
     "./Plugins/libbrush_button.so",
     "./Plugins/liberaser_button.so",
+    "./Plugins/librectangle_plugin.so",
     "./Plugins/libnegative_filter.so",
     "./Plugins/libbump_filter.so",
     "./Plugins/libblur_filter.so",

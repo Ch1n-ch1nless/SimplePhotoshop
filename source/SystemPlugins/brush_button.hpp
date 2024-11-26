@@ -9,7 +9,7 @@
 namespace sys_plugin
 {
     const char* const BRUSH_BUTTON_TEXTURE  = "pictures/brush_button.png";
-    const int         BRUSH_RADIUS          = 8;
+    const int         BRUSH_RADIUS          = 100;
 
     class BrushAction : public ps::ABarAction
     {

@@ -9,7 +9,7 @@
 namespace sys_plugin
 {
     const char* const ERASER_BUTTON_TEXTURE = "pictures/eraser_button.png";
-    const int         ERASER_RADIUS         = 10;
+    const int         ERASER_RADIUS         = 50;
 
     class EraserAction : public ps::ABarAction
     {

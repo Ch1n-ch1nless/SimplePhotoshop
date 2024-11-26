@@ -108,7 +108,7 @@ void EraserAction::paintNewCircle()
             {
                 if ((offsetX * offsetX + offsetY * offsetY) <= ERASER_RADIUS * ERASER_RADIUS)
                 {
-                    canvas_->getTempLayer()->setPixel(point + ps::vec2i{offsetX, offsetY}, psapi::sfm::Color{200, 200, 200, 255});
+                    canvas_->getTempLayer()->setPixel(point + ps::vec2i{offsetX, offsetY}, psapi::sfm::Color{255, 255, 255, 255});
                 }
             }
         }

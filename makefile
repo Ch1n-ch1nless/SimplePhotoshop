@@ -51,6 +51,7 @@ link: build_sys_plugins
 																						-L./Plugins/ -lcat_button \
 																						-L./Plugins/ -lbrush_button \
 																						-L./Plugins/ -leraser_button \
+																						-L./Plugins/ -lrectangle_plugin \
 																						-L./Plugins/ -lnegative_filter \
 																						-L./Plugins/ -lbump_filter \
 																						-L./Plugins/ -lblur_filter \
@@ -70,6 +71,7 @@ build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_
 	$(CC) -shared -o Plugins/libblur_filter.so object/SystemPlugins/blur_filter.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/libgauss_blur_filter.so object/SystemPlugins/gauss_blur_filter.o -L./Plugins/ -lapi_impl
 	$(CC) -shared -o Plugins/libunsharp_mask_filter.so object/SystemPlugins/unsharp_mask_filter.o -L./Plugins/ -lapi_impl
+	$(CC) -shared -o Plugins/librectangle_plugin.so object/SystemPlugins/rectangle_plugin.o -L./Plugins/ -lapi_impl
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
