@@ -74,4 +74,15 @@ std::unique_ptr<psapi::sfm::IImage> psapi::sfm::Image::create()
     return std::make_unique<Image>();
 }
 
+//TODO: I need to understand, why we need in standard these functions!
+psapi::sfm::vec2i psapi::sfm::Image::getPos() const
+{
+    return vec2i();
+}
+
+void psapi::sfm::Image::setPos(const psapi::sfm::vec2i &pos)
+{
+    return;
+}
+
 /*============================================================================*/

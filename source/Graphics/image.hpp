@@ -28,6 +28,9 @@ namespace psapi
             Color getPixel(unsigned int x, unsigned int y) const override;
             Color getPixel(vec2u pos) const override;
 
+            virtual vec2i getPos() const override;
+            virtual void setPos(const vec2i &pos) override;
+
             static std::unique_ptr<IImage> create();
 
         private:
