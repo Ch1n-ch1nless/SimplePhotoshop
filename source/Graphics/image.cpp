@@ -12,7 +12,8 @@ std::unique_ptr<psapi::sfm::IImage> psapi::sfm::IImage::create()
 /*===========================< Image implementation >=========================*/
 
 psapi::sfm::Image::Image() :
-    image_()
+    image_(),
+    pos_  ()
 {
 }
 
@@ -77,12 +78,12 @@ std::unique_ptr<psapi::sfm::IImage> psapi::sfm::Image::create()
 //TODO: I need to understand, why we need in standard these functions!
 psapi::sfm::vec2i psapi::sfm::Image::getPos() const
 {
-    return vec2i();
+    return pos_;
 }
 
 void psapi::sfm::Image::setPos(const psapi::sfm::vec2i &pos)
 {
-    return;
+    pos_ = pos;
 }
 
 /*============================================================================*/
