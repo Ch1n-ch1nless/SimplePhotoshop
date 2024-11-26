@@ -11,7 +11,8 @@ using namespace sfm;
 
 EllipseShape::EllipseShape(unsigned int width, unsigned int height)
 :
-shape_(static_cast<float>(width) / 2.0f)
+    shape_(static_cast<float>(width) / 2.0f),
+    cached_image_(IImage::create())
 {
     setSize({width, height});
 }
@@ -24,7 +25,8 @@ EllipseShape::EllipseShape(const vec2u &size)
 
 EllipseShape::EllipseShape(unsigned int radius)
 :
-    shape_(static_cast<float>(radius))
+    shape_(static_cast<float>(radius)),
+    cached_image_(IImage::create())
 {
 }
 
@@ -129,13 +131,40 @@ const Color &EllipseShape::getOutlineColor() const
 
 const IImage *EllipseShape::getImage() const 
 {
-    assert(false && "This function is not implemented");
-    return nullptr;
+    if (image_needs_update_) {
+        updateImage();
+    }
+    return cached_image_.get();
 }
 
 void EllipseShape::move(const vec2f &offset)
 {
     shape_.move(sf::Vector2f(offset.x, offset.y));
+    image_needs_update_ = true;
+}
+
+void EllipseShape::updateImage() const
+{
+    sf::RenderTexture renderTexture;
+    if (!renderTexture.create(1920, 1080)){
+        return;
+    }
+
+    renderTexture.clear(sf::Color::Transparent);
+    renderTexture.draw(shape_);
+    renderTexture.display();
+
+    sf::Image image = renderTexture.getTexture().copyToImage();
+    if (image.getSize().x == 0 || image.getSize().y == 0) {
+        return;
+    }
+
+    cached_image_ = std::make_unique<Image>();
+    cached_image_->create(image.getSize().x,
+                          image.getSize().y,
+                          reinterpret_cast<const Color*>(image.getPixelsPtr()));
+
+    image_needs_update_ = false;
 }
 
 std::unique_ptr<IEllipseShape> IEllipseShape::create(unsigned int width, unsigned int height)
@@ -159,13 +188,15 @@ std::unique_ptr<IEllipseShape> IEllipseShape::create(const psapi::sfm::vec2u &si
 
 psapi::sfm::RectangleShape::RectangleShape(unsigned int width, unsigned int height)
 :
-    shape_(sf::Vector2f(static_cast<float>(width), static_cast<float>(height)))
+    shape_(sf::Vector2f(static_cast<float>(width), static_cast<float>(height))),
+    cached_image_(IImage::create())
 {
 }
 
 RectangleShape::RectangleShape(const vec2u &size)
 : 
-    shape_(sf::Vector2f(static_cast<float>(size.x),  static_cast<float>(size.y))) 
+    shape_(sf::Vector2f(static_cast<float>(size.x),  static_cast<float>(size.y))) ,
+    cached_image_(IImage::create())
 {
 }
 
@@ -268,12 +299,39 @@ const Color &RectangleShape::getOutlineColor() const {
 
 const IImage *RectangleShape::getImage() const
 {
-    assert(false && "This function is not implemented");
-    return nullptr;
+    if (image_needs_update_) {
+        updateImage();
+    }
+    return cached_image_.get();
 }
 
 void RectangleShape::move(const vec2f &offset) {
     shape_.move(sf::Vector2f(offset.x, offset.y));
+    image_needs_update_ = true;
+}
+
+void RectangleShape::updateImage() const
+{
+    sf::RenderTexture renderTexture;
+    if (!renderTexture.create(1920, 1080)){
+        return;
+    }
+
+    renderTexture.clear(sf::Color::Transparent);
+    renderTexture.draw(shape_);
+    renderTexture.display();
+
+    sf::Image image = renderTexture.getTexture().copyToImage();
+    if (image.getSize().x == 0 || image.getSize().y == 0) {
+        return;
+    }
+
+    cached_image_ = std::make_unique<Image>();
+    cached_image_->create(image.getSize().x,
+                          image.getSize().y,
+                          reinterpret_cast<const Color*>(image.getPixelsPtr()));
+
+    image_needs_update_ = false;
 }
 
 std::unique_ptr<IRectangleShape> IRectangleShape::create(unsigned int width,

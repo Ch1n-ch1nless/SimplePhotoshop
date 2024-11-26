@@ -8,11 +8,11 @@ namespace psapi
 {
     namespace sfm
     {
-        class Texture : public ITexture
+        class Texture final: public ITexture
         {
         public:
              Texture();
-            ~Texture() = default;
+            ~Texture() final = default;
 
             virtual bool create(unsigned int width, unsigned int height)                                     override;
             virtual bool loadFromFile  (const std::string& filename,        const IntRect& area = IntRect()) override;
@@ -34,11 +34,11 @@ namespace psapi
             friend class EllipseShape;
         };
 
-        class Sprite : public ISprite
+        class Sprite final : public ISprite
         {
         public:
              Sprite();
-            ~Sprite() = default;
+            ~Sprite() final = default;
 
             virtual void setTexture(const ITexture *texture, bool reset_rect = false) override;
             virtual void setTextureRect(const IntRect &rectangle) override;

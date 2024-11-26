@@ -45,8 +45,8 @@ SYSTEM_PLUGINS_OBJ	 = $(patsubst $(SYSTEM_PLUGINS_SRC_DIR)%.cpp, $(SYSTEM_PLUGIN
 
 all: link
 
-link: $(GRAPHICS_OBJ)
-	$(CC) object/main.o $(GRAPHICS_OBJ)-o photoshop.out
+link: $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ)
+	$(CC) object/main.o $(GRAPHICS_OBJ) $(STANDARD_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_OBJ) $(MAIN_OBJ)
 	$(CC) -shared -o Plugins/libapi_impl.so $(GRAPHICS_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system

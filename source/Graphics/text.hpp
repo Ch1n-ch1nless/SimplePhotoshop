@@ -7,11 +7,11 @@ namespace psapi
 {
     namespace sfm
     {
-        class Font : public IFont
+        class Font final : public IFont
         {
         public:
              Font();
-            ~Font() = default;
+            ~Font() final = default;
 
             virtual bool loadFromFile(const std::string& filename) override;
 
@@ -23,12 +23,13 @@ namespace psapi
             friend class Text;
         };
 
-        class Text : public IText
+        class Text final : public IText
         {
         public:
              Text();
-            ~Text() = default;
+            ~Text() final = default;
 
+            virtual IntRect getGlobalBounds() const override;
             virtual void draw(IRenderWindow *window)    const override;
             virtual void setString(const std::string& string) override;
             virtual void setFont(const IFont* font)           override;

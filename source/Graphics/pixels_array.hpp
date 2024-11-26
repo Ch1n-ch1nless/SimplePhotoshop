@@ -7,11 +7,11 @@ namespace psapi
 {
     namespace sfm
     {
-        class PixelsArray : public IPixelsArray
+        class PixelsArray final : public IPixelsArray
         {
         public:
              PixelsArray(size_t init_size);
-            ~PixelsArray() = default;
+            ~PixelsArray() final = default;
 
             virtual void draw(IRenderWindow* render_window) const override;
 

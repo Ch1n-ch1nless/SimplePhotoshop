@@ -29,13 +29,13 @@ bool Texture::create(unsigned int width, unsigned int height)
 
 bool Texture::loadFromFile(const std::string& filename, const IntRect& area)
 {
-    sf::IntRect rectangle = {area.top_x, area.top_y, area.width, area.height};
+    sf::IntRect rectangle = {area.pos.x, area.pos.y, (int)area.size.x, (int)area.size.y};
     return texture_.loadFromFile(filename, rectangle);
 }
 
 bool Texture::loadFromMemory(const void* data, std::size_t size, const IntRect& area)
 {
-    sf::IntRect rectangle = {area.top_x, area.top_y, area.width, area.height};
+    sf::IntRect rectangle = {area.pos.x, area.pos.y, (int)area.size.x, (int)area.size.y};
     return texture_.loadFromMemory(data, size, rectangle);
 }
 
@@ -89,7 +89,7 @@ void Sprite::setTexture(const ITexture *texture, bool reset_rect)
 
 void Sprite::setTextureRect(const IntRect &area)
 {
-    sf::IntRect rectangle = {area.top_x, area.top_y, area.width, area.height};
+    sf::IntRect rectangle = {area.pos.x, area.pos.y, (int)area.size.x, (int)area.size.y};
     sprite_.setTextureRect(rectangle);
 }
 
@@ -140,7 +140,7 @@ const vec2f Sprite::getPosition() const
 IntRect Sprite::getGlobalBounds() const
 {
     sf::FloatRect area = sprite_.getGlobalBounds();
-    return {(int)area.left, (int)area.top, (int)area.width, (int)area.height};
+    return IntRect{vec2i{(int)area.left, (int)area.top}, vec2u{(unsigned int)area.width, (unsigned int)area.height}};
 }
 
  void Sprite::draw(IRenderWindow *window) const

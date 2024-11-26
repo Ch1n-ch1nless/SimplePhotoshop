@@ -61,13 +61,13 @@ void psapi::sfm::Image::setPixel(vec2u pos, const Color &color)
 psapi::sfm::Color psapi::sfm::Image::getPixel(unsigned int x, unsigned int y) const
 {
     sf::Color color = image_.getPixel(x, y);
-    return Color(color.r, color.g, color.b, color.a);
+    return Color((uint8_t)color.r, (uint8_t)color.g, (uint8_t)color.b, (uint8_t)color.a);
 }
 
 psapi::sfm::Color psapi::sfm::Image::getPixel(vec2u pos) const
 {
     sf::Color color = image_.getPixel(pos.x, pos.y);
-    return Color(color.r, color.g, color.b, color.a);
+    return Color((uint8_t)color.r, (uint8_t)color.g, (uint8_t)color.b, (uint8_t)color.a);
 }
 
 std::unique_ptr<psapi::sfm::IImage> psapi::sfm::Image::create()

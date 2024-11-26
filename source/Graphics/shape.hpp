@@ -7,12 +7,14 @@ namespace psapi
 {
     namespace sfm
     {
-        class EllipseShape : public IEllipseShape
+        class EllipseShape final : public IEllipseShape
         {
         public:
             EllipseShape(unsigned int width, unsigned int height);
             EllipseShape(const vec2u &size);
             EllipseShape(unsigned int radius);
+
+            ~EllipseShape() final = default;
 
             void draw(IRenderWindow *window) const override;
 
@@ -40,15 +42,19 @@ namespace psapi
 
         private:
             sf::CircleShape shape_;
+            mutable std::unique_ptr<IImage> cached_image_;
+            mutable bool image_needs_update_ = true;
+
+            void updateImage() const;
         };
 
-        class RectangleShape : public IRectangleShape
+        class RectangleShape final : public IRectangleShape
         {
         public:
             RectangleShape(unsigned int width, unsigned int height);
             RectangleShape(const vec2u &size);
 
-            ~RectangleShape() override = default;
+            ~RectangleShape() final = default;
 
             void draw(IRenderWindow *window) const override;
 
@@ -76,6 +82,10 @@ namespace psapi
 
         private:
             sf::RectangleShape shape_;
+            mutable std::unique_ptr<IImage> cached_image_;
+            mutable bool image_needs_update_ = true;
+
+            void updateImage() const;
         };
 
     } //sfm

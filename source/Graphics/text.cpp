@@ -38,6 +38,16 @@ void psapi::sfm::Text::draw(IRenderWindow *window) const
     real_window->window_.draw(text_);
 }
 
+psapi::sfm::IntRect psapi::sfm::Text::getGlobalBounds() const
+{
+    psapi::sfm::vec2i pos  = vec2i{static_cast<int>(text_.getPosition().x), 
+                                   static_cast<int>(text_.getPosition().y)};
+    psapi::sfm::vec2u size = vec2u{static_cast<unsigned int>(text_.getGlobalBounds().width), 
+                                   static_cast<unsigned int>(text_.getGlobalBounds().height)};
+    
+    return IntRect{pos, size};
+}   
+
 void psapi::sfm::Text::setString(const std::string &string)
 {
     text_.setString(string);

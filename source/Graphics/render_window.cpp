@@ -42,14 +42,12 @@ vec2u RenderWindow::getSize() const
 
 void RenderWindow::setFps(float fps)
 {
-    //TODO: Fix the assert
-    assert(false && "ERROR!!! Current function is npt allowed to use it!\n");
+    window_.setFramerateLimit(static_cast<unsigned int>(fps));
 }
 
 float RenderWindow::getFps() const
 {
-    //TODO: Fix the assert
-    assert(false && "ERROR!!! Current function is npt allowed to use it!\n");
+    //TODO: Fix the function, to get real value of fps
     return 0.f;
 }
 
@@ -150,7 +148,7 @@ bool RenderWindow::pollEvent(Event& event)
             event.type = Event::MouseLeft;
             break;
 
-        case sf::Event::MouseWheelMoved: // deprecated
+        case sf::Event::MouseWheelMoved:
         case sf::Event::JoystickButtonPressed:
         case sf::Event::JoystickButtonReleased:
         case sf::Event::JoystickMoved:

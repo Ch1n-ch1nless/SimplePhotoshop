@@ -7,11 +7,11 @@ namespace psapi
 {
     namespace sfm
     {
-        class Image : public IImage
+        class Image final : public IImage
         {
         public:
              Image();
-            virtual ~Image() override = default;
+            virtual ~Image() final = default;
 
             void create(unsigned int width, unsigned int height, const Color &color=Color(0, 0, 0)) override;
             void create(vec2u size, const Color &color=Color(0, 0, 0)) override;

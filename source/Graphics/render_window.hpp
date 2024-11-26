@@ -16,11 +16,11 @@ namespace psapi
         class RectangleShape;
         class EllipseShape;
 
-        class RenderWindow : public IRenderWindow
+        class RenderWindow final : public IRenderWindow
         {
         public:
              RenderWindow(unsigned int width, unsigned int height, const std::string& window_title);
-            ~RenderWindow() = default;
+            ~RenderWindow() final = default;
 
             virtual bool isOpen () const override;
             virtual void clear  ()       override;
