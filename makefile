@@ -15,8 +15,8 @@ CFLAGS= -D _DEBUG -ggdb3 -std=c++20 -O2 -Wall -Wextra -Weffc++ -Waggressive-loop
 GRAPHICS_SRC_DIR = ./source/Graphics/
 GRAPHICS_OBJ_DIR = ./object/Graphics/
 
-STANDARD_SRC_DIR 	= ./source/Standard/
-STANDARD_OBJ_DIR 	= ./object/Standard/
+STANDARD_SRC_DIR 	= ./api/
+STANDARD_OBJ_DIR 	= ./object/api/
 
 VIEW_SRC_DIR		= ./source/View/
 VIEW_OBJ_DIR 		= ./object/View/

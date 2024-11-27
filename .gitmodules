@@ -1,0 +1,6 @@
+[submodule "source/api"]
+	path = source/api
+	url = git@github.com:PhotoshopAuthors/Standard.git
+[submodule "api"]
+	path = api
+	url = git@github.com:PhotoshopAuthors/Standard.git
