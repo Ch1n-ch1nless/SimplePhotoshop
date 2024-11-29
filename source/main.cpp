@@ -7,7 +7,7 @@ int loadPlugins();
 
 int main()
 {
-    psapi::sfm::RenderWindow render_window(1920, 1080, "MyPhotoshop v.0.1");
+    psapi::sfm::RenderWindow render_window(1920, 1080, "MyPhotoshop v.2.0.1");
 
     while (render_window.isOpen())
     {
