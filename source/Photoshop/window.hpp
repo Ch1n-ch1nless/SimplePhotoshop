@@ -7,6 +7,8 @@
 
 namespace psapi
 {
+    /*=========================< AWindow interface >==========================*/
+
     class AWindow : public IWindow
     {
     public:
@@ -42,6 +44,8 @@ namespace psapi
         bool            is_active_;
     };
 
+    /*=====================< AWindowContainer interface >=====================*/
+
     class AWindowContainer : public IWindowContainer, public AWindow
     {
     public:
@@ -54,13 +58,17 @@ namespace psapi
         virtual ~AWindowContainer() override = default;
 
         virtual bool isWindowContainer() const override;
+        virtual void addWindow(std::unique_ptr<IWindow> window) override;
+        virtual void removeWindow(wid_t id) override;
 
     protected:
         virtual void drawChildren(IRenderWindow* render_window);
+        virtual void executeActions(const IRenderWindow* renderWindow, const Event& event);
 
         std::vector<std::unique_ptr<IWindow>> children_;
     };
 
+    /*========================================================================*/
 }
 
 #endif //MY_API_WINDOW_HPP

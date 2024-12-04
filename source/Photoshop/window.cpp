@@ -104,4 +104,37 @@ bool psapi::AWindowContainer::isWindowContainer() const
     return true;
 }
 
+void psapi::AWindowContainer::addWindow(std::unique_ptr<IWindow> window)
+{
+    children_.push_back(std::move(window));
+}
+
+void psapi::AWindowContainer::removeWindow(wid_t id)
+{
+    for (auto it = children_.begin(); it != children_.end(); ++it)
+    {
+        if (it->get()->getId() == id)
+        {
+            children_.erase(it);
+            break;
+        }
+    }
+}
+
+void psapi::AWindowContainer::executeActions(const IRenderWindow* renderWindow, const Event& event)
+{
+    AActionController* global_controller = getActionController();
+
+    for (auto& window : children_)
+    {
+        global_controller->execute(window->createAction(renderWindow, event));
+    }
+}
+
+/*============================================================================*/
+
+/*=======================< RootWindow implementation >========================*/
+
+
+
 /*============================================================================*/
