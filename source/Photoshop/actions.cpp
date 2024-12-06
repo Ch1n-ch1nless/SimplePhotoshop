@@ -15,7 +15,7 @@ bool psapi::ActionController::execute(std::unique_ptr<IAction> action)
 
     if (isUndoableAction(action.get()))
     {
-        undo_actions_.push_back(std::make_unique<IUndoableAction>(static_cast<IUndoableAction*>(action.release())));
+        undo_actions_.push_back(std::move(action));
         if (undo_actions_.size() > MAX_ACTIONS_DEQUE_SIZE)
         {
             undo_actions_.pop_front();
@@ -32,10 +32,10 @@ bool psapi::ActionController::undo()
         return false;
     }
 
-    std::unique_ptr<IUndoableAction> action(std::move(undo_actions_.back()));
+    std::unique_ptr<IAction> action(std::move(undo_actions_.back()));
     undo_actions_.pop_back();
 
-    bool result = actionUndo(action.get());
+    bool result = actionUndo(dynamic_cast<IUndoableAction*>(action.get()));
 
     redo_actions_.push_back(std::move(action));
     if (redo_actions_.size() > MAX_ACTIONS_DEQUE_SIZE)
@@ -53,10 +53,10 @@ bool psapi::ActionController::redo()
         return false;
     }
 
-    std::unique_ptr<IUndoableAction> action(std::move(redo_actions_.back()));
+    std::unique_ptr<IAction> action(std::move(redo_actions_.back()));
     redo_actions_.pop_back();
 
-    return actionRedo(action.get());
+    return actionRedo(dynamic_cast<IUndoableAction*>(action.get()));
 }
 
 /*============================================================================*/

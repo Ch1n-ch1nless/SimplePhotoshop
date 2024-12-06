@@ -35,6 +35,8 @@ namespace psapi
             virtual void setFont(const IFont* font)           override;
             virtual void setCharacterSize(unsigned int size)  override;
             virtual void setStyle(uint32_t style)             override;
+            virtual void setPos(const vec2f &pos)             override;
+            virtual void setSize(const vec2f &size)           override;
             virtual void setFillColor(const Color* color)     override;
             virtual void setOutlineColor(const Color* color)  override;
             virtual void setOutlineThickness(float thickness) override;

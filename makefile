@@ -12,14 +12,14 @@ CFLAGS= -D _DEBUG -ggdb3 -std=c++20 -O2 -Wall -Wextra -Weffc++ -Waggressive-loop
 		-fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr \
 		-Wl,--export-dynamic
 
-GRAPHICS_SRC_DIR = ./source/Graphics/
-GRAPHICS_OBJ_DIR = ./object/Graphics/
+GRAPHICS_SRC_DIR 	= ./source/Graphics/
+GRAPHICS_OBJ_DIR 	= ./object/Graphics/
 
 STANDARD_SRC_DIR 	= ./api/
 STANDARD_OBJ_DIR 	= ./object/api/
 
-VIEW_SRC_DIR		= ./source/View/
-VIEW_OBJ_DIR 		= ./object/View/
+PHOTOSHOP_SRC_DIR	= ./source/Photoshop/
+PHOTOSHOP_OBJ_DIR	= ./object/Photoshop/
 
 MAIN_SRC = ./source/main.cpp
 MAIN_OBJ = ./object/main.o
@@ -37,30 +37,16 @@ GRAPHICS_OBJ = $(patsubst $(GRAPHICS_SRC_DIR)%.cpp, $(GRAPHICS_OBJ_DIR)%.o, $(GR
 STANDARD_SRC = $(wildcard $(STANDARD_SRC_DIR)*.cpp)
 STANDARD_OBJ = $(patsubst $(STANDARD_SRC_DIR)%.cpp, $(STANDARD_OBJ_DIR)%.o, $(STANDARD_SRC))
 
-VIEW_SRC	 = $(wildcard $(VIEW_SRC_DIR)*.cpp)
-VIEW_OBJ	 = $(patsubst $(VIEW_SRC_DIR)%.cpp, $(VIEW_OBJ_DIR)%.o, $(VIEW_SRC))
+PHOTOSHOP_SRC	 = $(wildcard $(PHOTOSHOP_SRC_DIR)*.cpp)
+PHOTOSHOP_OBJ	 = $(patsubst $(PHOTOSHOP_SRC_DIR)%.cpp, $(PHOTOSHOP_OBJ_DIR)%.o, $(PHOTOSHOP_SRC))
 
 SYSTEM_PLUGINS_SRC	 = $(wildcard $(SYSTEM_PLUGINS_SRC_DIR)*.cpp)
 SYSTEM_PLUGINS_OBJ	 = $(patsubst $(SYSTEM_PLUGINS_SRC_DIR)%.cpp, $(SYSTEM_PLUGINS_OBJ_DIR)%.o, $(SYSTEM_PLUGINS_SRC))
 
 all: link
 
-link: $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ)
-	$(CC) object/main.o $(GRAPHICS_OBJ) $(STANDARD_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-
-build_sys_plugins: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(VIEW_OBJ) $(SYSTEM_PLUGINS_OBJ) $(MAIN_OBJ)
-	$(CC) -shared -o Plugins/libapi_impl.so $(GRAPHICS_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-	$(CC) -shared -o Plugins/libpencil_button.so object/SystemPlugins/pencil_button.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libtool_bar.so object/SystemPlugins/tool_bar.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libcat_button.so object/SystemPlugins/cat_button.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libbrush_button.so object/SystemPlugins/brush_button.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/liberaser_button.so object/SystemPlugins/eraser_button.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libnegative_filter.so object/SystemPlugins/negative_filter.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libbump_filter.so object/SystemPlugins/bump_filter.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libblur_filter.so object/SystemPlugins/blur_filter.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libgauss_blur_filter.so object/SystemPlugins/gauss_blur_filter.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/libunsharp_mask_filter.so object/SystemPlugins/unsharp_mask_filter.o -L./Plugins/ -lapi_impl
-	$(CC) -shared -o Plugins/librectangle_plugin.so object/SystemPlugins/rectangle_plugin.o -L./Plugins/ -lapi_impl
+link: $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ)
+	$(CC) object/main.o $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
@@ -68,7 +54,7 @@ $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 $(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
-$(VIEW_OBJ_DIR)%.o : $(VIEW_SRC_DIR)%.cpp
+$(PHOTOSHOP_OBJ_DIR)%.o : $(PHOTOSHOP_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 $(SYSTEM_PLUGINS_OBJ_DIR)%.o : $(SYSTEM_PLUGINS_SRC_DIR)%.cpp
@@ -78,11 +64,10 @@ $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 clean:
-	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(VIEW_OBJ) $(STANDARD_OBJ) $(SYSTEM_PLUGINS_OBJ)
+	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(PHOTOSHOP_OBJ) $(STANDARD_OBJ)
  
 build:
 	mkdir object              		&& \
 	mkdir $(GRAPHICS_OBJ_DIR) 		&& \
 	mkdir $(STANDARD_OBJ_DIR) 		&& \
-	mkdir $(VIEW_OBJ_DIR)	  		&& \
-	mkdir $(SYSTEM_PLUGINS_OBJ_DIR)
+	mkdir $(PHOTOSHOP_OBJ_DIR)	

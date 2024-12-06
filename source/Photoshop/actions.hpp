@@ -1,7 +1,7 @@
 #ifndef  MY_ACTIONS_HPP
 #define  MY_ACTIONS_HPP
 
-#include "api/api_actions.hpp"
+#include "../../api/api_actions.hpp"
 #include <deque>
 
 namespace psapi
@@ -18,8 +18,8 @@ namespace psapi
         virtual bool redo() override;
 
     private:  
-        std::deque<std::unique_ptr<IUndoableAction>> undo_actions_;
-        std::deque<std::unique_ptr<IUndoableAction>> redo_actions_;
+        std::deque<std::unique_ptr<IAction>> undo_actions_;
+        std::deque<std::unique_ptr<IAction>> redo_actions_;
     
         const size_t MAX_ACTIONS_DEQUE_SIZE = 10;
     };

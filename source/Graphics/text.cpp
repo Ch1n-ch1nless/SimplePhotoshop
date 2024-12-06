@@ -70,6 +70,23 @@ void psapi::sfm::Text::setStyle(uint32_t style)
     text_.setStyle(style);
 }
 
+void psapi::sfm::Text::setPos(const psapi::sfm::vec2f &pos)  
+{
+    text_.setPosition(static_cast<float>(pos.x),
+                      static_cast<float>(pos.y) );
+}
+
+void psapi::sfm::Text::setSize(const psapi::sfm::vec2f &size)
+{
+    float new_factorX = static_cast<float>(size.x) /
+                        text_.getGlobalBounds().width;
+
+    float new_factorY = static_cast<float>(size.y) /
+                        text_.getGlobalBounds().height;
+
+    text_.setScale(new_factorX, new_factorY);
+}
+
 void psapi::sfm::Text::setFillColor(const Color *color)
 {
     text_.setFillColor(sf::Color(color->r, color->g, color->b, color->a));
