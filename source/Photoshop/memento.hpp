@@ -22,6 +22,7 @@ namespace psapi
     std::unique_ptr<SnapshotType> psapi::Mementable<SnapshotType>::save()
     {
         assert(false && "ERROR!!! Function is not implemented in this release!\n");
+        return nullptr;
     }
 
     template <typename SnapshotType>

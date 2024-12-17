@@ -18,7 +18,11 @@ namespace psapi
                 const IWindow* parent    = nullptr,
                 bool           is_active = false   );
 
+        AWindow(const AWindow& other);
+
         virtual ~AWindow() override = default;
+
+        AWindow& operator=(const AWindow& other) = delete;
 
         virtual void                     draw(IRenderWindow* renderWindow) override = 0;
         virtual std::unique_ptr<IAction> createAction(const IRenderWindow* renderWindow, const Event& event) override = 0;
@@ -55,7 +59,11 @@ namespace psapi
                          const IWindow* parent    = nullptr,
                          bool           is_active = false   );
 
+        AWindowContainer(const AWindowContainer& other);
+
         virtual ~AWindowContainer() override = default;
+
+        AWindowContainer& operator=(const AWindowContainer& other) = delete;
 
         virtual wid_t           getId()                             const   override;
         virtual IWindow*        getWindowById(wid_t id)                     override;

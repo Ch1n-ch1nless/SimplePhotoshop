@@ -18,6 +18,16 @@ psapi::AWindow::AWindow(const vec2i    &position,
 {
 }
 
+psapi::AWindow::AWindow(const AWindow& other)
+:
+    pos_        (other.pos_),
+    size_       (other.size_),
+    id_         (other.id_),
+    parent_     (other.parent_),
+    is_active_  (other.is_active_)
+{
+}
+
 psapi::wid_t psapi::AWindow::getId() const
 {
     return id_;
@@ -93,9 +103,17 @@ psapi::AWindowContainer::AWindowContainer(const vec2i    &position,
                                           const IWindow*  parent,
                                           bool            is_active)
 :
-    AWindow             (position, size, id, parent, is_active),
-    IWindowContainer    (),
-    children_           ()
+    IWindowContainer(),
+    AWindow         (position, size, id, parent, is_active),
+    children_       ()
+{
+}
+
+psapi::AWindowContainer::AWindowContainer(const AWindowContainer& other)
+:
+    IWindowContainer(),
+    AWindow         (static_cast<const AWindow&>(other)),
+    children_       ()
 {
 }
 
@@ -234,7 +252,10 @@ public:
 
 psapi::RootWindow::RootWindow(const size_t width, const size_t height)
 :
-    AWindowContainer(vec2i{0, 0}, vec2u{width, height}, kRootWindowId, nullptr, true),
+    AWindowContainer(vec2i{0, 0}, 
+                    vec2u{static_cast<unsigned int>(width), 
+                          static_cast<unsigned int>(height)}, 
+                    kRootWindowId, nullptr, true),
     active_layer_id_(0)
 {
 }

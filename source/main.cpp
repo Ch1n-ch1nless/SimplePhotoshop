@@ -11,6 +11,8 @@ int main()
     psapi::sfm::RenderWindow render_window(1920, 1080, "MyPhotoshop v.2.0.1");
 
     psapi::IRootWindow* root_window = psapi::getRootWindow();
+    root_window->addWindow(std::make_unique<psapi::Canvas>(psapi::vec2i{400, 200}, psapi::vec2u{1080, 720}));
+    root_window->getWindowById(psapi::kCanvasWindowId)->setParent(root_window);
 
     while (render_window.isOpen())
     {
@@ -27,6 +29,7 @@ int main()
 
         render_window.clear();
         psapi::getActionController()->execute(root_window->createAction(&render_window, event));
+        root_window->draw(&render_window);
         render_window.display();
     }
 
