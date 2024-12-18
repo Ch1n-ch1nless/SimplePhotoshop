@@ -14,6 +14,9 @@ int main()
     root_window->addWindow(std::make_unique<psapi::Canvas>(psapi::getCanvasIntRect().pos, psapi::getCanvasIntRect().size));
     root_window->getWindowById(psapi::kCanvasWindowId)->setParent(root_window);
 
+    root_window->addWindow(static_cast<std::unique_ptr<psapi::AWindow>>(std::make_unique<psapi::ToolBar>()));
+    root_window->getWindowById(psapi::kToolBarWindowId)->setParent(root_window);
+
     while (render_window.isOpen())
     {
         psapi::sfm::Event event = {};
