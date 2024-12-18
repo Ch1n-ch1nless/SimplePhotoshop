@@ -271,12 +271,13 @@ bool psapi::ABar::isWindowContainer() const
 
 void psapi::ABar::addWindow(std::unique_ptr<IWindow> window)
 {
-    window->setSize(button_size_);
+    n_buttons_++;
+
     window->setPos(getNextChildPos());
+    window->setSize(button_size_);
     window->setParent(static_cast<AWindow*>(this));
 
     children_.push_back(std::move(window));
-    n_buttons_++;
 }
 
 void psapi::ABar::removeWindow(wid_t id)

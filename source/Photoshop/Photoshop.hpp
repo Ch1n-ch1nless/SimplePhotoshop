@@ -4,6 +4,7 @@
 #include "actions.hpp"
 #include "bar.hpp"
 #include "canvas.hpp"
+#include "color_palette.hpp"
 #include "menu_button.hpp"
 #include "options_bar.hpp"
 #include "tool_bar.hpp"

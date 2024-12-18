@@ -17,8 +17,11 @@ int main()
     root_window->addWindow(static_cast<std::unique_ptr<psapi::AWindow>>(std::make_unique<psapi::ToolBar>()));
     root_window->getWindowById(psapi::kToolBarWindowId)->setParent(root_window);
 
-    root_window->addWindow(static_cast<std::unique_ptr<psapi::AWindow>>(std::make_unique<psapi::OptionsBar>()));
-    root_window->getWindowById(psapi::kOptionsBarWindowId)->setParent(root_window);
+    std::unique_ptr<psapi::OptionsBar> options_bar = std::make_unique<psapi::OptionsBar>();
+    options_bar->setParent(root_window);
+    options_bar->addWindow(psapi::ColorPalette::create());
+
+    root_window->addWindow(static_cast<std::unique_ptr<psapi::AWindow>>(std::move(options_bar)));
 
     while (render_window.isOpen())
     {

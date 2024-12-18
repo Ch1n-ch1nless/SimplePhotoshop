@@ -12,7 +12,7 @@ psapi::OptionsBar::OptionsBar()
          getOptionsBarIntRect().size,
          {20, 20},
          {0, 20},
-         {128, 128},
+         {200, 200},
          1,
          kOptionsBarWindowId              )
 {
@@ -30,7 +30,8 @@ void psapi::OptionsBar::draw(IRenderWindow* renderWindow)
     ABar::draw(renderWindow);
 }
 
-std::unique_ptr<psapi::IAction> psapi::OptionsBar::createAction(const IRenderWindow* renderWindow, const Event& event)
+std::unique_ptr<psapi::IAction> 
+psapi::OptionsBar::createAction(const IRenderWindow* renderWindow, const Event& event)
 {
     return std::make_unique<OptionAction>(this, renderWindow, event);
 }
