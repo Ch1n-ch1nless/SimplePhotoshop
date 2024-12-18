@@ -28,46 +28,43 @@ PLUGINS_DIR = ./Plugins/
 
 PLUGINS = $(wildcard $(PLUGINS_DIR)*.so)
 
-SYSTEM_PLUGINS_SRC_DIR = ./source/SystemPlugins/
-SYSTEM_PLUGINS_OBJ_DIR = ./object/SystemPlugins/
+MY_PLUGINS_SRC_DIR = ./source/MyPlugins/
+MY_PLUGINS_OBJ_DIR = ./object/MyPlugins/
 
 GRAPHICS_SRC = $(wildcard $(GRAPHICS_SRC_DIR)*.cpp)
 GRAPHICS_OBJ = $(patsubst $(GRAPHICS_SRC_DIR)%.cpp, $(GRAPHICS_OBJ_DIR)%.o, $(GRAPHICS_SRC))
 
-STANDARD_SRC = $(wildcard $(STANDARD_SRC_DIR)*.cpp)
-STANDARD_OBJ = $(patsubst $(STANDARD_SRC_DIR)%.cpp, $(STANDARD_OBJ_DIR)%.o, $(STANDARD_SRC))
+MY_PLUGINS_SRC = $(wildcard $(MY_PLUGINS_SRC_DIR)*.cpp)
+MY_PLUGINS_OBJ = $(patsubst $(MY_PLUGINS_SRC_DIR)%.cpp, $(MY_PLUGINS_OBJ_DIR)%.o, $(MY_PLUGINS_SRC))
 
 PHOTOSHOP_SRC	 = $(wildcard $(PHOTOSHOP_SRC_DIR)*.cpp)
 PHOTOSHOP_OBJ	 = $(patsubst $(PHOTOSHOP_SRC_DIR)%.cpp, $(PHOTOSHOP_OBJ_DIR)%.o, $(PHOTOSHOP_SRC))
 
-SYSTEM_PLUGINS_SRC	 = $(wildcard $(SYSTEM_PLUGINS_SRC_DIR)*.cpp)
-SYSTEM_PLUGINS_OBJ	 = $(patsubst $(SYSTEM_PLUGINS_SRC_DIR)%.cpp, $(SYSTEM_PLUGINS_OBJ_DIR)%.o, $(SYSTEM_PLUGINS_SRC))
-
 all: link
 
-link: $(MAIN_OBJ) $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ)
-	$(CC) object/main.o $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ) -o photoshop.out -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+link: $(MAIN_OBJ) $(GRAPHICS_OBJ) $(PHOTOSHOP_OBJ)
+	$(CC) object/main.o $(GRAPHICS_OBJ) $(PHOTOSHOP_OBJ) -o photoshop.out -L./plugins/ -lbrush -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
-	$(CC) $(CFLAGS) -c -fPIC $< -o $@
-
-$(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 $(PHOTOSHOP_OBJ_DIR)%.o : $(PHOTOSHOP_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
-$(SYSTEM_PLUGINS_OBJ_DIR)%.o : $(SYSTEM_PLUGINS_SRC_DIR)%.cpp
-	$(CC) $(CFLAGS) -c -fPIC $< -o $@
-
 $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
+build_my_plugins: $(MY_PLUGINS_OBJ)
+	$(CC) -shared -o plugins/libbrush.so object/MyPlugins/brush.o -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+
+$(MY_PLUGINS_OBJ_DIR)%.o : $(MY_PLUGINS_SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) -c -fPIC $< -o $@
+
 clean:
-	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(PHOTOSHOP_OBJ) $(STANDARD_OBJ)
+	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(PHOTOSHOP_OBJ) $(MY_PLUGINS_OBJ) 
  
 build:
 	mkdir object              		&& \
 	mkdir $(GRAPHICS_OBJ_DIR) 		&& \
-	mkdir $(STANDARD_OBJ_DIR) 		&& \
-	mkdir $(PHOTOSHOP_OBJ_DIR)	
+	mkdir $(PHOTOSHOP_OBJ_DIR)		&& \
+	mkdir $(MY_PLUGINS_OBJ_DIR)
