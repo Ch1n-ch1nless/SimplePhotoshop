@@ -5,6 +5,7 @@
 #include "bar.hpp"
 #include "canvas.hpp"
 #include "menu_button.hpp"
+#include "options_bar.hpp"
 #include "tool_bar.hpp"
 #include "window.hpp"
 
