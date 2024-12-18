@@ -5,9 +5,13 @@
 #include "../Graphics/Graphics.hpp"
 #include "window.hpp"
 #include "memento.hpp"
+#include "actions.hpp"
 
 namespace psapi
 {
+    class ABarAction;
+    class ABarButtonAction;
+
     class ABarButton : public IBarButton, public AWindow
     {
     public:
@@ -39,6 +43,24 @@ namespace psapi
         std::unique_ptr<sfm::Texture>   texture_;
         std::unique_ptr<sfm::Sprite>    sprite_;
         State                           state_;
+
+    private:
+        friend class ABarButtonAction;
+    };
+
+    class ABarButtonAction : public IAction
+    {
+    public:
+         ABarButtonAction(ABarButton *button, const IRenderWindow *renderWindow, const Event &event);
+        ~ABarButtonAction() override = default;
+
+        virtual bool execute   (const Key& key) override;
+        virtual bool isUndoable(const Key& key) override;
+
+    protected:
+        const IRenderWindow*    render_window_;
+        ABarButton*             button_;
+        const Event&            event_;
     };
 
     class ABar : public AWindowContainer, public IBar
@@ -58,7 +80,7 @@ namespace psapi
 
         ~ABar() override = default;
 
-        virtual std::unique_ptr<IAction> createAction(const IRenderWindow* renderWindow, const Event& event) override = 0;
+        virtual std::unique_ptr<IAction> createAction(const IRenderWindow* renderWindow, const Event& event) override;
 
         virtual wid_t           getId()                             const   override;
         virtual IWindow*        getWindowById(wid_t id)                     override;
@@ -98,6 +120,26 @@ namespace psapi
         int n_buttons_ = 0;
 
         mutable int cur_button_it = 0;
+
+        wid_t   last_pressed_id_  = -1;
+
+    private:
+        friend class ABarAction;
+    };
+
+    class ABarAction : public IAction
+    {
+    public:
+        ABarAction(ABar *bar, const IRenderWindow *renderWindow, const Event &event);
+        ~ABarAction() override = default;
+
+        virtual bool execute   (const Key& key) override;
+        virtual bool isUndoable(const Key& key) override;
+
+    protected:
+        const IRenderWindow*    render_window_;
+        ABar*                   bar_;
+        const Event&            event_;
     };
 }
 

@@ -98,6 +98,58 @@ psapi::IBarButton::State psapi::ABarButton::getState() const
 
 /*============================================================================*/
 
+/*====================< ABarButtonAction implementation >=====================*/
+
+psapi::ABarButtonAction::ABarButtonAction(ABarButton *button, const IRenderWindow *renderWindow, const Event &event)
+:
+    render_window_  (renderWindow),
+    button_         (button),
+    event_          (event)
+{
+}
+
+bool psapi::ABarButtonAction::execute(const Key& key)
+{
+    vec2i mouse_pos = sfm::Mouse::getPosition(render_window_);
+    vec2i button_pos = button_->getPos();
+
+    vec2u size = button_->getSize();
+    bool is_on_focus = button_pos.x <= mouse_pos.x && mouse_pos.x <= button_pos.x + size.x &&
+                        button_pos.y <= mouse_pos.y && mouse_pos.y <= button_pos.y + size.y;
+    if ( is_on_focus )
+    {
+        if ( event_.type == Event::MouseButtonPressed )
+        {
+            if ( button_->state_ != IBarButton::State::Press )
+            {
+                button_->state_ = IBarButton::State::Press;
+            } 
+            else
+            {
+                button_->state_ = IBarButton::State::Released;
+                //static_cast<psapi::IOptionsBar *>(psapi::getRootWindow()->getWindowById(psapi::kOptionsBarWindowId))->removeAllOptions();
+            }
+        } 
+        else if ( button_->state_ != IBarButton::State::Press )
+        {
+            button_->state_ = psapi::IBarButton::State::Hover;
+        }
+    } 
+    else if ( button_->state_ == psapi::IBarButton::State::Hover || button_->state_ == psapi::IBarButton::State::Released )
+    {
+        button_->state_ = psapi::IBarButton::State::Normal;
+    }
+
+    return true;
+}
+
+bool psapi::ABarButtonAction::isUndoable(const Key &key)
+{
+    return false;
+}
+
+/*============================================================================*/
+
 /*==========================< ABar implementation >===========================*/
 
 psapi::ABar::ABar(  std::unique_ptr<psapi::sfm::Sprite> sprite,
@@ -298,6 +350,55 @@ psapi::vec2i psapi::ABar::getNextChildPos()
     cur_button_it = (cur_button_it + 1) % n_buttons_;
 
     return vec2i{x, y};
+}
+
+std::unique_ptr<psapi::IAction> 
+psapi::ABar::createAction(const IRenderWindow* renderWindow, const Event& event)
+{
+    return std::make_unique<ABarAction>(this, renderWindow, event);
+}
+
+/*============================================================================*/
+
+/*=======================< ABarAction implementation >========================*/
+
+psapi::ABarAction::ABarAction(ABar *bar, const IRenderWindow *renderWindow, const Event &event)
+:
+    render_window_  (renderWindow),
+    bar_            (bar),
+    event_          (event)
+{
+}
+
+bool psapi::ABarAction::execute(const Key& key)
+{
+    for ( auto &window : bar_->children_ )
+    {
+        if ( !psapi::getActionController()->execute(window->createAction(render_window_, event_)) )
+            return false;
+
+        IBarButton* button = static_cast<IBarButton*>(window.get());
+
+        if ( button->getState() == psapi::IBarButton::State::Press && button->getId() != bar_->last_pressed_id_ )
+        {
+            IWindow* prev_button = bar_->getWindowById( bar_->last_pressed_id_);
+            if ( prev_button )
+            {
+                IBarButton *button_ptr =  static_cast<IBarButton *>( prev_button);
+                if ( button_ptr->getState() == psapi::IBarButton::State::Press )
+                {
+                    button_ptr->setState( psapi::IBarButton::State::Normal);
+                }
+            }
+            bar_->last_pressed_id_ = button->getId();
+        }
+    }
+    return true;
+}
+
+bool psapi::ABarAction::isUndoable(const Key &key)
+{
+    return false;
 }
 
 /*============================================================================*/
