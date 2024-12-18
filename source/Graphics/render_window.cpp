@@ -10,6 +10,11 @@ RenderWindow::RenderWindow(unsigned int width, unsigned int height, const std::s
 {
 }
 
+RenderWindow::RenderWindow(vec2u size, const std::string& window_title)
+    : window_(sf::VideoMode(size.x, size.y), window_title), size_(size)
+{
+}
+
 void RenderWindow::clear()
 {
     window_.clear();

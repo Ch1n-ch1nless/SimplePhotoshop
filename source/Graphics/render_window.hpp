@@ -20,6 +20,7 @@ namespace psapi
         {
         public:
              RenderWindow(unsigned int width, unsigned int height, const std::string& window_title);
+             RenderWindow(vec2u size, const std::string& window_title);
             ~RenderWindow() final = default;
 
             virtual bool isOpen () const override;

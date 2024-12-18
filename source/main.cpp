@@ -8,10 +8,10 @@ int loadPlugins();
 
 int main()
 {
-    psapi::sfm::RenderWindow render_window(1920, 1080, "MyPhotoshop v.2.0.1");
+    psapi::sfm::RenderWindow render_window(psapi::getScreenSize(), "MyPhotoshop v.2.0.1");
 
     psapi::IRootWindow* root_window = psapi::getRootWindow();
-    root_window->addWindow(std::make_unique<psapi::Canvas>(psapi::vec2i{400, 200}, psapi::vec2u{1080, 720}));
+    root_window->addWindow(std::make_unique<psapi::Canvas>(psapi::getCanvasIntRect().pos, psapi::getCanvasIntRect().size));
     root_window->getWindowById(psapi::kCanvasWindowId)->setParent(root_window);
 
     while (render_window.isOpen())
