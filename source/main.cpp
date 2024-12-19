@@ -1,4 +1,5 @@
 #include "Graphics/Graphics.hpp"
+#include "Photoshop/Photoshop.hpp"
 
 #include <cassert>
 #include <iostream>
@@ -22,7 +23,20 @@ int main()
 {
     loadPlugins(plugin_pathes);
 
-    RenderWindow render_window(1920, 1080, "MyPhotoshop v.2.1");
+    RenderWindow render_window(getScreenSize(), "MyPhotoshop v.2.1.2");
+
+    IRootWindow* root_window = getRootWindow();
+    root_window->addWindow(std::make_unique<Canvas>(getCanvasIntRect().pos, getCanvasIntRect().size));
+    root_window->getWindowById(kCanvasWindowId)->setParent(root_window);
+
+    root_window->addWindow(static_cast<std::unique_ptr<AWindow>>(std::make_unique<ToolBar>()));
+    root_window->getWindowById(kToolBarWindowId)->setParent(root_window);
+
+    std::unique_ptr<OptionsBar> options_bar = std::make_unique<OptionsBar>();
+    options_bar->setParent(root_window);
+    options_bar->addWindow(ColorPalette::create());
+
+    root_window->addWindow(static_cast<std::unique_ptr<AWindow>>(std::move(options_bar)));
 
     while (render_window.isOpen())
     {
@@ -38,10 +52,10 @@ int main()
         }
 
         render_window.clear();
+        getActionController()->execute(root_window->createAction(&render_window, event));
+        root_window->draw(&render_window);
         render_window.display();
     }
-
-    return 0;
 }
 
 void loadPlugins(const char* const *plugins)

@@ -18,6 +18,9 @@ GRAPHICS_OBJ_DIR 	= ./object/Graphics/
 STANDARD_SRC_DIR 	= ./api/
 STANDARD_OBJ_DIR 	= ./object/api/
 
+PHOTOSHOP_SRC_DIR 	= ./source/Photoshop/
+PHOTOSHOP_OBJ_DIR 	= ./object/Photoshop/
+
 MAIN_SRC = ./source/main.cpp
 MAIN_OBJ = ./object/main.o
 
@@ -27,21 +30,30 @@ GRAPHICS_OBJ = $(patsubst $(GRAPHICS_SRC_DIR)%.cpp, $(GRAPHICS_OBJ_DIR)%.o, $(GR
 STANDARD_SRC = $(wildcard $(STANDARD_SRC_DIR)*.cpp)
 STANDARD_OBJ = $(patsubst $(STANDARD_SRC_DIR)%.cpp, $(STANDARD_OBJ_DIR)%.o, $(STANDARD_SRC))
 
+PHOTOSHOP_SRC = $(wildcard $(PHOTOSHOP_SRC_DIR)*.cpp)
+PHOTOSHOP_OBJ = $(patsubst $(PHOTOSHOP_SRC_DIR)%.cpp, $(PHOTOSHOP_OBJ_DIR)%.o, $(PHOTOSHOP_SRC))
+
 all: link
 
 link: build_impl $(MAIN_OBJ)
-	$(CC) object/main.o -o photoshop.out -L./plugins -Wl,-rpath=./plugins -lsfm_impl -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) object/main.o -o photoshop.out -L./plugins -Wl,-rpath=./plugins -lsfm_impl 				\
+										 -L./plugins -Wl,-rpath=./plugins -lapi_impl				\
+										 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
-build_impl: $(GRAPHICS_OBJ) $(STANDARD_OBJ)
+build_impl: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ)
 	$(CC) -shared $(GRAPHICS_OBJ) $(STANDARD_OBJ) -o ./plugins/libsfm_impl.so -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) -shared $(PHOTOSHOP_OBJ) -o ./plugins/libapi_impl.so -L./plugins -lsfm_impl -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 $(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) -c -fPIC $< -o $@
+
+$(PHOTOSHOP_OBJ_DIR)%.o : $(PHOTOSHOP_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 clean:
@@ -52,4 +64,5 @@ build:
 	mkdir plugins					&& \
 	mkdir object              		&& \
 	mkdir $(GRAPHICS_OBJ_DIR)		&& \
-	mkdir $(STANDARD_OBJ_DIR)
+	mkdir $(STANDARD_OBJ_DIR)		&& \
+	mkdir $(PHOTOSHOP_OBJ_DIR)
