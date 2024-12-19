@@ -1,9 +1,0 @@
-#ifndef  MY_API_PHOTOSHOP_CONFIG_HPP
-#define  MY_API_PHOTOSHOP_CONFIG_HPP
-
-namespace psapi
-{
-    
-}
-
-#endif //MY_API_PHOTOSHOP_CONFIG_HPP

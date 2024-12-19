@@ -18,53 +18,38 @@ GRAPHICS_OBJ_DIR 	= ./object/Graphics/
 STANDARD_SRC_DIR 	= ./api/
 STANDARD_OBJ_DIR 	= ./object/api/
 
-PHOTOSHOP_SRC_DIR	= ./source/Photoshop/
-PHOTOSHOP_OBJ_DIR	= ./object/Photoshop/
-
 MAIN_SRC = ./source/main.cpp
 MAIN_OBJ = ./object/main.o
-
-PLUGINS_DIR = ./Plugins/
-
-PLUGINS = $(wildcard $(PLUGINS_DIR)*.so)
-
-MY_PLUGINS_SRC_DIR = ./source/MyPlugins/
-MY_PLUGINS_OBJ_DIR = ./object/MyPlugins/
 
 GRAPHICS_SRC = $(wildcard $(GRAPHICS_SRC_DIR)*.cpp)
 GRAPHICS_OBJ = $(patsubst $(GRAPHICS_SRC_DIR)%.cpp, $(GRAPHICS_OBJ_DIR)%.o, $(GRAPHICS_SRC))
 
-MY_PLUGINS_SRC = $(wildcard $(MY_PLUGINS_SRC_DIR)*.cpp)
-MY_PLUGINS_OBJ = $(patsubst $(MY_PLUGINS_SRC_DIR)%.cpp, $(MY_PLUGINS_OBJ_DIR)%.o, $(MY_PLUGINS_SRC))
-
-PHOTOSHOP_SRC	 = $(wildcard $(PHOTOSHOP_SRC_DIR)*.cpp)
-PHOTOSHOP_OBJ	 = $(patsubst $(PHOTOSHOP_SRC_DIR)%.cpp, $(PHOTOSHOP_OBJ_DIR)%.o, $(PHOTOSHOP_SRC))
+STANDARD_SRC = $(wildcard $(STANDARD_SRC_DIR)*.cpp)
+STANDARD_OBJ = $(patsubst $(STANDARD_SRC_DIR)%.cpp, $(STANDARD_OBJ_DIR)%.o, $(STANDARD_SRC))
 
 all: link
 
-link: $(MAIN_OBJ) $(GRAPHICS_OBJ) $(PHOTOSHOP_OBJ)
-	$(CC) object/main.o $(GRAPHICS_OBJ) $(PHOTOSHOP_OBJ) -o photoshop.out -L./plugins/ -lbrush -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-
-$(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
-	$(CC) $(CFLAGS) -c -fPIC $< -o $@
-
-$(PHOTOSHOP_OBJ_DIR)%.o : $(PHOTOSHOP_SRC_DIR)%.cpp
-	$(CC) $(CFLAGS) -c -fPIC $< -o $@
+link: build_impl $(MAIN_OBJ)
+	$(CC) object/main.o -o photoshop.out -L./plugins -Wl,-rpath=./plugins -lsfm_impl -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
-build_my_plugins: $(MY_PLUGINS_OBJ)
-	$(CC) -shared -o plugins/libbrush.so object/MyPlugins/brush.o -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+build_impl: $(GRAPHICS_OBJ) $(STANDARD_OBJ)
+	$(CC) -shared $(GRAPHICS_OBJ) $(STANDARD_OBJ) -o ./plugins/libsfm_impl.so -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
-$(MY_PLUGINS_OBJ_DIR)%.o : $(MY_PLUGINS_SRC_DIR)%.cpp
+$(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) -c -fPIC $< -o $@
+
+$(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 clean:
-	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(PHOTOSHOP_OBJ) $(MY_PLUGINS_OBJ) 
+	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(STANDARD_OBJ)
+	rm -f ./plugins/libsfm_impl.so
  
 build:
+	mkdir plugins					&& \
 	mkdir object              		&& \
-	mkdir $(GRAPHICS_OBJ_DIR) 		&& \
-	mkdir $(PHOTOSHOP_OBJ_DIR)		&& \
-	mkdir $(MY_PLUGINS_OBJ_DIR)
+	mkdir $(GRAPHICS_OBJ_DIR)		&& \
+	mkdir $(STANDARD_OBJ_DIR)

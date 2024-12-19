@@ -1,35 +1,36 @@
 #include "Graphics/Graphics.hpp"
-#include "Photoshop/Photoshop.hpp"
 
+#include <cassert>
 #include <iostream>
 #include <dlfcn.h>
 
-int loadPlugins();
+typedef bool (*LoadPluginFunc)();
+typedef void (*UnloadPluginFunc)();
+
+using namespace psapi;
+using namespace sfm;
+
+const char* const plugin_pathes[] =
+{
+
+};
+
+void loadPlugin(const char* plugin_path);
+void loadPlugins(const char* const *plugins);
 
 int main()
 {
-    psapi::sfm::RenderWindow render_window(psapi::getScreenSize(), "MyPhotoshop v.2.0.1");
+    loadPlugins(plugin_pathes);
 
-    psapi::IRootWindow* root_window = psapi::getRootWindow();
-    root_window->addWindow(std::make_unique<psapi::Canvas>(psapi::getCanvasIntRect().pos, psapi::getCanvasIntRect().size));
-    root_window->getWindowById(psapi::kCanvasWindowId)->setParent(root_window);
-
-    root_window->addWindow(static_cast<std::unique_ptr<psapi::AWindow>>(std::make_unique<psapi::ToolBar>()));
-    root_window->getWindowById(psapi::kToolBarWindowId)->setParent(root_window);
-
-    std::unique_ptr<psapi::OptionsBar> options_bar = std::make_unique<psapi::OptionsBar>();
-    options_bar->setParent(root_window);
-    options_bar->addWindow(psapi::ColorPalette::create());
-
-    root_window->addWindow(static_cast<std::unique_ptr<psapi::AWindow>>(std::move(options_bar)));
+    RenderWindow render_window(1920, 1080, "MyPhotoshop v.2.1");
 
     while (render_window.isOpen())
     {
-        psapi::sfm::Event event = {};
+        Event event = {};
 
         while (render_window.pollEvent(event))
         {
-            if (event.type == psapi::sfm::Event::EventType::Closed)
+            if (event.type == Event::EventType::Closed)
             {
                 render_window.close();
                 break;
@@ -37,10 +38,42 @@ int main()
         }
 
         render_window.clear();
-        psapi::getActionController()->execute(root_window->createAction(&render_window, event));
-        root_window->draw(&render_window);
         render_window.display();
     }
 
     return 0;
+}
+
+void loadPlugins(const char* const *plugins)
+{
+    for (size_t i = 0; i < sizeof(plugin_pathes) / sizeof(const char*); ++i)
+    {
+        loadPlugin(plugins[i]);
+    }
+}
+
+void loadPlugin(const char* plugin_path)
+{
+    void* pluginLib = dlopen(plugin_path, RTLD_LAZY);
+    if (!pluginLib) {
+        std::cerr << "Failed to load plugin dylib in main: " << dlerror() << "\n";
+        assert(false && "loadPluginfromLib");
+    }
+
+    LoadPluginFunc loadPlugin = reinterpret_cast<LoadPluginFunc>(dlsym(pluginLib, "loadPlugin"));
+    UnloadPluginFunc unloadPlugin = reinterpret_cast<UnloadPluginFunc>(dlsym(pluginLib, "unloadPlugin"));
+
+    if (!loadPlugin || !unloadPlugin) {
+        std::cerr << "Failed to locate functions in plugin dylib in main: " << dlerror() << "\n";
+        dlclose(pluginLib);
+        assert(false && "loadPluginfromLib");
+    }
+
+    if (!loadPlugin()) {
+        std::cerr << "Failed to initialize plugin in main.\n";
+        dlclose(pluginLib);
+        assert(false && "loadPluginfromLib");
+    }
+
+    std::cout << "Plugin: \"" << plugin_path << "\"loaded successfully!\n";
 }
