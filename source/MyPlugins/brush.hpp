@@ -3,8 +3,38 @@
 
 #include "../Photoshop/Photoshop.hpp"
 
+#include <deque>
+
 namespace psapi
 {
+    class PaintAction
+    {
+        public:
+             PaintAction();
+
+            ~PaintAction() = default;
+
+            bool operator()(const psapi::IRenderWindow* render_window, const psapi::sfm::Event& event);
+
+            void activate();
+
+        private:
+            psapi::Canvas*  canvas_;
+            bool            is_active_;
+
+            std::deque<psapi::vec2i> mouse_points_;
+
+            psapi::vec2i    interpolateHermite( float         t,
+                                                psapi::vec2i &point0,
+                                                psapi::vec2i &point1,
+                                                psapi::vec2i &point2,
+                                                psapi::vec2i &point3 );
+
+            size_t          calculateStepsNumber(psapi::vec2i &point1, psapi::vec2i &point2);
+
+            void            paintNewCircle();
+    };
+
     class BrushButton : public ABarButton
     {
     public:
@@ -34,6 +64,8 @@ namespace psapi
 
     private:
         bool update(const IRenderWindow* render_window, const Event& event);
+        
+        PaintAction             action_;
 
         friend class BrushAction;
     };

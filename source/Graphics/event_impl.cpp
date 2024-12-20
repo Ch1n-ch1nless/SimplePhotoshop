@@ -15,3 +15,22 @@ vec2i Mouse::getPosition(const IRenderWindow* window) {
     return { pos.x, pos.y };
 }
 
+bool Mouse::isButtonPressed(Mouse::Button button) {
+    switch (button)
+    {
+        case Mouse::Button::Left:
+            return sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+
+        case Mouse::Button::Right:
+            return sf::Mouse::isButtonPressed(sf::Mouse::Button::Right);
+    
+        case Mouse::Button::Middle:
+            return sf::Mouse::isButtonPressed(sf::Mouse::Button::Middle);
+
+        default:
+            break;
+    }
+
+    return false;
+}
+

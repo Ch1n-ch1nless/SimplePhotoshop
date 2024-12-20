@@ -39,11 +39,10 @@ psapi::sfm::Color psapi::Layer::getPixel(sfm::vec2i pos) const
     if (((0 <= pos.x) && (pos.x < size_.x)) &&
         ((0 <= pos.y) && (pos.y < size_.y))    )
     {
-        //TODO: Rewrite to my exception!
-        assert(false && "ERROR!!! Access is denied!\n");
+        return data_[static_cast<size_t>(pos.x + pos.y * size_.x)];
     }
 
-    return data_[static_cast<size_t>(pos.x + pos.y * size_.x)];
+    return sfm::Color{0, 0, 0, 0};
 }
 
 void psapi::Layer::setPixel(sfm::vec2i pos, psapi::sfm::Color color)
@@ -53,12 +52,8 @@ void psapi::Layer::setPixel(sfm::vec2i pos, psapi::sfm::Color color)
     if (((0 <= pos.x) && (pos.x < size_.x)) &&
         ((0 <= pos.y) && (pos.y < size_.y))    )
     {
-        //TODO: Rewrite to my exception!
-        assert(false && "ERROR!!! Access is denied!\n");
-        return;
+        data_[static_cast<size_t>(pos.x + pos.y * size_.x)] = color;
     }
-
-    data_[static_cast<size_t>(pos.x + pos.y * size_.x)] = color;
 }
 
 psapi::drawable_id_t psapi::Layer::addDrawable(std::unique_ptr<sfm::Drawable> object)
@@ -259,25 +254,22 @@ void psapi::Canvas::setZoom(sfm::vec2f zoom)
 
 psapi::sfm::vec2i psapi::Canvas::getMousePosition() const
 {
-    return mouse_position_;
+    return sfm::Mouse::getPosition();
 }
 
 bool psapi::Canvas::isPressedRightMouseButton() const
 {
-    //TODO: Implement!
-    return false;
+    return sfm::Mouse::isButtonPressed(sfm::Mouse::Button::Right);
 }
 
 bool psapi::Canvas::isPressedLeftMouseButton() const
 {
-    //TODO: Implement!
-    return false;
+    return sfm::Mouse::isButtonPressed(sfm::Mouse::Button::Left);
 }
 
 bool psapi::Canvas::isPressedScrollButton() const
 {
-    //TODO: implement!
-    return false;
+    return sfm::Mouse::isButtonPressed(sfm::Mouse::Button::Middle);
 }
 
 psapi::sfm::Color psapi::Canvas::getCanvasBaseColor() const

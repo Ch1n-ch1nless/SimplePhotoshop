@@ -26,7 +26,7 @@ psapi::ColorPalette::ColorPalette()
     cur_color = std::make_unique<sfm::RectangleShape>(48, 48);
     cur_color->setFillColor(sfm::Color::getStandardColor(psapi::sfm::Color::Type::Transparent));
     cur_color->setOutlineColor(sfm::Color::getStandardColor(psapi::sfm::Color::Type::Black));
-    cur_color->setOutlineThickness(5.0);
+    cur_color->setOutlineThickness(2.0);
 
     std::unique_ptr<sfm::RectangleShape> button = nullptr;
     for ( auto &color : PALETTE_COLORS )
