@@ -1,4 +1,5 @@
 #include "Graphics/Graphics.hpp"
+#include "MyPlugins/brush.hpp"
 #include "Photoshop/Photoshop.hpp"
 
 #include <cassert>
@@ -16,7 +17,7 @@ void loadPlugins(const char* const *plugins);
 
 int main()
 {
-    RenderWindow render_window(getScreenSize(), "MyPhotoshop v.2.1.2");
+    RenderWindow render_window(getScreenSize(), "MyPhotoshop v.2.1.3");
 
     IRootWindow* root_window = getRootWindow();
     root_window->addWindow(std::make_unique<Canvas>(getCanvasIntRect().pos, getCanvasIntRect().size));
@@ -30,6 +31,11 @@ int main()
     options_bar->addWindow(ColorPalette::create());
 
     root_window->addWindow(static_cast<std::unique_ptr<AWindow>>(std::move(options_bar)));
+
+    std::unique_ptr<BrushButton> brush = std::make_unique<BrushButton>();
+
+    ToolBar* tool_bar = dynamic_cast<ToolBar*>(root_window->getWindowById(kToolBarWindowId));
+    tool_bar->addWindow(static_cast<std::unique_ptr<AWindow>>(std::move(brush)));
 
     loadPlugins(plugin_pathes);
 

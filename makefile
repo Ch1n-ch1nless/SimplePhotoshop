@@ -41,7 +41,7 @@ MY_PLUGINS_OBJ = $(patsubst $(MY_PLUGINS_SRC_DIR)%.cpp, $(MY_PLUGINS_OBJ_DIR)%.o
 
 all: link
 
-link: build_impl $(MAIN_OBJ)
+link: build_impl build_plugins $(MAIN_OBJ)
 	$(CC) object/main.o -o photoshop.out -L./plugins -Wl,-rpath=./plugins -lsfm_impl 				\
 										 -L./plugins -Wl,-rpath=./plugins -lapi_impl				\
 										 -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
@@ -49,9 +49,9 @@ link: build_impl $(MAIN_OBJ)
 $(MAIN_OBJ) : $(MAIN_SRC)
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
-build_impl: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ)
+build_impl: $(GRAPHICS_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ) $(MY_PLUGINS_OBJ)
 	$(CC) -shared $(GRAPHICS_OBJ) $(STANDARD_OBJ) -o ./plugins/libsfm_impl.so -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
-	$(CC) -shared $(PHOTOSHOP_OBJ) -o ./plugins/libapi_impl.so -L./plugins -lsfm_impl -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+	$(CC) -shared $(PHOTOSHOP_OBJ) $(MY_PLUGINS_OBJ) -o ./plugins/libapi_impl.so -L./plugins -lsfm_impl -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
 
 $(GRAPHICS_OBJ_DIR)%.o : $(GRAPHICS_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
@@ -61,6 +61,14 @@ $(STANDARD_OBJ_DIR)%.o : $(STANDARD_SRC_DIR)%.cpp
 
 $(PHOTOSHOP_OBJ_DIR)%.o : $(PHOTOSHOP_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
+
+build_plugins: $(MY_PLUGINS_OBJ)
+	$(CC) -shared ./object/MyPlugins/brush.o -o ./plugins/libbrush.so 	-L./plugins -lapi_impl 									\
+																		-L./plugins -lsfm_impl									\
+																		-lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system
+
+$(MY_PLUGINS_OBJ_DIR)%.o : $(MY_PLUGINS_SRC_DIR)%.cpp
+	$(CC) $(CFLAGS) -c -fPIC $< -o $@	
 
 clean:
 	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ) $(MY_PLUGINS_OBJ)

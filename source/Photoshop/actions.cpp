@@ -11,6 +11,8 @@ psapi::ActionController::ActionController()
 
 bool psapi::ActionController::execute(std::unique_ptr<IAction> action)
 {
+    if (action == nullptr) return false;
+
     bool result = actionExecute(action.get());
 
     if (isUndoableAction(action.get()))

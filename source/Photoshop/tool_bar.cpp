@@ -32,3 +32,8 @@ psapi::ToolBar::ToolBar()
     setSize(size_);
     setPos(pos_);
 }
+
+void psapi::ToolBar::finishButtonDraw(IRenderWindow* renderWindow, const IBarButton* button) const
+{
+    return;
+}

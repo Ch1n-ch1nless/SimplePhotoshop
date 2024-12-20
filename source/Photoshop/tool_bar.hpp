@@ -10,6 +10,8 @@ namespace psapi
     public:
          ToolBar();
         ~ToolBar() final = default;
+
+        void finishButtonDraw(IRenderWindow* renderWindow, const IBarButton* button) const override;
     };
 }
 

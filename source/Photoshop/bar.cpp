@@ -89,7 +89,7 @@ void psapi::ABarButton::setState(State state)
     state_ = state;
 }
 
-psapi::IBarButton::State psapi::ABarButton::getState() const
+psapi::ABarButton::State psapi::ABarButton::getState() const
 {
     return state_;
 }
@@ -170,7 +170,7 @@ psapi::ABar::ABar(  std::unique_ptr<psapi::sfm::Sprite> sprite,
     inbutton_gap_       (inbutton_gap),
     button_size_        (button_size),
     n_buttons_in_row_   (n_buttons_in_row),
-    n_buttons_          (0),
+    n_buttons_          (1),
     cur_button_it       (0)
 {
 
@@ -296,22 +296,24 @@ void psapi::ABar::finishButtonDraw(IRenderWindow* renderWindow, const IBarButton
     float pos_x = static_cast<float>(cur_position.x);
     float pos_y = static_cast<float>(cur_position.y);
 
-    switch (button->getState())
+    ABarButton::State state = (dynamic_cast<const ABarButton*>(button))->getState();
+
+    switch (state)
     {
-    case psapi::IBarButton::State::Normal:
+    case psapi::ABarButton::State::Normal:
         break;
 
-    case psapi::IBarButton::State::Hover:
+    case psapi::ABarButton::State::Hover:
         hovered_->setPosition(pos_x, pos_y);
         renderWindow->draw(hovered_.get());
         break;
 
-    case psapi::IBarButton::State::Press:
+    case psapi::ABarButton::State::Press:
         pressed_->setPosition(pos_x, pos_y);
         renderWindow->draw(pressed_.get());
         break;
 
-    case psapi::IBarButton::State::Released:
+    case psapi::ABarButton::State::Released:
         released_->setPosition(pos_x, pos_y);
         renderWindow->draw(released_.get());
         break;
@@ -381,17 +383,20 @@ bool psapi::ABarAction::execute(const Key& key)
         if ( !psapi::getActionController()->execute(window->createAction(render_window_, event_)) )
             return false;
 
-        IBarButton* button = static_cast<IBarButton*>(window.get());
+        ABarButton* button = dynamic_cast<ABarButton*>(window.get());
 
-        if ( button->getState() == psapi::IBarButton::State::Press && button->getId() != bar_->last_pressed_id_ )
+        ABarButton::State state = button->getState();
+
+        if ( state == psapi::ABarButton::State::Press && button->getId() != bar_->last_pressed_id_ )
         {
             IWindow* prev_button = bar_->getWindowById( bar_->last_pressed_id_);
             if ( prev_button )
             {
-                IBarButton *button_ptr =  static_cast<IBarButton *>( prev_button);
-                if ( button_ptr->getState() == psapi::IBarButton::State::Press )
+                ABarButton *button_ptr =  dynamic_cast<ABarButton *>( prev_button);
+                ABarButton::State cur_state = button_ptr->getState();
+                if ( cur_state == psapi::ABarButton::State::Press )
                 {
-                    button_ptr->setState( psapi::IBarButton::State::Normal);
+                    button_ptr->setState( psapi::ABarButton::State::Normal);
                 }
             }
             bar_->last_pressed_id_ = button->getId();
