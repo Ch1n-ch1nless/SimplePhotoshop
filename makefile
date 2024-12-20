@@ -21,6 +21,9 @@ STANDARD_OBJ_DIR 	= ./object/api/
 PHOTOSHOP_SRC_DIR 	= ./source/Photoshop/
 PHOTOSHOP_OBJ_DIR 	= ./object/Photoshop/
 
+MY_PLUGINS_SRC_DIR 	= ./source/MyPlugins/
+MY_PLUGINS_OBJ_DIR 	= ./object/MyPlugins/
+
 MAIN_SRC = ./source/main.cpp
 MAIN_OBJ = ./object/main.o
 
@@ -32,6 +35,9 @@ STANDARD_OBJ = $(patsubst $(STANDARD_SRC_DIR)%.cpp, $(STANDARD_OBJ_DIR)%.o, $(ST
 
 PHOTOSHOP_SRC = $(wildcard $(PHOTOSHOP_SRC_DIR)*.cpp)
 PHOTOSHOP_OBJ = $(patsubst $(PHOTOSHOP_SRC_DIR)%.cpp, $(PHOTOSHOP_OBJ_DIR)%.o, $(PHOTOSHOP_SRC))
+
+MY_PLUGINS_SRC = $(wildcard $(MY_PLUGINS_SRC_DIR)*.cpp)
+MY_PLUGINS_OBJ = $(patsubst $(MY_PLUGINS_SRC_DIR)%.cpp, $(MY_PLUGINS_OBJ_DIR)%.o, $(MY_PLUGINS_SRC))
 
 all: link
 
@@ -57,12 +63,15 @@ $(PHOTOSHOP_OBJ_DIR)%.o : $(PHOTOSHOP_SRC_DIR)%.cpp
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 clean:
-	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(STANDARD_OBJ)
+	rm $(GRAPHICS_OBJ) $(MAIN_OBJ) $(STANDARD_OBJ) $(PHOTOSHOP_OBJ) $(MY_PLUGINS_OBJ)
 	rm -f ./plugins/libsfm_impl.so
+	rm -f ./plugins/libapi_impl.so
+	rm -f ./plugins/libbrush.so
  
 build:
 	mkdir plugins					&& \
 	mkdir object              		&& \
 	mkdir $(GRAPHICS_OBJ_DIR)		&& \
 	mkdir $(STANDARD_OBJ_DIR)		&& \
-	mkdir $(PHOTOSHOP_OBJ_DIR)
+	mkdir $(PHOTOSHOP_OBJ_DIR)		&& \
+	mkdir $(MY_PLUGINS_OBJ_DIR)

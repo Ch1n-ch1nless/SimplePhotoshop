@@ -146,7 +146,7 @@ IntRect Sprite::getGlobalBounds() const
  void Sprite::draw(IRenderWindow *window) const
  {
     RenderWindow* real_window = static_cast<RenderWindow*>(window);
-
+    
     real_window->window_.draw(sprite_);
  }  
 

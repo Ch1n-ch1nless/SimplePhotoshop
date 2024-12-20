@@ -41,7 +41,7 @@ psapi::vec2u psapi::ABarButton::getSize() const
 void psapi::ABarButton::setSize(const psapi::vec2u& size)
 {
     size_ = size;
-    sprite_->setTextureRect(sfm::IntRect{pos_, size_});
+    sprite_->setTextureRect(sfm::IntRect{{0, 0}, size_});
 }
 
 void psapi::ABarButton::setPos(const psapi::vec2i& pos)
@@ -81,8 +81,6 @@ void psapi::ABarButton::draw(psapi::IRenderWindow* renderWindow)
     if (is_active_)
     {
         renderWindow->draw(sprite_.get());
-        const IBar* bar = dynamic_cast<const IBar*>(parent_);
-        bar->finishButtonDraw(renderWindow, this);
     }
 }
 
@@ -127,7 +125,6 @@ bool psapi::ABarButtonAction::execute(const Key& key)
             else
             {
                 button_->state_ = IBarButton::State::Released;
-                //static_cast<psapi::IOptionsBar *>(psapi::getRootWindow()->getWindowById(psapi::kOptionsBarWindowId))->removeAllOptions();
             }
         } 
         else if ( button_->state_ != IBarButton::State::Press )
@@ -275,7 +272,7 @@ void psapi::ABar::addWindow(std::unique_ptr<IWindow> window)
 
     window->setPos(getNextChildPos());
     window->setSize(button_size_);
-    window->setParent(static_cast<AWindow*>(this));
+    window->setParent(static_cast<IBar*>(this));
 
     children_.push_back(std::move(window));
 }
@@ -337,7 +334,13 @@ bool psapi::ABar::unPressAllButtons()
 void psapi::ABar::draw(psapi::IRenderWindow* renderWindow)
 {
     renderWindow->draw(background_.get());
-    drawChildren(renderWindow);
+    
+    for (auto& window : children_)
+    {
+        window->draw(renderWindow);
+        const IBarButton* button = static_cast<const IBarButton*>(const_cast<const IWindow*>(window.get()));
+        finishButtonDraw(renderWindow, button);
+    }
 }
 
 psapi::vec2i psapi::ABar::getNextChildPos()

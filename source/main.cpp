@@ -11,18 +11,11 @@ typedef void (*UnloadPluginFunc)();
 using namespace psapi;
 using namespace sfm;
 
-const char* const plugin_pathes[] =
-{
-
-};
-
 void loadPlugin(const char* plugin_path);
 void loadPlugins(const char* const *plugins);
 
 int main()
 {
-    loadPlugins(plugin_pathes);
-
     RenderWindow render_window(getScreenSize(), "MyPhotoshop v.2.1.2");
 
     IRootWindow* root_window = getRootWindow();
@@ -37,6 +30,8 @@ int main()
     options_bar->addWindow(ColorPalette::create());
 
     root_window->addWindow(static_cast<std::unique_ptr<AWindow>>(std::move(options_bar)));
+
+    loadPlugins(plugin_pathes);
 
     while (render_window.isOpen())
     {
@@ -74,8 +69,8 @@ void loadPlugin(const char* plugin_path)
         assert(false && "loadPluginfromLib");
     }
 
-    LoadPluginFunc loadPlugin = reinterpret_cast<LoadPluginFunc>(dlsym(pluginLib, "loadPlugin"));
-    UnloadPluginFunc unloadPlugin = reinterpret_cast<UnloadPluginFunc>(dlsym(pluginLib, "unloadPlugin"));
+    LoadPluginFunc loadPlugin = reinterpret_cast<LoadPluginFunc>(dlsym(pluginLib, "onLoadPlugin"));
+    UnloadPluginFunc unloadPlugin = reinterpret_cast<UnloadPluginFunc>(dlsym(pluginLib, "onUnloadPlugin"));
 
     if (!loadPlugin || !unloadPlugin) {
         std::cerr << "Failed to locate functions in plugin dylib in main: " << dlerror() << "\n";
@@ -89,5 +84,5 @@ void loadPlugin(const char* plugin_path)
         assert(false && "loadPluginfromLib");
     }
 
-    std::cout << "Plugin: \"" << plugin_path << "\"loaded successfully!\n";
+    std::cout << "Plugin: \"" << plugin_path << "\" loaded successfully!\n";
 }
